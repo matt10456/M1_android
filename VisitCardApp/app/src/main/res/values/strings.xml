@@ -1,0 +1,10 @@
+<resources>
+    <!-- <string name=""></string> -->
+    <string name="app_name">VisitCardApp</string>
+    <string name="app_title">The best visit card app ever !</string>
+    <string name="card_create">Create visit card</string>
+    <string name="card_send">Send visit card</string>
+    <string name="card_display">Display visit card</string>
+    <string name="create_from_qr">Create card from QR code</string>
+    <string name="create_from_text_input">Create brand new card</string>
+</resources>
