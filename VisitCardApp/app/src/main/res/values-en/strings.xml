@@ -1,16 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- <string name=""></string> -->
     <string name="app_name">VisitCardApp</string>
     <string name="app_title">The best visit card app ever !</string>
+    <string name="ask_company">"Company name : "</string>
+    <string name="ask_name">"Name : "</string>
+    <string name="ask_phone">"Phone number : "</string>
+    <string name="ask_surname">"Surname : "</string>
     <string name="card_create">Create visit card</string>
-    <string name="card_send">Send visit card</string>
     <string name="card_display">Display visit card</string>
+    <string name="card_send">Send visit card</string>
+    <string name="confirm_creation">Create card</string>
     <string name="create_from_qr">Create card from QR code</string>
     <string name="create_from_text_input">Create brand new card</string>
-    <string name="ask_name">Name : </string>
-    <string name="ask_surname">Surname : </string>
-    <string name="ask_phone">Phone number : </string>
-    <string name="ask_company">Company name : </string>
-    <string name="confirm_creation">Create card</string>
     <string name="register_qr">Save as visit card</string>
 </resources>

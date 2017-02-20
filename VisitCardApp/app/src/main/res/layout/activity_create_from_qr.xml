@@ -11,5 +11,25 @@
     tools:context="fr.unice.visitcardapp.MainActivity">
 
 
+    <FrameLayout
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/qr_view">
+
+    </FrameLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register_qr"
+        android:id="@+id/button_create"
+        android:textStyle="bold"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/qr_view" />
 
 </RelativeLayout>

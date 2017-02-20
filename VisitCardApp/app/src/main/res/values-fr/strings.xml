@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VisitCardApp</string>
+    <string name="app_title">La meilleure application de carte de visite !</string>
+    <string name="ask_company">Nom d\'entreprise :</string>
+    <string name="ask_name">Nom :</string>
+    <string name="ask_phone">Numéro de téléphone :</string>
+    <string name="ask_surname">Prénom :</string>
+    <string name="card_create">Créer une carte de visite</string>
+    <string name="card_display">Afficher les cartes de visite</string>
+    <string name="card_send">Envoyer une carte de visite</string>
+    <string name="create_from_qr">Créer a partir d\'un QR code</string>
+    <string name="confirm_creation">Créer carte</string>
+    <string name="create_from_text_input">Créer une toute nouvelle carte</string>
+    <string name="register_qr">Sauvergarder en tant que carte de visite</string>
+</resources>
