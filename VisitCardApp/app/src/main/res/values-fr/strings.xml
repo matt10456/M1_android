@@ -11,6 +11,6 @@
     <string name="card_send">Envoyer une carte de visite</string>
     <string name="create_from_qr">Créer a partir d\'un QR code</string>
     <string name="confirm_creation">Créer carte</string>
-    <string name="create_from_text_input">Créer une toute nouvelle carte</string>
+    <string name="create_from_text_input">Créer une nouvelle carte</string>
     <string name="register_qr">Sauvergarder en tant que carte de visite</string>
 </resources>

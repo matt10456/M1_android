@@ -8,6 +8,6 @@ public class CreateNewCardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_from_qr);
+        setContentView(R.layout.activity_create_new_card);
     }
 }

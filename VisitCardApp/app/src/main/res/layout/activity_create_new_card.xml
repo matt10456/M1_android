@@ -59,36 +59,55 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content">
 
-            <TextView
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="40dp"
-                android:id="@+id/textBox1"
-                android:text="textbox1" />
+                android:paddingTop="15dp"
+                android:id="@+id/surname">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textBox1"
-                android:paddingTop="40dp"
-                android:id="@+id/textBox2"
-                android:text="textbox2"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textBox2"
-                android:paddingTop="40dp"
-                android:id="@+id/textBox3"
-                android:text="textbox3"/>
+            </android.support.design.widget.TextInputLayout>
 
-            <TextView
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textBox3"
-                android:paddingTop="40dp"
-                android:id="@+id/textBox4"
-                android:text="textbox4"/>
+                android:paddingTop="5dp"
+                android:id="@+id/name"
+                android:layout_below="@+id/surname">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/phone_number"
+                android:layout_below="@+id/name">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/company_name"
+                android:layout_below="@+id/phone_number">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.design.widget.TextInputLayout>
+
 
         </RelativeLayout>
 
