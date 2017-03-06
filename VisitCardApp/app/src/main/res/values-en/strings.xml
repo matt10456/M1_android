@@ -3,7 +3,7 @@
     <string name="app_name">VisitCardApp</string>
     <string name="app_title">The best visit card app ever !</string>
     <string name="ask_company">"Company name : "</string>
-    <string name="ask_name">"Name : "</string>
+    <string name="ask_first_name">"First name : "</string>
     <string name="ask_phone">"Phone number : "</string>
     <string name="ask_surname">"Surname : "</string>
     <string name="card_create">Create visit card</string>
@@ -13,4 +13,11 @@
     <string name="create_from_qr">Create card from QR code</string>
     <string name="create_from_text_input">Create brand new card</string>
     <string name="register_qr">Save as visit card</string>
+    <string name="first_contact">First contact</string>
+    <string name="second_contact">Second contact</string>
+    <string name="third_contact">Third contact</string>
+    <string name="fourth_contact">Fourth contact</string>
+    <string name="fifth_contact">Fifth contact</string>
+    <string name="ask_website">Website :</string>
+    <string name="ask_email">"Email : "</string>
 </resources>

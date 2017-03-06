@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="40dp"
                 android:id="@+id/textView1"
-                android:text="@string/ask_surname" />
+                android:text="@string/ask_first_name" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 android:layout_below="@+id/textView1"
                 android:paddingTop="40dp"
                 android:id="@+id/textView2"
-                android:text="@string/ask_name"/>
+                android:text="@string/ask_surname"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -51,6 +51,22 @@
                 android:paddingTop="40dp"
                 android:id="@+id/textView4"
                 android:text="@string/ask_company"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView4"
+                android:paddingTop="40dp"
+                android:id="@+id/textView5"
+                android:text="@string/ask_email"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView5"
+                android:paddingTop="40dp"
+                android:id="@+id/textView6"
+                android:text="@string/ask_website"/>
 
         </RelativeLayout>
 
@@ -108,6 +124,32 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:id="@+id/email"
+                android:layout_below="@+id/company_name">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:id="@+id/website"
+                android:layout_below="@+id/email">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.design.widget.TextInputLayout>
+
         </RelativeLayout>
 
     </LinearLayout>
@@ -118,7 +160,8 @@
         android:text="@string/confirm_creation"
         android:id="@+id/button_create"
         android:textStyle="bold"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="40dp"
         android:layout_below="@+id/linearLayout1" />
 
 </RelativeLayout>
