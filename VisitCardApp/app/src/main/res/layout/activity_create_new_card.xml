@@ -42,7 +42,7 @@
                 android:layout_below="@+id/textView2"
                 android:paddingTop="40dp"
                 android:id="@+id/textView3"
-                android:text="@string/ask_phone"/>
+                android:text="@string/ask_profession"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                 android:layout_below="@+id/textView3"
                 android:paddingTop="40dp"
                 android:id="@+id/textView4"
-                android:text="@string/ask_company"/>
+                android:text="@string/ask_phone"/>
 
             <TextView
                 android:layout_width="match_parent"
