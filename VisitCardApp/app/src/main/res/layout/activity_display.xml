@@ -13,21 +13,21 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/create_from_qr"
-        android:id="@+id/button_create_1"
-        android:layout_marginTop="63dp"
-        android:textStyle="bold"
+        android:text="@string/display_own"
+        android:id="@+id/button_display_1"
+        android:layout_marginTop="83dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/create_from_text_input"
-        android:id="@+id/button_create_2"
+        android:text="@string/display_others"
+        android:id="@+id/button_display_2"
         android:layout_marginTop="57dp"
-        android:textStyle="bold"
-        android:layout_below="@+id/button_create_1"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/button_display_1"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
 </RelativeLayout>

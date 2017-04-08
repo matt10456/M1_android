@@ -10,26 +10,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="fr.unice.visitcardapp.MainActivity">
 
-
-    <FrameLayout
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="70dp"
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_from_text_input"
+        android:id="@+id/button_create_1"
+        android:layout_marginTop="83dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@android:color/darker_gray"
-        android:id="@+id/qr_view">
-
-    </FrameLayout>
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/register_qr"
-        android:id="@+id/button_create"
-        android:layout_marginTop="80dp"
+        android:text="@string/create_from_qr"
+        android:id="@+id/button_create_2"
+        android:layout_marginTop="57dp"
+        android:layout_below="@+id/button_create_1"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/qr_view"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
 </RelativeLayout>

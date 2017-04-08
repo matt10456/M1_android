@@ -4,15 +4,15 @@ public class VisitCard {
     private String firstName;
     private String surname;
     private String phoneNumber;
-    private String companyName;
+    private String job;
     private String email;
     private String website;
 
-    public VisitCard(String firstName, String surname, String phoneNumber, String companyName, String email, String website) {
+    public VisitCard(String firstName, String surname, String phoneNumber, String job, String email, String website) {
         this.firstName = firstName;
         this. surname = surname;
         this.phoneNumber = phoneNumber;
-        this.companyName = companyName;
+        this.job = job;
         this.email = email;
         this.website = website;
     }
@@ -41,12 +41,12 @@ public class VisitCard {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getJob() {
+        return job;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setJob(String job) {
+        this.job = job;
     }
 
     public String getEmail() {

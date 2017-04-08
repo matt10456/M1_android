@@ -13,37 +13,25 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_title"
-        android:id="@+id/textView"
+        android:text="@string/card_created"
+        android:id="@+id/textViewCreated"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="35dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textAllCaps="false"
+        android:typeface="normal"
         android:fontFamily="sans-serif"
-        android:textStyle="normal|bold|italic"
-        android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#000"
+        android:textAlignment="center" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/card_send"
-        android:id="@+id/button_send"
-        android:layout_marginTop="65dp"
-        android:layout_below="@+id/button_create"
-        android:layout_alignStart="@+id/button_create"
-        android:layout_alignEnd="@+id/button_create"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/card_create"
-        android:id="@+id/button_create"
-        android:layout_gravity="center"
-        android:layout_marginTop="52dp"
-        android:layout_below="@+id/textView"
+        android:text="@string/menu"
+        android:id="@+id/button_menu"
+        android:layout_marginTop="57dp"
+        android:layout_below="@+id/button_display"
         android:layout_centerHorizontal="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -52,9 +40,9 @@
         android:layout_height="wrap_content"
         android:text="@string/card_display"
         android:id="@+id/button_display"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="65dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:layout_below="@+id/button_send"
+        android:layout_below="@+id/textViewCreated"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

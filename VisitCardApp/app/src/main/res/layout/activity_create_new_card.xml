@@ -159,9 +159,9 @@
         android:layout_height="wrap_content"
         android:text="@string/confirm_creation"
         android:id="@+id/button_create"
-        android:textStyle="bold"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_below="@+id/linearLayout1" />
+        android:layout_below="@+id/linearLayout1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
 </RelativeLayout>
