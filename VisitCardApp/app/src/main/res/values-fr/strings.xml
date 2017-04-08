@@ -24,4 +24,5 @@
     <string name="display_own">Affiche ma carte</string>
     <string name="menu">Retour au menu</string>
     <string name="card_created">Carte créée !</string>
+    <string name="edit">Editer</string>
 </resources>

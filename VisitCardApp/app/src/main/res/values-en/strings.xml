@@ -24,4 +24,5 @@
     <string name="display_own">Display my card</string>
     <string name="menu">Back to menu</string>
     <string name="card_created">Card created !</string>
+    <string name="edit">Edit</string>
 </resources>
