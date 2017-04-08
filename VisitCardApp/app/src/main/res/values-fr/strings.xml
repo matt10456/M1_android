@@ -9,7 +9,7 @@
     <string name="card_display">Afficher les cartes de visite</string>
     <string name="card_send">Envoyer une carte de visite</string>
     <string name="create_from_qr">Créer a partir d\'un QR code</string>
-    <string name="confirm_creation">Créer carte</string>
+    <string name="confirm_creation">Valider</string>
     <string name="create_from_text_input">Créer ma carte</string>
     <string name="register_qr">Sauvergarder en tant que carte de visite</string>
     <string name="fifth_contact">Cinquième contact</string>
@@ -23,6 +23,6 @@
     <string name="display_others">Affiche les autres cartes</string>
     <string name="display_own">Affiche ma carte</string>
     <string name="menu">Retour au menu</string>
-    <string name="card_created">Carte créée !</string>
     <string name="edit">Editer</string>
+    <string name="card_saved">Carte sauvegardée !</string>
 </resources>

@@ -11,7 +11,7 @@
     <string name="ask_surname">Surname : </string>
     <string name="ask_phone">Phone number : </string>
     <string name="ask_profession">Profession : </string>
-    <string name="confirm_creation">Create card</string>
+    <string name="confirm_creation">Done</string>
     <string name="register_qr">Save as visit card</string>
     <string name="first_contact">First contact</string>
     <string name="second_contact">Second contact</string>
@@ -23,6 +23,6 @@
     <string name="display_own">Display my card</string>
     <string name="display_others">Display other cards</string>
     <string name="menu">Back to menu</string>
-    <string name="card_created">Card created !</string>
+    <string name="card_saved">Card saved !</string>
     <string name="edit">Edit</string>
 </resources>

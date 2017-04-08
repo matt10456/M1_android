@@ -7,7 +7,8 @@
     android:paddingBottom="10dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:background="@mipmap/radialgradientback">
 
     <LinearLayout
         android:layout_gravity="center_horizontal"
@@ -78,25 +79,29 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
+                android:paddingTop="25dp"
                 android:id="@+id/surname">
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:maxLines="1"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
+                android:paddingTop="25dp"
                 android:id="@+id/name"
                 android:layout_below="@+id/surname">
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:maxLines="1"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -104,11 +109,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/phone_number"
-                android:layout_below="@+id/name">
+                android:layout_below="@+id/name"
+                android:paddingTop="25dp">
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:maxLines="1"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -116,37 +124,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/company_name"
-                android:layout_below="@+id/phone_number">
+                android:layout_below="@+id/phone_number"
+                android:paddingTop="25dp">
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:maxLines="1"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
+                android:paddingTop="25dp"
                 android:id="@+id/email"
                 android:layout_below="@+id/company_name">
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:maxLines="1"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
+                android:paddingTop="25dp"
                 android:id="@+id/website"
                 android:layout_below="@+id/email">
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:maxLines="1"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -158,7 +173,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/confirm_creation"
-        android:id="@+id/button_create"
+        android:id="@+id/button_confirm"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="40dp"
         android:layout_below="@+id/linearLayout1"

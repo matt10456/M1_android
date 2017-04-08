@@ -21,7 +21,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="@string/edit"
-            android:id="@+id/button_create_1"
+            android:id="@+id/button_edit"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
         <TextView

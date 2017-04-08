@@ -6,15 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class CreateFromQRActivity extends AppCompatActivity {
+public class CreateNewCardOrEditActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_from_qr);
+        setContentView(R.layout.activity_create_new_card);
 
-        Button saveButton = (Button)findViewById(R.id.button_save);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        Button confirmButton = (Button)findViewById(R.id.button_confirm);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
@@ -23,4 +23,5 @@ public class CreateFromQRActivity extends AppCompatActivity {
         });
 
     }
+
 }

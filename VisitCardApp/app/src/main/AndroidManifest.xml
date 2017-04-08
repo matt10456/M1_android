@@ -18,62 +18,32 @@
 
         <activity
             android:name=".CardCreatedActivity"
-            android:label="@string/card_created">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/card_create">
         </activity>
 
         <activity
             android:name=".CreateActivity"
             android:label="@string/card_create">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".CreateFromQRActivity"
             android:label="@string/create_from_qr">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
-            android:name=".CreateNewCardActivity"
+            android:name=".CreateNewCardOrEditActivity"
             android:label="@string/create_from_text_input">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".DisplayActivity"
             android:label="@string/card_display">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".DisplayVisitCardActivity"
             android:label="@string/card_display">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
     </application>
