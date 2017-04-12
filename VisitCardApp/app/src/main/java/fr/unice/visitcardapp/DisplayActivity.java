@@ -57,7 +57,7 @@ public class DisplayActivity extends AppCompatActivity {
                 if (null != nameCur && nameCur.moveToFirst()) {
                     // Retrieves the name of the selected contact
                     String formattedName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
-                    //Log.d("TEST",formattedName);
+                    Log.d("TEST",formattedName);
                 }
             }
 

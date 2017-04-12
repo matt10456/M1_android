@@ -18,11 +18,11 @@
         android:id="@+id/linearLayout1">
 
         <Button
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/edit"
             android:id="@+id/button_edit"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button" />
 
         <TextView
             android:layout_width="100dp"
@@ -30,7 +30,7 @@
             android:paddingTop="10dp"
             android:id="@+id/textView1"
             android:text="Name"
-            android:layout_marginStart="80dp" />
+            android:layout_marginStart="50dp" />
 
         <TextView
             android:layout_width="100dp"
@@ -50,7 +50,7 @@
         android:text="Job"
         android:layout_below="@+id/linearLayout1"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="150dp" />
+        android:layout_marginStart="160dp" />
 
     <FrameLayout
         android:layout_width="180dp"

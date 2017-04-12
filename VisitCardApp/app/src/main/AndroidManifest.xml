@@ -30,11 +30,6 @@
         </activity>
 
         <activity
-            android:name=".CreateFromQRActivity"
-            android:label="@string/create_from_qr">
-        </activity>
-
-        <activity
             android:name=".CreateNewCardOrEditActivity"
             android:label="@string/create_from_text_input">
         </activity>

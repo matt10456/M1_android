@@ -29,6 +29,7 @@
         android:layout_marginTop="57dp"
         android:layout_below="@+id/button_create_1"
         android:layout_centerHorizontal="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:onClick="QrScanner" />
 
 </RelativeLayout>
