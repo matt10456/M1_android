@@ -2,18 +2,23 @@ package fr.unice.visitcardapp;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity {
     public int PICK_CONTACT_REQUEST = 1;
+    static String cardCreated = "CREATED CARD CHECK";
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
 
         Button createButton = (Button)findViewById(R.id.button_create);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -42,5 +47,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent i = getIntent();
+        int notCreated = i.getIntExtra(cardCreated, 0);
+        if (notCreated == 1) {
+            Snackbar snackbar = Snackbar.make(relativeLayout, "\tCreate a card first.", Snackbar.LENGTH_LONG);
+            snackbar.show();
+            getIntent().removeExtra(cardCreated);
+        }
     }
 }

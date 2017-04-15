@@ -14,6 +14,7 @@ import android.widget.Button;
 
 public class DisplayActivity extends AppCompatActivity {
     public int PICK_CONTACT_REQUEST = 1;
+    public boolean CONTACT_FOUND = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +25,14 @@ public class DisplayActivity extends AppCompatActivity {
         displayButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), DisplayVisitCardActivity.class);
-                startActivity(i);
+                if (CONTACT_FOUND) {
+                    Intent i = new Intent(getApplicationContext(), DisplayVisitCardActivity.class);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    i.putExtra(MainActivity.cardCreated, 1);
+                    startActivity(i);
+                }
             }
         });
 
