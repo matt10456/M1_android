@@ -5,6 +5,8 @@ import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -55,9 +57,10 @@ public class MainActivity extends AppCompatActivity {
         Intent i = getIntent();
         int notCreated = i.getIntExtra(cardCreated, 0);
         if (notCreated == 1) {
-            Snackbar snackbar = Snackbar.make(relativeLayout, "\tCreate a card first.", Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.create_card_first, Snackbar.LENGTH_LONG);
             snackbar.show();
             getIntent().removeExtra(cardCreated);
         }
     }
+
 }

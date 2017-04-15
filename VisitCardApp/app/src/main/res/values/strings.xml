@@ -25,4 +25,5 @@
     <string name="menu">Back to menu</string>
     <string name="card_saved">Card saved !</string>
     <string name="edit">Edit</string>
+    <string name="create_card_first">Create the card first</string>
 </resources>
