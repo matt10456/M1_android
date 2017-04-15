@@ -25,5 +25,6 @@
     <string name="menu">Back to menu</string>
     <string name="edit">Edit</string>
     <string name="card_saved">Card saved !</string>
-    <string name="create_card_first">Create the card first</string>
+    <string name="create_card_first">Create your card first</string>
+    <string name="card_not_found">Contact has no visit card</string>
 </resources>

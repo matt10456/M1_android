@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,15 +15,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 public class DisplayActivity extends AppCompatActivity {
     public int PICK_CONTACT_REQUEST = 1;
     public boolean CONTACT_FOUND = false;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
+        relativeLayout = (RelativeLayout) findViewById(R.id.activity_display);
 
         Button displayButton1 = (Button)findViewById(R.id.button_display_1);
         displayButton1.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +72,14 @@ public class DisplayActivity extends AppCompatActivity {
                     // Retrieves the name of the selected contact
                     String formattedName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
                     Log.d("TEST",formattedName);
+
+                    // We have to look for the name of the contact in our database
+                    // Case 1 : contact is not found (default)
+                    // Case 2 : contact is found
+
+                    // Case 1 :
+                    Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
 
