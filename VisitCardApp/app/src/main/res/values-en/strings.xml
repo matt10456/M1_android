@@ -19,7 +19,7 @@
     <string name="fifth_contact">Fifth contact</string>
     <string name="ask_website">Website :</string>
     <string name="ask_email">"Email : "</string>
-    <string name="ask_profession">Profession</string>
+    <string name="ask_job">Job : </string>
     <string name="display_others">Display other cards</string>
     <string name="display_own">Display my card</string>
     <string name="menu">Back to menu</string>

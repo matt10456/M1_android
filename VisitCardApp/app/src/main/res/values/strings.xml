@@ -10,7 +10,7 @@
     <string name="ask_first_name">First name : </string>
     <string name="ask_surname">Surname : </string>
     <string name="ask_phone">Phone number : </string>
-    <string name="ask_profession">Profession : </string>
+    <string name="ask_job">Job : </string>
     <string name="confirm_creation">Done</string>
     <string name="register_qr">Save as visit card</string>
     <string name="first_contact">First contact</string>
