@@ -1,9 +1,11 @@
 package fr.unice.visitcardapp;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ import com.google.zxing.common.BitMatrix;
 
 public class DisplayVisitCardActivity extends AppCompatActivity {
     public final static int QRcodeWidth = 500;
+    private Database db;
     ImageView imageView;
     Bitmap bitmap;
     // The following string should be created according to the previous activity's output
@@ -27,6 +30,9 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_card);
+
+        db = new Database(this);
+
         imageView = (ImageView)findViewById(R.id.imageView);
 
         Button editButton = (Button)findViewById(R.id.button_edit);
@@ -38,7 +44,21 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
             }
         });
 
-        textValue = "QRAPP:name=Name,surname=Surname,job=Job,phone=XXXXXXXX,mail=XXXX@XXXX.com,website=XXXX.fr";
+        // Display last database value.
+        Cursor rs = db.getLastContact();
+        rs.moveToFirst();
+
+        String name = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_NAME));
+        String surname = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_SURNAME));
+        String job = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_JOB));
+        String phone = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_PHONE));
+        String mail = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_MAIL));
+        String website = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_WEBSITE));
+
+        Log.d("Test", name + " " + surname + " " + job + " " + phone + " " + mail + " " + website);
+
+
+        textValue = "QRAPP:name=name,surname=surname,job=Job,phone=phone,mail=mail,website=XXXX.fr";
 
         try {
             bitmap = TextToImageEncode(textValue);

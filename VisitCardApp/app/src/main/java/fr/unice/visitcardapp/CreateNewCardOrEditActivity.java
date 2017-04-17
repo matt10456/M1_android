@@ -24,11 +24,14 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
     String editTextPhoneValue;
     String editTextMailValue;
     String editTextWebsiteValue;
+    private Database db ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_card);
+
+        db = new Database(this);
 
         editTextName = (EditText)findViewById(R.id.editTextName);
         editTextSurname = (EditText)findViewById(R.id.editTextSurname);
@@ -48,13 +51,22 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                 editTextJobValue = editTextJob.getText().length() == 0 ? emptyField : editTextJob.getText().toString();
                 editTextPhoneValue = editTextPhone.getText().length() == 0 ? emptyField : editTextPhone.getText().toString();
                 editTextMailValue = editTextMail.getText().length() == 0 ? emptyField : editTextMail.getText().toString();
-                editTextWebsiteValue = editTextWebsite.getText().length() == 0 ? emptyField : editTextWebsite.getText().toString();
+                editTextMailValue = editTextWebsite.getText().length() == 0 ? emptyField : editTextWebsite.getText().toString();
 
                 Log.d("TEST", "1 " + editTextNameValue + " 2 " + editTextSurnameValue + " 3 " + editTextJobValue + " 4 " +
                         editTextPhoneValue + " 5 " + editTextMailValue + " 6 " + editTextWebsiteValue);
 
-                Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
-                startActivity(i);
+                // DB INSERTION
+                if(
+                db.insertContact(editTextNameValue, editTextSurnameValue,
+                        editTextJobValue, editTextPhoneValue,
+                        editTextMailValue, editTextMailValue))
+                {
+                    Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
+                    startActivity(i);
+                }
+
+
             }
         });
     }
