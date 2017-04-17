@@ -27,8 +27,9 @@ public class DisplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
-
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_display);
+
+        db = new Database(this);
 
         Button displayButton1 = (Button)findViewById(R.id.button_display_1);
         displayButton1.setOnClickListener(new View.OnClickListener() {
@@ -53,12 +54,10 @@ public class DisplayActivity extends AppCompatActivity {
                 startActivityForResult(intent,PICK_CONTACT_REQUEST);
             }
         });
-
     }
 
     @Override
     public void onActivityResult( int requestCode, int resultCode, Intent data ) {
-        db = new Database(this);
 
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
 
@@ -77,26 +76,21 @@ public class DisplayActivity extends AppCompatActivity {
                     Log.d("TEST",formattedName);
 
                     // We have to look for the name of the contact in our database
-                    // Case 1 : contact is not found (default)
-                    // Case 2 : contact is found
-
                     Cursor rs = db.getDataByName(formattedName);
                     rs.moveToFirst();
 
-                    if(rs!=null && rs.getCount() > 0)
-                    {
+                    if (rs.getCount() > 0) {
+                        // Case 1 : contact is not found (default)
                         Intent i = new Intent(getApplicationContext(), DisplayVisitCardActivity.class);
-                        i.putExtra("name", rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_NAME)));
+                        i.putExtra("name", rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME)));
                         startActivity(i);
-                    }
-                    else
-                    {
+                    } else {
+                        // Case 2 : contact is found
                         Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }
                 }
             }
-
         }
     }
 

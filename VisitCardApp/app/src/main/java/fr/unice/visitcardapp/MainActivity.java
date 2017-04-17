@@ -1,13 +1,10 @@
 package fr.unice.visitcardapp;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -17,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
     static String cardCreated = "CREATED CARD CHECK";
     private RelativeLayout relativeLayout;
     Database db;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent,PICK_CONTACT_REQUEST);
             }
         });
-
-
-
     }
 
     @Override

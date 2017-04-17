@@ -22,20 +22,19 @@ import com.google.zxing.common.BitMatrix;
 
 public class DisplayVisitCardActivity extends AppCompatActivity {
     public final static int QRcodeWidth = 500;
-    private Database db;
     ImageView imageView;
     Bitmap bitmap;
-    // The following string should be created according to the previous activity's output
     String textValue;
+    Cursor rs;
+    Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_card);
+        imageView = (ImageView)findViewById(R.id.imageView);
 
         db = new Database(this);
-
-        imageView = (ImageView)findViewById(R.id.imageView);
 
         Button editButton = (Button)findViewById(R.id.button_edit);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -46,38 +45,34 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
             }
         });
 
-        // Cursor.
-        Cursor rs;
         // Display last database value.
         Bundle extras = this.getIntent().getExtras();
-        if(extras != null) {
-            String Extraname = extras.getString("name");
+        if (extras != null) {
+            String extraname = extras.getString("name");
             // Found a visit card to display.
-             rs = db.getDataByName(Extraname);
+             rs = db.getDataByName(extraname);
         }
-        else
-        {
-            // Show the last.
+        else {
             rs = db.getLastContact();
         }
 
         rs.moveToFirst();
 
-        String name = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_NAME));
-        String surname = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_SURNAME));
-        String job = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_JOB));
-        String phone = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_PHONE));
-        String mail = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_MAIL));
-        String website = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_WEBSITE));
+        String name = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME));
+        String surname = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_SURNAME));
+        String job = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_JOB));
+        String phone = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_PHONE));
+        String mail = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_MAIL));
+        String website = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_WEBSITE));
 
         TextView tName = (TextView)findViewById(R.id.textViewName);
-        tName.append("\n" + name);
+        tName.append(name);
 
         TextView tSurname = (TextView)findViewById(R.id.textViewSurname);
-        tSurname.append("\n" + surname);
+        tSurname.append(surname);
 
         TextView tJob = (TextView)findViewById(R.id.textViewJob);
-        tJob.append("\n" + job);
+        tJob.append(" " + job);
 
         TextView tPhone = (TextView)findViewById(R.id.textViewPhone);
         tPhone.append("\n" + phone);
@@ -88,7 +83,6 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
         TextView tWebsite = (TextView)findViewById(R.id.textViewWebsite);
         tWebsite.append("\n" + website);
 
-
         textValue = "QRAPP:name="+name+",surname="+surname+",job="+job+",phone="+phone+",mail="+mail+",website="+website+"";
 
         try {
@@ -97,7 +91,6 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
         } catch (WriterException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override

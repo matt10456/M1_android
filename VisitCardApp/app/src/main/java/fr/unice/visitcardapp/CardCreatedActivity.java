@@ -33,7 +33,6 @@ public class CardCreatedActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
     }
 
     @Override

@@ -12,18 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class CreateNewCardOrEditActivity extends AppCompatActivity {
-    EditText editTextName;
-    EditText editTextSurname;
-    EditText editTextJob;
-    EditText editTextPhone;
-    EditText editTextMail;
-    EditText editTextWebsite;
-    String editTextNameValue;
-    String editTextSurnameValue;
-    String editTextJobValue;
-    String editTextPhoneValue;
-    String editTextMailValue;
-    String editTextWebsiteValue;
+    private EditText editTextName;
+    private EditText editTextSurname;
+    private EditText editTextJob;
+    private EditText editTextPhone;
+    private EditText editTextMail;
+    private EditText editTextWebsite;
+    private String editTextNameValue;
+    private String editTextSurnameValue;
+    private String editTextJobValue;
+    private String editTextPhoneValue;
+    private String editTextMailValue;
+    private String editTextWebsiteValue;
     private Database db ;
 
     @Override
@@ -46,9 +46,9 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String emptyField = "None";
 
-                editTextNameValue = editTextName.getText().length() == 0 ? emptyField : editTextName.getText().toString();
-                editTextSurnameValue = editTextSurname.getText().length() == 0 ? emptyField : editTextSurname.getText().toString();
-                editTextJobValue = editTextJob.getText().length() == 0 ? emptyField : editTextJob.getText().toString();
+                editTextNameValue = editTextName.getText().length() == 0 ? "" : editTextName.getText().toString();
+                editTextSurnameValue = editTextSurname.getText().length() == 0 ? "" : editTextSurname.getText().toString();
+                editTextJobValue = editTextJob.getText().length() == 0 ? "" : editTextJob.getText().toString();
                 editTextPhoneValue = editTextPhone.getText().length() == 0 ? emptyField : editTextPhone.getText().toString();
                 editTextMailValue = editTextMail.getText().length() == 0 ? emptyField : editTextMail.getText().toString();
                 editTextWebsiteValue = editTextWebsite.getText().length() == 0 ? emptyField : editTextWebsite.getText().toString();
@@ -57,17 +57,13 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                         editTextPhoneValue + " 5 " + editTextMailValue + " 6 " + editTextWebsiteValue);
 
                 // DB INSERTION
-                if(
-                db.insertContact(editTextNameValue, editTextSurnameValue,
+                if (db.insertContact(editTextNameValue, editTextSurnameValue,
                         editTextJobValue, editTextPhoneValue,
-                        editTextMailValue, editTextWebsiteValue))
-                {
+                        editTextMailValue, editTextWebsiteValue)) {
                     // Rechercher si le nom existe deja si oui erreur
                     Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
                     startActivity(i);
                 }
-
-
             }
         });
     }

@@ -28,16 +28,16 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:id="@+id/textViewName"
-            android:text="Name"
-            android:layout_marginStart="50dp" />
+            android:layout_marginStart="50dp"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:id="@+id/textViewSurname"
-            android:text="Surname"
-            android:layout_weight="0.34" />
+            android:layout_weight="0.34"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
 
     </LinearLayout>
 
@@ -46,10 +46,11 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:id="@+id/textViewJob"
-        android:text="Job"
         android:layout_below="@+id/linearLayout1"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="140dp" />
+        android:layout_marginStart="140dp"
+        android:text="@string/ask_job"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
 
     <FrameLayout
         android:layout_width="200dp"
@@ -77,13 +78,14 @@
         android:layout_below="@id/qr_placement">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:id="@+id/textViewPhone"
-            android:text="Phone :"
-            android:layout_marginTop="100dp"
-            android:layout_weight="0.5"/>
+            android:text="@string/ask_phone"
+            android:layout_marginTop="88dp"
+            android:layout_weight="0.5"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
 
         <LinearLayout
             android:layout_gravity="center_vertical"
@@ -92,24 +94,24 @@
             android:weightSum="0.5"
             android:id="@+id/linearLayout3"
             android:orientation="vertical"
-            android:layout_below="@id/qr_placement"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="50dp">
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:id="@+id/textViewMail"
-                android:text="Mail adress :" />
+                android:text="@string/ask_email"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:paddingTop="10dp"
                 android:id="@+id/textViewWebsite"
-                android:text="Website :"
-                android:layout_below="@id/textViewMail" />
+                android:text="@string/ask_website"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
         </LinearLayout>
 
