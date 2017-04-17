@@ -85,8 +85,6 @@ public class DisplayActivity extends AppCompatActivity {
 
                     if(rs!=null && rs.getCount() > 0)
                     {
-                        Log.d("Test", rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_NAME)));
-
                         Intent i = new Intent(getApplicationContext(), DisplayVisitCardActivity.class);
                         i.putExtra("name", rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_NAME)));
                         startActivity(i);

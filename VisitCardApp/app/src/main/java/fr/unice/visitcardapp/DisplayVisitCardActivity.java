@@ -46,6 +46,7 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
             }
         });
 
+        // Cursor.
         Cursor rs;
         // Display last database value.
         Bundle extras = this.getIntent().getExtras();
@@ -60,7 +61,6 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
             rs = db.getLastContact();
         }
 
-
         rs.moveToFirst();
 
         String name = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_NAME));
@@ -69,8 +69,6 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
         String phone = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_PHONE));
         String mail = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_MAIL));
         String website = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_WEBSITE));
-
-        Log.d("Test", name + " " + surname + " " + job + " " + phone + " " + mail + " " + website);
 
         TextView tName = (TextView)findViewById(R.id.textViewName);
         tName.append("\n" + name);
@@ -100,16 +98,6 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-    }
-
-    @Override
-    public void onActivityResult( int requestCode, int resultCode, Intent data ) {
-        db = new Database(this);
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            String Extraname = extras.getString("name");
-            Log.d("TEST", Extraname);
-        }
     }
 
     @Override
