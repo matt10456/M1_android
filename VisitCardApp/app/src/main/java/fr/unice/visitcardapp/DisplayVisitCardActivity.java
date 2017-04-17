@@ -46,8 +46,21 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
             }
         });
 
+        Cursor rs;
         // Display last database value.
-        Cursor rs = db.getLastContact();
+        Bundle extras = this.getIntent().getExtras();
+        if(extras != null) {
+            String Extraname = extras.getString("name");
+            // Found a visit card to display.
+             rs = db.getDataByName(Extraname);
+        }
+        else
+        {
+            // Show the last.
+            rs = db.getLastContact();
+        }
+
+
         rs.moveToFirst();
 
         String name = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_NAME));
@@ -87,6 +100,16 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onActivityResult( int requestCode, int resultCode, Intent data ) {
+        db = new Database(this);
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            String Extraname = extras.getString("name");
+            Log.d("TEST", Extraname);
+        }
     }
 
     @Override

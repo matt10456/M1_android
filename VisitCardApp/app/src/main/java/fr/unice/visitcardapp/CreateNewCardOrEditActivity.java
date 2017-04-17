@@ -62,6 +62,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                         editTextJobValue, editTextPhoneValue,
                         editTextMailValue, editTextWebsiteValue))
                 {
+                    // Rechercher si le nom existe deja si oui erreur
                     Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
                     startActivity(i);
                 }

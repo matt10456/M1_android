@@ -21,11 +21,13 @@ public class DisplayActivity extends AppCompatActivity {
     public int PICK_CONTACT_REQUEST = 1;
     public boolean CONTACT_FOUND = false;
     private RelativeLayout relativeLayout;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
+
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_display);
 
         Button displayButton1 = (Button)findViewById(R.id.button_display_1);
@@ -56,6 +58,7 @@ public class DisplayActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult( int requestCode, int resultCode, Intent data ) {
+        db = new Database(this);
 
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
 
@@ -77,9 +80,22 @@ public class DisplayActivity extends AppCompatActivity {
                     // Case 1 : contact is not found (default)
                     // Case 2 : contact is found
 
-                    // Case 1 :
-                    Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    Cursor rs = db.getDataByName(formattedName);
+                    rs.moveToFirst();
+
+                    if(rs!=null && rs.getCount() > 0)
+                    {
+                        Log.d("Test", rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_NAME)));
+
+                        Intent i = new Intent(getApplicationContext(), DisplayVisitCardActivity.class);
+                        i.putExtra("name", rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_NAME)));
+                        startActivity(i);
+                    }
+                    else
+                    {
+                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
                 }
             }
 

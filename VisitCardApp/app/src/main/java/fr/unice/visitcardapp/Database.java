@@ -64,7 +64,13 @@ public class Database extends SQLiteOpenHelper {
 
     public Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts where id="+id+"", null );
+        Cursor res =  db.rawQuery( "select * from contacts where id="+id, null );
+        return res;
+    }
+
+    public Cursor getDataByName(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from contacts where "+CONTACTS_COLUMN_NAME+"=?", new String[]{name});
         return res;
     }
 
