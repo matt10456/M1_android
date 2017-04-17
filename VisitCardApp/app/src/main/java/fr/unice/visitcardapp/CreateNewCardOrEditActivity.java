@@ -51,7 +51,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                 editTextJobValue = editTextJob.getText().length() == 0 ? emptyField : editTextJob.getText().toString();
                 editTextPhoneValue = editTextPhone.getText().length() == 0 ? emptyField : editTextPhone.getText().toString();
                 editTextMailValue = editTextMail.getText().length() == 0 ? emptyField : editTextMail.getText().toString();
-                editTextMailValue = editTextWebsite.getText().length() == 0 ? emptyField : editTextWebsite.getText().toString();
+                editTextWebsiteValue = editTextWebsite.getText().length() == 0 ? emptyField : editTextWebsite.getText().toString();
 
                 Log.d("TEST", "1 " + editTextNameValue + " 2 " + editTextSurnameValue + " 3 " + editTextJobValue + " 4 " +
                         editTextPhoneValue + " 5 " + editTextMailValue + " 6 " + editTextWebsiteValue);
@@ -60,7 +60,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                 if(
                 db.insertContact(editTextNameValue, editTextSurnameValue,
                         editTextJobValue, editTextPhoneValue,
-                        editTextMailValue, editTextMailValue))
+                        editTextMailValue, editTextWebsiteValue))
                 {
                     Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
                     startActivity(i);

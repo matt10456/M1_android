@@ -68,8 +68,7 @@ public class Database extends SQLiteOpenHelper {
         return res;
     }
 
-    public Cursor getLastContact()
-    {
+    public Cursor getLastContact() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from contacts ORDER BY id DESC", null );
         return res;
