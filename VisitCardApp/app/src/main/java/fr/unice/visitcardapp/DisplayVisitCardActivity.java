@@ -36,43 +36,33 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
 
         db = new Database(this);
 
-        Button editButton = (Button)findViewById(R.id.button_edit);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
-                startActivity(i);
-            }
-        });
-
         // Display last database value.
         Bundle extras = this.getIntent().getExtras();
         if (extras != null) {
-            String extraname = extras.getString("name");
+            String extraName = extras.getString("name");
             // Found a visit card to display.
-             rs = db.getDataByName(extraname);
-        }
-        else {
+             rs = db.getDataByName(extraName);
+        } else {
             rs = db.getLastContact();
         }
 
         rs.moveToFirst();
 
-        String name = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME));
-        String surname = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_SURNAME));
-        String job = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_JOB));
-        String phone = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_PHONE));
-        String mail = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_MAIL));
-        String website = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_WEBSITE));
+        final String name = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME));
+        final String surname = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_SURNAME));
+        final String job = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_JOB));
+        final String phone = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_PHONE));
+        final String mail = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_MAIL));
+        final String website = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_WEBSITE));
 
         TextView tName = (TextView)findViewById(R.id.textViewName);
         tName.append(name);
 
         TextView tSurname = (TextView)findViewById(R.id.textViewSurname);
-        tSurname.append(surname);
+        tSurname.append(" " + surname);
 
         TextView tJob = (TextView)findViewById(R.id.textViewJob);
-        tJob.append(" " + job);
+        tJob.append("Job : " + job);
 
         TextView tPhone = (TextView)findViewById(R.id.textViewPhone);
         tPhone.append("\n" + phone);
@@ -91,6 +81,17 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
         } catch (WriterException e) {
             e.printStackTrace();
         }
+
+        Button editButton = (Button)findViewById(R.id.button_edit);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
+                i.putExtra(CreateNewCardOrEditActivity.editMode,true);
+                i.putExtra(CreateNewCardOrEditActivity.editContent, new String[]{name,surname,job,phone,mail,website});
+                startActivity(i);
+            }
+        });
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class CreateNewCardOrEditActivity extends AppCompatActivity {
     private EditText editTextName;
@@ -25,6 +26,9 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
     private String editTextMailValue;
     private String editTextWebsiteValue;
     private Database db ;
+    static String createMode = "CREATE MODE";
+    static String editMode = "EDIT MODE";
+    static String editContent = "EDIT CONTENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +44,26 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
         editTextMail = (EditText)findViewById(R.id.editTextEmail);
         editTextWebsite = (EditText)findViewById(R.id.editTextWebsite);
 
+        Intent i = getIntent();
+        if (i.getBooleanExtra(editMode,false)) {
+            String[] cardContents = i.getStringArrayExtra(editContent);
+            editTextName.setText(cardContents[0], TextView.BufferType.EDITABLE);
+            editTextSurname.setText(cardContents[1], TextView.BufferType.EDITABLE);
+            editTextJob.setText(cardContents[2], TextView.BufferType.EDITABLE);
+            editTextPhone.setText(cardContents[3], TextView.BufferType.EDITABLE);
+            editTextMail.setText(cardContents[4], TextView.BufferType.EDITABLE);
+            editTextWebsite.setText(cardContents[5], TextView.BufferType.EDITABLE);
+        }
+
         Button confirmButton = (Button)findViewById(R.id.button_confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emptyField = "None";
+                String emptyField = "";
 
-                editTextNameValue = editTextName.getText().length() == 0 ? "" : editTextName.getText().toString();
-                editTextSurnameValue = editTextSurname.getText().length() == 0 ? "" : editTextSurname.getText().toString();
-                editTextJobValue = editTextJob.getText().length() == 0 ? "" : editTextJob.getText().toString();
+                editTextNameValue = editTextName.getText().length() == 0 ? emptyField : editTextName.getText().toString();
+                editTextSurnameValue = editTextSurname.getText().length() == 0 ? emptyField : editTextSurname.getText().toString();
+                editTextJobValue = editTextJob.getText().length() == 0 ? emptyField : editTextJob.getText().toString();
                 editTextPhoneValue = editTextPhone.getText().length() == 0 ? emptyField : editTextPhone.getText().toString();
                 editTextMailValue = editTextMail.getText().length() == 0 ? emptyField : editTextMail.getText().toString();
                 editTextWebsiteValue = editTextWebsite.getText().length() == 0 ? emptyField : editTextWebsite.getText().toString();
