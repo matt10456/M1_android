@@ -27,7 +27,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:id="@+id/textView1"
+            android:id="@+id/textViewName"
             android:text="Name"
             android:layout_marginStart="50dp" />
 
@@ -35,7 +35,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:id="@+id/textView2"
+            android:id="@+id/textViewSurname"
             android:text="Surname"
             android:layout_weight="0.34" />
 
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
-        android:id="@+id/textView3"
+        android:id="@+id/textViewJob"
         android:text="Job"
         android:layout_below="@+id/linearLayout1"
         android:layout_alignParentStart="true"
@@ -57,8 +57,8 @@
         android:layout_marginTop="49dp"
         android:background="@android:color/darker_gray"
         android:id="@+id/qr_placement"
-        android:layout_below="@+id/textView3"
-        android:layout_alignStart="@+id/textView3">
+        android:layout_below="@+id/textViewJob"
+        android:layout_alignStart="@+id/textViewJob">
 
         <ImageView
             android:layout_width="match_parent"
@@ -80,8 +80,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:id="@+id/textView4"
-            android:text="Phone : \n XXXXXXXXXX"
+            android:id="@+id/textViewPhone"
+            android:text="Phone :"
             android:layout_marginTop="100dp"
             android:layout_weight="0.5"/>
 
@@ -100,16 +100,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
-                android:id="@+id/textView5"
-                android:text="Mail adress : \n XXXX@XXXX.com" />
+                android:id="@+id/textViewMail"
+                android:text="Mail adress :" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:paddingTop="10dp"
-                android:id="@+id/textView6"
-                android:text="Website : www.XXXXX.fr"
-                android:layout_below="@id/textView5" />
+                android:id="@+id/textViewWebsite"
+                android:text="Website :"
+                android:layout_below="@id/textViewMail" />
 
         </LinearLayout>
 

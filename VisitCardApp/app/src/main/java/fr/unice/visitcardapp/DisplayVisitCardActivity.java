@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -56,6 +58,24 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
         String website = rs.getString(rs.getColumnIndex(db.CONTACTS_COLUMN_WEBSITE));
 
         Log.d("Test", name + " " + surname + " " + job + " " + phone + " " + mail + " " + website);
+
+        TextView tName = (TextView)findViewById(R.id.textViewName);
+        tName.append("\n" + name);
+
+        TextView tSurname = (TextView)findViewById(R.id.textViewSurname);
+        tSurname.append("\n" + surname);
+
+        TextView tJob = (TextView)findViewById(R.id.textViewJob);
+        tJob.append("\n" + job);
+
+        TextView tPhone = (TextView)findViewById(R.id.textViewPhone);
+        tPhone.append("\n" + phone);
+
+        TextView tMail = (TextView)findViewById(R.id.textViewMail);
+        tMail.append("\n" + mail);
+
+        TextView tWebsite = (TextView)findViewById(R.id.textViewWebsite);
+        tWebsite.append("\n" + website);
 
 
         textValue = "QRAPP:name="+name+",surname="+surname+",job="+job+",phone="+phone+",mail="+mail+",website="+website+"";
