@@ -58,7 +58,7 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
         Log.d("Test", name + " " + surname + " " + job + " " + phone + " " + mail + " " + website);
 
 
-        textValue = "QRAPP:name=name,surname=surname,job=Job,phone=phone,mail=mail,website=XXXX.fr";
+        textValue = "QRAPP:name="+name+",surname="+surname+",job="+job+",phone="+phone+",mail="+mail+",website="+website+"";
 
         try {
             bitmap = TextToImageEncode(textValue);
