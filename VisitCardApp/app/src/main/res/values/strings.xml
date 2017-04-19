@@ -6,7 +6,7 @@
     <string name="card_send">Send visit card</string>
     <string name="card_display">Display visit card</string>
     <string name="create_from_qr">Create card from QR code</string>
-    <string name="create_from_text_input">Create a card</string>
+    <string name="create_from_text_input">Create a card from contact</string>
     <string name="ask_first_name">First name : </string>
     <string name="ask_surname">Surname : </string>
     <string name="ask_phone">Phone number : </string>

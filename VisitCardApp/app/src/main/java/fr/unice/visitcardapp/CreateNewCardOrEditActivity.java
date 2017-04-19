@@ -49,10 +49,6 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
             String[] cardContents = i.getStringArrayExtra(editContent);
             editTextName.setText(cardContents[0], TextView.BufferType.EDITABLE);
             editTextSurname.setText(cardContents[1], TextView.BufferType.EDITABLE);
-            editTextJob.setText(cardContents[2], TextView.BufferType.EDITABLE);
-            editTextPhone.setText(cardContents[3], TextView.BufferType.EDITABLE);
-            editTextMail.setText(cardContents[4], TextView.BufferType.EDITABLE);
-            editTextWebsite.setText(cardContents[5], TextView.BufferType.EDITABLE);
         }
 
         Button confirmButton = (Button)findViewById(R.id.button_confirm);
@@ -72,9 +68,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                         editTextPhoneValue + " 5 " + editTextMailValue + " 6 " + editTextWebsiteValue);
 
                 // DB INSERTION
-                if (db.insertContact(editTextNameValue, editTextSurnameValue,
-                        editTextJobValue, editTextPhoneValue,
-                        editTextMailValue, editTextWebsiteValue)) {
+                if (db.insertContact(editTextNameValue, "1", "1")) {
                     // Rechercher si le nom existe deja si oui erreur
                     Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
                     startActivity(i);

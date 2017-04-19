@@ -77,6 +77,7 @@ public class DisplayActivity extends AppCompatActivity {
 
                     // We have to look for the name of the contact in our database
                     Cursor rs = db.getDataByName(formattedName);
+
                     rs.moveToFirst();
 
                     if (rs.getCount() > 0) {

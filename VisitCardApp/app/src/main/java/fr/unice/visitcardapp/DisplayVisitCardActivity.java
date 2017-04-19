@@ -49,31 +49,12 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
         rs.moveToFirst();
 
         final String name = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME));
-        final String surname = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_SURNAME));
-        final String job = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_JOB));
-        final String phone = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_PHONE));
-        final String mail = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_MAIL));
-        final String website = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_WEBSITE));
 
         TextView tName = (TextView)findViewById(R.id.textViewName);
         tName.append(name);
 
-        TextView tSurname = (TextView)findViewById(R.id.textViewSurname);
-        tSurname.append(" " + surname);
 
-        TextView tJob = (TextView)findViewById(R.id.textViewJob);
-        tJob.append("Job : " + job);
-
-        TextView tPhone = (TextView)findViewById(R.id.textViewPhone);
-        tPhone.append("\n" + phone);
-
-        TextView tMail = (TextView)findViewById(R.id.textViewMail);
-        tMail.append("\n" + mail);
-
-        TextView tWebsite = (TextView)findViewById(R.id.textViewWebsite);
-        tWebsite.append("\n" + website);
-
-        textValue = "QRAPP:name="+name+",surname="+surname+",job="+job+",phone="+phone+",mail="+mail+",website="+website+"";
+        textValue = "QRAPP:name="+name+",surname=surname,job=job,phone=phone,mail=mail,website=website";
 
         try {
             bitmap = TextToImageEncode(textValue);
@@ -88,7 +69,7 @@ public class DisplayVisitCardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
                 i.putExtra(CreateNewCardOrEditActivity.editMode,true);
-                i.putExtra(CreateNewCardOrEditActivity.editContent, new String[]{name,surname,job,phone,mail,website});
+                i.putExtra(CreateNewCardOrEditActivity.editContent, new String[]{name});
                 startActivity(i);
             }
         });

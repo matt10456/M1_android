@@ -16,11 +16,8 @@ class Database extends SQLiteOpenHelper {
     static final String CONTACTS_TABLE_NAME = "contacts";
     static final String CONTACTS_COLUMN_ID = "id";
     static final String CONTACTS_COLUMN_NAME = "name";
-    static final String CONTACTS_COLUMN_SURNAME = "surname";
-    static final String CONTACTS_COLUMN_JOB = "job";
-    static final String CONTACTS_COLUMN_PHONE = "phone";
-    static final String CONTACTS_COLUMN_MAIL = "email";
-    static final String CONTACTS_COLUMN_WEBSITE = "website";
+    static final String CONTACTS_COLUMN_1 = "display1";
+    static final String CONTACTS_COLUMN_2 = "display2";
     private HashMap hp;
 
     Database(Context context) {
@@ -30,7 +27,7 @@ class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table contacts " +
-                "(id integer primary key, name text,surname text,job text, phone text, email text, website text)");
+                "(id integer primary key, name text, display1 text, display2 text)");
     }
 
     @Override
@@ -44,34 +41,42 @@ class Database extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    boolean insertContact (String name, String surname, String job, String phone,String email, String website) {
+    public void sup()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS contacts");
+    }
+
+    boolean insertContact (String name, String d1, String d2) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("surname", surname);
-        contentValues.put("job", job);
-        contentValues.put("phone", phone);
-        contentValues.put("email", email);
-        contentValues.put("website", website);
+        contentValues.put(CONTACTS_COLUMN_NAME , name);
+        contentValues.put(CONTACTS_COLUMN_1, d1);
+        contentValues.put(CONTACTS_COLUMN_2, d2);
         db.insert("contacts", null, contentValues);
         return true;
     }
 
     Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts where id="+id, null );
+
+        Cursor res =  db.rawQuery( "select * from contacts where id=?", new String[]{Integer.toString(id)});
         return res;
     }
 
     Cursor getDataByName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts where "+CONTACTS_COLUMN_NAME+"=?", new String[]{name});
-        return res;
+        Cursor res = null;
+        if(!name.equals(""))
+        {
+            res =  db.rawQuery("select * from contacts where "+CONTACTS_COLUMN_NAME+"=?", new String[]{name});
+        }
+       return res;
     }
 
     Cursor getLastContact() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts ORDER BY id DESC", null );
+        Cursor res =  db.rawQuery( "select * from contacts ORDER BY id DESC", null);
         return res;
     }
 }

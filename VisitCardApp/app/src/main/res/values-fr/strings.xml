@@ -10,7 +10,7 @@
     <string name="card_send">Envoyer une carte de visite</string>
     <string name="create_from_qr">Créer a partir d\'un QR code</string>
     <string name="confirm_creation">Valider</string>
-    <string name="create_from_text_input">Créer une carte</string>
+    <string name="create_from_text_input">Créer une carte à partir d\'un contact</string>
     <string name="register_qr">Sauvergarder en tant que carte de visite</string>
     <string name="fifth_contact">Cinquième contact</string>
     <string name="first_contact">Premier contact</string>
@@ -27,4 +27,5 @@
     <string name="card_saved">Carte sauvegardée !</string>
     <string name="create_card_first">Créez votre carte d\'abord.</string>
     <string name="card_not_found">Pas de carte de visite pour ce contact</string>
+    <string name="card_alreadyExist">Le contact possède déjà une carte.</string>
 </resources>

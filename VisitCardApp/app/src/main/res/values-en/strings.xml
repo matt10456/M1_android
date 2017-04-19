@@ -10,7 +10,7 @@
     <string name="card_send">Send visit card</string>
     <string name="confirm_creation">Done</string>
     <string name="create_from_qr">Create card from QR code</string>
-    <string name="create_from_text_input">Create a card</string>
+    <string name="create_from_text_input">Create a card from contact</string>
     <string name="register_qr">Save as visit card</string>
     <string name="first_contact">First contact</string>
     <string name="second_contact">Second contact</string>
@@ -27,4 +27,6 @@
     <string name="card_saved">Card saved !</string>
     <string name="create_card_first">Create your card first</string>
     <string name="card_not_found">Contact has no visit card</string>
+    <string name="card_alreadyExist">Contact already has a card</string>
+
 </resources>

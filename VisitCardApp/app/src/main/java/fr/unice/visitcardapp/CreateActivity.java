@@ -1,6 +1,12 @@
 package fr.unice.visitcardapp;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,27 +15,75 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.google.zxing.Result;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class CreateActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
+    public int PICK_CONTACT_REQUEST = 1;
+    private RelativeLayout relativeLayout;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
 
-        Button myCardButton = (Button)findViewById(R.id.button_create_1);
+        relativeLayout = (RelativeLayout) findViewById(R.id.activity_create);
+        db = new Database(this);
+
+        Button myCardButton = (Button) findViewById(R.id.button_create_1);
         myCardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
-                startActivity(i);
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(intent, PICK_CONTACT_REQUEST);
             }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
+            // Verify if contact exist in Database.
+            ContentResolver cr = getContentResolver();
+            Uri dataUri = data.getData();
+            String[] projection = { ContactsContract.Contacts._ID };
+            Cursor cursor = cr.query(dataUri, projection, null, null, null);
+            if ( null != cursor && cursor.moveToFirst()) {
+
+                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                String where = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+                String[] whereParameters = new String[]{id, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
+                Cursor nameCur = cr.query(ContactsContract.Data.CONTENT_URI, null, where, whereParameters, null);
+                if (null != nameCur && nameCur.moveToFirst()) {
+
+                    // Retrieves the name of the selected contact
+                    String formattedName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
+                    // Search in Database.
+                    Cursor rs = db.getDataByName(formattedName);
+
+                    rs.moveToFirst();
+
+                    // Case 1 : contact already has a visit card.
+                    if (rs.getCount() > 0) {
+                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_alreadyExist, Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                    // Case 2 : We have to create visit card with the contact.
+                    else
+                    {
+
+                    }
+                }
+            }
+        }
+
+    }
+
 
     public void QrScanner(View view){
         // Programmatically initialize the scanner view
