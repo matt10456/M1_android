@@ -17,100 +17,82 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.google.zxing.Result;
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
-
-public class CreateActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
-    private ZXingScannerView mScannerView;
+public class DisplayActivityOLD extends AppCompatActivity {
     public int PICK_CONTACT_REQUEST = 1;
+    public boolean CONTACT_FOUND = false;
     private RelativeLayout relativeLayout;
     private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create);
+        setContentView(R.layout.activity_display_old);
+        relativeLayout = (RelativeLayout) findViewById(R.id.activity_display);
 
-        relativeLayout = (RelativeLayout) findViewById(R.id.activity_create);
         db = new Database(this);
 
-        Button myCardButton = (Button) findViewById(R.id.button_create_1);
-        myCardButton.setOnClickListener(new View.OnClickListener() {
+        Button displayButton1 = (Button)findViewById(R.id.button_display_1);
+        displayButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if (CONTACT_FOUND) {
+                //    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                //    startActivity(i);
+                //} else {
+                //    Intent i = new Intent(getApplicationContext(), MainActivityOLD.class);
+                //    i.putExtra(MainActivityOLD.cardCreated, 1);
+                //    startActivity(i);
+                //}
+            }
+        });
+
+        Button displayButton2 = (Button)findViewById(R.id.button_display_2);
+        displayButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, PICK_CONTACT_REQUEST);
+                startActivityForResult(intent,PICK_CONTACT_REQUEST);
             }
         });
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult( int requestCode, int resultCode, Intent data ) {
 
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
-            // Verify if contact exist in Database.
+
             ContentResolver cr = getContentResolver();
             Uri dataUri = data.getData();
             String[] projection = { ContactsContract.Contacts._ID };
             Cursor cursor = cr.query(dataUri, projection, null, null, null);
             if ( null != cursor && cursor.moveToFirst()) {
-
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String where = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
                 String[] whereParameters = new String[]{id, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
                 Cursor nameCur = cr.query(ContactsContract.Data.CONTENT_URI, null, where, whereParameters, null);
                 if (null != nameCur && nameCur.moveToFirst()) {
-
                     // Retrieves the name of the selected contact
                     String formattedName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
-                    // Search in Database.
+                    Log.d("TEST",formattedName);
+
+                    // We have to look for the name of the contact in our database
                     Cursor rs = db.getDataByName(formattedName);
 
                     rs.moveToFirst();
 
-                    // Case 1 : contact already has a visit card
                     if (rs.getCount() > 0) {
-                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_already_exists, Snackbar.LENGTH_LONG);
+                        // Case 1 : contact is not found (default)
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        i.putExtra("name", rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME)));
+                        startActivity(i);
+                    } else {
+                        // Case 2 : contact is found
+                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }
-                    // Case 2 : We have to create visit card for the contact
-                    // else {
-                    //
-                    // }
                 }
             }
         }
-    }
-
-    public void QrScanner(View view){
-        // Programmatically initialize the scanner view
-        mScannerView = new ZXingScannerView(this);
-        setContentView(mScannerView);
-        // Register ourselves as a handler for scan results
-        mScannerView.setResultHandler(this);
-        // Start camera
-        mScannerView.startCamera();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // Stop camera on pause
-        if (mScannerView != null) mScannerView.stopCamera();
-    }
-
-    @Override
-    public void handleResult(Result rawResult) {
-        // Do something with the result here
-
-        // Prints scan results
-        Log.e("handler", rawResult.getText());
-        // Prints the scan format (qrcode)
-        Log.e("handler", rawResult.getBarcodeFormat().toString());
-
-        Intent i = new Intent(getApplicationContext(), DisplayVisitCardActivity.class);
-        startActivity(i);
-
     }
 
     @Override
@@ -125,7 +107,7 @@ public class CreateActivity extends AppCompatActivity implements ZXingScannerVie
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.back_menu:
-                Intent intent = new Intent(CreateActivity.this, MainActivity.class);
+                Intent intent = new Intent(DisplayActivityOLD.this, MainActivityOLD.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;

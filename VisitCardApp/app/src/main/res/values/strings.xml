@@ -2,11 +2,11 @@
     <!-- <string name=""></string> -->
     <string name="app_name">VisitCardApp</string>
     <string name="app_title">Visit card creation App</string>
-    <string name="card_create">Create visit card</string>
-    <string name="card_send">Send visit card</string>
-    <string name="card_display">Display visit card</string>
-    <string name="create_from_qr">Create card from QR code</string>
-    <string name="create_from_text_input">Create a card from contact</string>
+    <string name="card_create">Create</string>
+    <string name="card_send">Send</string>
+    <string name="card_display">Display</string>
+    <string name="create_from_qr">Create with QR</string>
+    <string name="create_from_text_input">Create from contact</string>
     <string name="ask_first_name">First name : </string>
     <string name="ask_surname">Surname : </string>
     <string name="ask_phone">Phone number : </string>
@@ -21,11 +21,12 @@
     <string name="ask_email">Email : </string>
     <string name="ask_website">Website :</string>
     <string name="display_own">Display my card</string>
-    <string name="display_others">Display other cards</string>
-    <string name="menu">Back to menu</string>
+    <string name="display_others">Others</string>
+    <string name="menu">Back to my card</string>
     <string name="card_saved">Card saved !</string>
     <string name="edit">Edit</string>
     <string name="create_card_first">Create your card first</string>
     <string name="card_not_found">Contact has no visit card</string>
     <string name="card_already_exists">Contact already has a card</string>
+    <string name="create_user_card">Create user card</string>
 </resources>

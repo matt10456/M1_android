@@ -51,6 +51,10 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
             //editTextSurname.setText(cardContents[1], TextView.BufferType.EDITABLE);
         }
 
+        if (i.getBooleanExtra(createMode,false)) {
+            // code to create new card for a contact
+        }
+
         Button confirmButton = (Button)findViewById(R.id.button_confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,10 +71,11 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                 Log.d("TEST", "1 " + editTextNameValue + " 2 " + editTextSurnameValue + " 3 " + editTextJobValue + " 4 " +
                         editTextPhoneValue + " 5 " + editTextMailValue + " 6 " + editTextWebsiteValue);
 
-                // DB INSERTION
+                // DB insertion
                 if (db.insertContact(editTextNameValue, "1", "1")) {
                     // Rechercher si le nom existe deja si oui erreur
-                    Intent i = new Intent(getApplicationContext(), DisplayVisitCardActivity.class);
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 }
             }
@@ -89,7 +94,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.back_menu:
-                Intent intent = new Intent(CreateNewCardOrEditActivity.this, MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;
