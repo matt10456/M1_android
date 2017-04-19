@@ -108,7 +108,7 @@ public class CreateActivity extends AppCompatActivity implements ZXingScannerVie
         // Prints the scan format (qrcode)
         Log.e("handler", rawResult.getBarcodeFormat().toString());
 
-        Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
+        Intent i = new Intent(getApplicationContext(), DisplayVisitCardActivity.class);
         startActivity(i);
 
     }

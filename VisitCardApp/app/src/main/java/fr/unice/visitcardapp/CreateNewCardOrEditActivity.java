@@ -48,7 +48,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
         if (i.getBooleanExtra(editMode,false)) {
             String[] cardContents = i.getStringArrayExtra(editContent);
             editTextName.setText(cardContents[0], TextView.BufferType.EDITABLE);
-            editTextSurname.setText(cardContents[1], TextView.BufferType.EDITABLE);
+            //editTextSurname.setText(cardContents[1], TextView.BufferType.EDITABLE);
         }
 
         Button confirmButton = (Button)findViewById(R.id.button_confirm);
@@ -70,7 +70,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                 // DB INSERTION
                 if (db.insertContact(editTextNameValue, "1", "1")) {
                     // Rechercher si le nom existe deja si oui erreur
-                    Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
+                    Intent i = new Intent(getApplicationContext(), DisplayVisitCardActivity.class);
                     startActivity(i);
                 }
             }
