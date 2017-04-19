@@ -27,4 +27,5 @@
     <string name="edit">Edit</string>
     <string name="create_card_first">Create your card first</string>
     <string name="card_not_found">Contact has no visit card</string>
+    <string name="card_already_exists">Contact already has a card</string>
 </resources>

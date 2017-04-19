@@ -68,22 +68,19 @@ public class CreateActivity extends AppCompatActivity implements ZXingScannerVie
 
                     rs.moveToFirst();
 
-                    // Case 1 : contact already has a visit card.
+                    // Case 1 : contact already has a visit card
                     if (rs.getCount() > 0) {
-                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_alreadyExist, Snackbar.LENGTH_LONG);
+                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_already_exists, Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }
-                    // Case 2 : We have to create visit card with the contact.
-                    else
-                    {
-
-                    }
+                    // Case 2 : We have to create visit card for the contact
+                    // else {
+                    //
+                    // }
                 }
             }
         }
-
     }
-
 
     public void QrScanner(View view){
         // Programmatically initialize the scanner view
@@ -114,15 +111,6 @@ public class CreateActivity extends AppCompatActivity implements ZXingScannerVie
         Intent i = new Intent(getApplicationContext(), CardCreatedActivity.class);
         startActivity(i);
 
-        // show the scanner result into dialog box.
-        // AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // builder.setTitle("Scan Result");
-        // builder.setMessage(rawResult.getText());
-        // AlertDialog alert1 = builder.create();
-        // alert1.show();
-
-        // If you would like to resume scanning, call this method below:
-        // mScannerView.resumeCameraPreview(this);
     }
 
     @Override

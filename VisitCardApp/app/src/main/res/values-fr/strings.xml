@@ -26,6 +26,6 @@
     <string name="edit">Editer</string>
     <string name="card_saved">Carte sauvegardée !</string>
     <string name="create_card_first">Créez votre carte d\'abord.</string>
-    <string name="card_not_found">Pas de carte de visite pour ce contact</string>
-    <string name="card_alreadyExist">Le contact possède déjà une carte.</string>
+    <string name="card_not_found">Pas de carte de visite pour ce contact.</string>
+    <string name="card_already_exists">Le contact possède déjà une carte.</string>
 </resources>

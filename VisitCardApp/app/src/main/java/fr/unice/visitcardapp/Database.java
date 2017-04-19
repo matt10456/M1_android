@@ -41,8 +41,7 @@ class Database extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void sup()
-    {
+    public void deleteDb() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS contacts");
     }
@@ -59,16 +58,13 @@ class Database extends SQLiteOpenHelper {
 
     Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor res =  db.rawQuery( "select * from contacts where id=?", new String[]{Integer.toString(id)});
-        return res;
+        return db.rawQuery( "select * from contacts where id=?", new String[]{Integer.toString(id)});
     }
 
     Cursor getDataByName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = null;
-        if(!name.equals(""))
-        {
+        if(!name.equals("")) {
             res =  db.rawQuery("select * from contacts where "+CONTACTS_COLUMN_NAME+"=?", new String[]{name});
         }
        return res;
@@ -76,7 +72,5 @@ class Database extends SQLiteOpenHelper {
 
     Cursor getLastContact() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts ORDER BY id DESC", null);
-        return res;
-    }
+        return db.rawQuery( "select * from contacts ORDER BY id DESC", null);    }
 }
