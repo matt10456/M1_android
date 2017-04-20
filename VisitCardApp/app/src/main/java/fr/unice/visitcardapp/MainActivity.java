@@ -59,10 +59,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         // Display last database value.
         Bundle extras = this.getIntent().getExtras();
-        if (extras != null) {
-            extraName = extras.getString("name");
-            extraNumber = "\n" + extras.getString("number");
-            extraEmail = extras.getString("email");
+        if (extras != null ) {
+            extraName += extras.getString("name");
+            extraNumber += "\n" + extras.getString("number");
+            extraEmail += extras.getString("email");
+
+
+            if(extraName.equals("null")) { extraName = "Name"; }
+            if(extraNumber.equals("\nnull")) { extraNumber = " "; }
+            if(extraEmail.equals("null")) { extraEmail = " "; }
+
             // Found a visit card to display.
              //rs = db.getDataByName(extraName);
         } else {
