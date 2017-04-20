@@ -28,6 +28,8 @@ import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import java.util.ArrayList;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -51,15 +53,23 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
 
         db = new Database(this);
+        String extraName = "";
+        String extraNumber = "";
+        String extraEmail = "";
 
         // Display last database value.
         Bundle extras = this.getIntent().getExtras();
         if (extras != null) {
-            String extraName = extras.getString("name");
+            extraName = extras.getString("name");
+            extraNumber = "\n" + extras.getString("number");
+            extraEmail = extras.getString("email");
             // Found a visit card to display.
              //rs = db.getDataByName(extraName);
         } else {
             //rs = db.getLastContact();
+            extraName = "name";
+            extraNumber = "";
+            extraEmail = "";
         }
 
         //rs.moveToFirst();
@@ -67,7 +77,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         //final String name = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME));
 
         TextView tName = (TextView)findViewById(R.id.textViewName);
-        tName.append("name");
+        tName.append(extraName);
+
+        TextView tNum = (TextView)findViewById(R.id.textViewPhone);
+        tNum.append(extraNumber);
+
+        TextView tEmail = (TextView)findViewById(R.id.textViewMail);
+        tEmail.append(extraEmail);
 
         textValue = "QRAPP:name="+"name"+",surname=surname,job=job,phone=phone,mail=mail,website=website";
 
@@ -137,37 +153,71 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         // Displays the contact's card if it exists
         if (resultCode == Activity.RESULT_OK && requestCode == DISPLAY_CONTACT_REQUEST) {
-            ContentResolver cr = getContentResolver();
-            Uri dataUri = data.getData();
-            String[] projection = { ContactsContract.Contacts._ID };
-            Cursor cursor = cr.query(dataUri, projection, null, null, null);
-            if ( null != cursor && cursor.moveToFirst()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                String where = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
-                String[] whereParameters = new String[]{id, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
-                Cursor nameCur = cr.query(ContactsContract.Data.CONTENT_URI, null, where, whereParameters, null);
-                if (null != nameCur && nameCur.moveToFirst()) {
-                    // Retrieves the name of the selected contact
-                    String formattedName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
-                    Log.d("TEST",formattedName);
+                    String name = "";
+                    String email = "";
 
+                    String phoneNumber = null;
+                    Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
+                    String _ID = ContactsContract.Contacts._ID;
+                    String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
+
+                    String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
+                    Uri PhoneCONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+                    String Phone_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
+                    String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
+
+                    Uri EmailCONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+                    String EmailCONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
+                    String DATA = ContactsContract.CommonDataKinds.Email.DATA;
+
+                    StringBuffer output;
+                    ContentResolver contentResolver = getContentResolver();
+                    Uri dataUri = data.getData();
+                    Cursor cursor = contentResolver.query(dataUri, null, null, null, null);
+                    // Iterate every contact in the phone
+                    if (cursor.getCount() > 0) {
+                        int counter = 0;
+                        while (cursor.moveToNext()) {
+                            output = new StringBuffer();
+                            String contact_id = cursor.getString(cursor.getColumnIndex(_ID));
+                            name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+                            int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
+                            if (hasPhoneNumber > 0) {
+                                output.append("\n First Name:" + name);
+                                //This is to read multiple phone numbers associated with the same contact
+                                Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[]{contact_id}, null);
+                                while (phoneCursor.moveToNext()) {
+                                    phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
+                                    output.append("\n Phone number:" + phoneNumber);
+                                }
+                                phoneCursor.close();
+                                // Read every email id associated with the contact
+                                Cursor emailCursor = contentResolver.query(EmailCONTENT_URI, null, EmailCONTACT_ID + " = ?", new String[]{contact_id}, null);
+                                while (emailCursor.moveToNext()) {
+                                    email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
+                                    output.append("\n Email:" + email);
+                                }
+                                emailCursor.close();
+                            }
+                        }
+                    }
                     // We have to look for the name of the contact in our database
-                    Cursor rs = db.getDataByName(formattedName);
+                    Cursor rs = db.getDataByName(name);
 
                     rs.moveToFirst();
 
                     if (rs.getCount() > 0) {
                         // Case 1 : contact is found
-                        Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
-                        i.putExtra("name", rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME)));
+                        Intent i = new Intent(getApplicationContext(), this.getClass());
+                        i.putExtra("name", name);
+                        i.putExtra("number", phoneNumber);
+                        i.putExtra("email",email);
                         startActivity(i);
                     } else {
                         // Case 2 : contact is not found
                         Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }
-                }
-            }
         }
 
         // Sends SMS to selected contact
@@ -189,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 if (null != nameCur && nameCur.moveToFirst()) {
                     // Retrieves the name of the selected contact
                     String formattedName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
-                    Log.d("TEST", formattedName);
+                    Log.d("TESTa", formattedName);
 
                     Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
                     i.putExtra("name", formattedName);
