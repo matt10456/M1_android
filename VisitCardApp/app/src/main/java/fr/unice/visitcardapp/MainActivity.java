@@ -28,8 +28,6 @@ import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.util.ArrayList;
-
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -37,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public int SEND_CONTACT_REQUEST = 2;
     public int PICK_CONTACT_REQUEST = 3;
     public final static int QRcodeWidth = 500;
+    public static final String userCard = "USER CARD";
+    public static final String contactCard = "CONTACT CARD";
+    static String state = userCard;
     private ZXingScannerView mScannerView;
     private RelativeLayout relativeLayout;
     ImageView imageView;
@@ -53,29 +54,36 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
 
         db = new Database(this);
-        String extraName = "";
-        String extraNumber = "";
-        String extraEmail = "";
+        String displayName = "";
+        String displayNumber = "";
+        String displayEmail = "";
 
-        // Display last database value.
-        Bundle extras = this.getIntent().getExtras();
-        if (extras != null ) {
-            extraName += extras.getString("name");
-            extraNumber += "\n" + extras.getString("number");
-            extraEmail += extras.getString("email");
+        if (state.equals(userCard)) {
+            Uri uri = ContactsContract.Profile.CONTENT_URI;
+            String[] projection = { ContactsContract.Profile.DISPLAY_NAME };
 
+            Cursor cursor = managedQuery(uri, projection, null, null, null);
 
-            if(extraName.equals("null")) { extraName = "Name"; }
-            if(extraNumber.equals("\nnull")) { extraNumber = " "; }
-            if(extraEmail.equals("null")) { extraEmail = " "; }
+            if (cursor.moveToFirst ()) {
+                displayName = cursor.getString (cursor.getColumnIndex (projection [0]));
+            }
+            displayNumber = "";
+            displayEmail = "";
+        } else if (state.equals(contactCard)) {
+            // Display last database value.
+            Bundle extras = this.getIntent().getExtras();
+            if (extras != null) {
+                displayName = "" + extras.getString("name");
+                displayNumber = "\n" + extras.getString("number");
+                displayEmail = "" + extras.getString("email");
 
-            // Found a visit card to display.
-             //rs = db.getDataByName(extraName);
-        } else {
-            //rs = db.getLastContact();
-            extraName = "name";
-            extraNumber = "";
-            extraEmail = "";
+                if(displayName.equals("null")) { displayName = "Name"; }
+                if(displayNumber.equals("\nnull")) { displayNumber = " "; }
+                if(displayEmail.equals("null")) { displayEmail = " "; }
+
+                // Found a visit card to display.
+                // rs = db.getDataByName(extraName);
+            }
         }
 
         //rs.moveToFirst();
@@ -83,13 +91,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         //final String name = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME));
 
         TextView tName = (TextView)findViewById(R.id.textViewName);
-        tName.append(extraName);
+        tName.append(displayName);
 
         TextView tNum = (TextView)findViewById(R.id.textViewPhone);
-        tNum.append(extraNumber);
+        tNum.append(displayNumber);
 
         TextView tEmail = (TextView)findViewById(R.id.textViewMail);
-        tEmail.append(extraEmail);
+        tEmail.append(displayEmail);
 
         textValue = "QRAPP:name="+"name"+",surname=surname,job=job,phone=phone,mail=mail,website=website";
 

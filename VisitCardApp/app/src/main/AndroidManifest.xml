@@ -3,6 +3,7 @@
     package="fr.unice.visitcardapp">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
