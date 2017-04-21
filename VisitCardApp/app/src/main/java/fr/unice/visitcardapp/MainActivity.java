@@ -222,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
                     if (rs.getCount() > 0) {
                         // Case 1 : contact is found
+                        this.state = contactCard;
                         Intent i = new Intent(getApplicationContext(), this.getClass());
                         i.putExtra("name", name);
                         i.putExtra("number", phoneNumber);
