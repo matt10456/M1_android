@@ -33,4 +33,6 @@
     <string name="full_name">Full name :</string>
     <string name="second_choice">Choice 2 :</string>
     <string name="third_choice">Choice 3 :</string>
+    <string name="ask_adr">Address :</string>
+    <string name="no_number">Contact has no number</string>
 </resources>

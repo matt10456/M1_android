@@ -22,7 +22,7 @@
     <string name="fourth_contact">Fourth contact</string>
     <string name="fifth_contact">Fifth contact</string>
     <string name="ask_email">Email : </string>
-    <string name="ask_adr">Adress : </string>
+    <string name="ask_adr">Address : </string>
     <string name="ask_website">Website :</string>
     <string name="display_own">Display my card</string>
     <string name="display_others">Others</string>
@@ -34,4 +34,5 @@
     <string name="card_already_exists">Contact already has a card</string>
     <string name="create_user_card">Create user card</string>
     <string name="ask_first_name">First name :</string>
+    <string name="no_number">Contact has no number</string>
 </resources>

@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     ImageView imageView;
     Bitmap bitmap;
     String textValue;
-    Cursor rs;
     Database db;
+    Cursor rs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,30 +65,28 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         db = new Database(this);
 
-        Log.d("STATE",state);
         if (state.equals(userCard)) {
             Uri uri = ContactsContract.Profile.CONTENT_URI;
             String[] projection = { ContactsContract.Profile.DISPLAY_NAME };
-
             Cursor cursor = managedQuery(uri, projection, null, null, null);
 
             if (cursor.moveToFirst ()) {
-                displayName = cursor.getString (cursor.getColumnIndex (projection [0]));
+                displayName = cursor.getString (cursor.getColumnIndex(projection [0]));
             }
-            displayNumber = "";
-            displayEmail = "";
+            displayNumber = "\n";
+            displayEmail = "\n";
         } else if (state.equals(contactCard)) {
             // Display last database value.
             Bundle extras = this.getIntent().getExtras();
             if (extras != null) {
                 displayName = "" + extras.getString("name");
                 displayNumber = "\n" + extras.getString("number");
-                displayEmail = "" + extras.getString("email");
-                displayAdr = "" + extras.getString("adresse");
+                displayEmail = "\n" + extras.getString("email");
+                displayAdr = "\n" + extras.getString("address");
 
-                if(displayName.equals("null")) { displayName = "Name"; }
+                if(displayName.equals("null")) { displayName = " "; }
                 if(displayNumber.equals("\n")) { displayNumber = " "; }
-                if(displayEmail.equals("null")) { displayEmail = " "; }
+                if(displayEmail.equals("null")) { displayEmail = "\n"; }
                 if(displayAdr.equals("null")) { displayAdr = " "; }
 
                 // Found a visit card to display.
@@ -188,16 +187,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
 
             String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
-            Uri PhoneCONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-            String Phone_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
+            Uri PHONE_CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+            String PHONE_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
             String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
 
-            Uri EmailCONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
-            String EmailCONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
+            Uri EMAIL_CONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+            String EMAIL_CONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
             String DATA = ContactsContract.CommonDataKinds.Email.DATA;
 
-            Uri AdressCONTENT_URI  = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-            String AdresseCONTACT_ID = ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID;
+            Uri ADDRESS_CONTENT_URI  = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
+            String ADDRESS_CONTACT_ID = ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID;
             String ADR = "";
 
             StringBuffer output;
@@ -206,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             Cursor cursor = contentResolver.query(dataUri, null, null, null, null);
             // Iterate every contact in the phone
             if (cursor.getCount() > 0) {
-                int counter = 0;
                 while (cursor.moveToNext()) {
                     output = new StringBuffer();
 
@@ -216,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     if (hasPhoneNumber > 0) {
                         output.append("\n First Name:" + name);
                         //This is to read multiple phone numbers associated with the same contact
-                        Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[]{contact_id}, null);
+                        Cursor phoneCursor = contentResolver.query(PHONE_CONTENT_URI, null, PHONE_CONTACT_ID + " = ?", new String[]{contact_id}, null);
                         while (phoneCursor.moveToNext()) {
                             phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
                             output.append("\n Phone number:" + phoneNumber);
@@ -224,31 +222,29 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         phoneCursor.close();
 
                         // Read every email id associated with the contact
-                        Cursor emailCursor = contentResolver.query(EmailCONTENT_URI, null, EmailCONTACT_ID + " = ?", new String[]{contact_id}, null);
+                        Cursor emailCursor = contentResolver.query(EMAIL_CONTENT_URI, null, EMAIL_CONTACT_ID + " = ?", new String[]{contact_id}, null);
                         while (emailCursor.moveToNext()) {
                             email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
                             output.append("\n Email:" + email);
                         }
                         emailCursor.close();
 
-                        // Read one adress of the contact.
-                        int max = 1; // Number of adresses.
-                        Cursor AdresseCursor = contentResolver.query(AdressCONTENT_URI, null, AdresseCONTACT_ID + " = ?", new String[]{contact_id}, null);
-                        while(AdresseCursor.moveToNext() && max == 1) {
-                            ADR += " " + AdresseCursor.getString(AdresseCursor.getColumnIndex(STREET));
-                            ADR += " " + AdresseCursor.getString(AdresseCursor.getColumnIndex(CITY));
-                            ADR += " " + AdresseCursor.getString(AdresseCursor.getColumnIndex(POSTCODE));
-                            ADR += " " + AdresseCursor.getString(AdresseCursor.getColumnIndex(COUNTRY));
+                        // Read one address of the contact.
+                        int max = 1; // Number of addresses.
+                        Cursor AddressCursor = contentResolver.query(ADDRESS_CONTENT_URI, null, ADDRESS_CONTACT_ID + " = ?", new String[]{contact_id}, null);
+                        while(AddressCursor.moveToNext() && max == 1) {
+                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(STREET));
+                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(CITY));
+                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(POSTCODE));
+                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(COUNTRY));
                             max++;
                         }
-                        AdresseCursor.close();
+                        AddressCursor.close();
                         ADR = ADR.replace("null", "");
-
                     }
                 }
             }
             // We have to look for the name of the contact in our database
-            Log.d("test", ADR);
             Cursor rs = db.getDataByName(name);
 
             rs.moveToFirst();
@@ -260,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 i.putExtra("name", name);
                 i.putExtra("number", phoneNumber);
                 i.putExtra("email",email);
-                i.putExtra("adresse",ADR.trim());
+                i.putExtra("address",ADR.trim());
                 startActivity(i);
             } else {
                 // Case 2 : contact is not found
@@ -271,7 +267,52 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         // Sends SMS to selected contact
         if (resultCode == Activity.RESULT_OK && requestCode == SEND_CONTACT_REQUEST) {
+            String name = "";
+            String email = "";
 
+            String phoneNumber = null;
+            Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
+            String _ID = ContactsContract.Contacts._ID;
+            String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
+
+            String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
+            Uri PHONE_CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+            String PHONE_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
+            String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
+
+            StringBuffer output;
+            ContentResolver contentResolver = getContentResolver();
+            Uri dataUri = data.getData();
+            Cursor cursor = contentResolver.query(dataUri, null, null, null, null);
+            // Iterate every contact in the phone
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    output = new StringBuffer();
+
+                    String contact_id = cursor.getString(cursor.getColumnIndex(_ID));
+                    name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+                    int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
+                    if (hasPhoneNumber > 0) {
+                        output.append("\n First Name:" + name);
+                        //This is to read multiple phone numbers associated with the same contact
+                        Cursor phoneCursor = contentResolver.query(PHONE_CONTENT_URI, null, PHONE_CONTACT_ID + " = ?", new String[]{contact_id}, null);
+                        while (phoneCursor.moveToNext()) {
+                            phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
+                            output.append("\n Phone number:" + phoneNumber);
+                        }
+                        phoneCursor.close();
+                    }
+                }
+            }
+
+            SmsManager smsManager = SmsManager.getDefault();
+            // Sending a text to 5556, should be replaced with contact number
+            if (phoneNumber != null) {
+                smsManager.sendTextMessage(phoneNumber, null, "Sending something", null, null);
+            } else {
+                Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
         }
 
         // Opens creation window for selected contact
@@ -288,8 +329,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 if (null != nameCur && nameCur.moveToFirst()) {
                     // Retrieves the name of the selected contact
                     String formattedName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
-                    Log.d("TEST", formattedName);
 
+                    state = userCard;
                     Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
                     i.putExtra(CreateNewCardOrEditActivity.createMode,true);
                     i.putExtra(CreateNewCardOrEditActivity.createContent, new String[]{formattedName});
@@ -356,12 +397,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     Bitmap TextToImageEncode(String Value) throws WriterException {
         BitMatrix bitMatrix;
         try {
-            bitMatrix = new MultiFormatWriter().encode(
-                    Value,
-                    BarcodeFormat.DATA_MATRIX.QR_CODE,
-                    QRcodeWidth, QRcodeWidth, null
-            );
-
+            bitMatrix = new MultiFormatWriter().encode(Value, BarcodeFormat.DATA_MATRIX.QR_CODE,
+                    QRcodeWidth, QRcodeWidth, null);
         } catch (IllegalArgumentException Illegalargumentexception) {
             return null;
         }

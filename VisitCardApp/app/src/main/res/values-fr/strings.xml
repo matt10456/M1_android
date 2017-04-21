@@ -19,7 +19,6 @@
     <string name="third_contact">Troisième contact</string>
     <string name="ask_email">Email :</string>
     <string name="ask_website">Site web :</string>
-    <string name="ask_adr">Adresse : </string>
     <string name="ask_job">Metier : </string>
     <string name="display_others">Autres</string>
     <string name="display_own">Affiche ma carte</string>
@@ -34,4 +33,6 @@
     <string name="second_choice">Choix 2 :</string>
     <string name="full_name">Nom complet :</string>
     <string name="first_choice">Choix 1 :</string>
+    <string name="no_number">Le contact n\'a pas de numéro</string>
+    <string name="ask_adr">Adresse :</string>
 </resources>

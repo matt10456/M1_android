@@ -39,6 +39,7 @@
             android:paddingTop="10dp"
             android:id="@+id/textViewSurname"
             android:layout_weight="0.34"
+            android:layout_marginStart="5dp"
             android:textAppearance="@style/TextAppearance.AppCompat" />
 
     </LinearLayout>
@@ -97,13 +98,12 @@
         android:layout_below="@id/qr_placement">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:id="@+id/textViewPhone"
             android:text="@string/ask_phone"
             android:layout_marginTop="45dp"
-            android:layout_weight="0.5"
             android:textAppearance="@style/TextAppearance.AppCompat" />
 
         <LinearLayout
