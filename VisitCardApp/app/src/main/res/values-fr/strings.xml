@@ -17,7 +17,7 @@
     <string name="fourth_contact">Quatrième contact</string>
     <string name="second_contact">Deuxième contact</string>
     <string name="third_contact">Troisième contact</string>
-    <string name="ask_email">"Email : "</string>
+    <string name="ask_email">Email :</string>
     <string name="ask_website">Site web :</string>
     <string name="ask_job">Metier : </string>
     <string name="display_others">Autres</string>
@@ -29,4 +29,8 @@
     <string name="card_not_found">Pas de carte de visite pour ce contact</string>
     <string name="card_already_exists">Le contact possède déjà une carte</string>
     <string name="create_user_card">Créer une carte utilisateur</string>
+    <string name="third_choice">Choix 3 :</string>
+    <string name="second_choice">Choix 2 :</string>
+    <string name="full_name">Nom complet :</string>
+    <string name="first_choice">Choix 1 :</string>
 </resources>

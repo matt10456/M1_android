@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">VisitCardApp</string>
     <string name="app_title">Visit card creation App</string>
-    <string name="ask_first_name">"First name : "</string>
-    <string name="ask_phone">"Phone number : "</string>
-    <string name="ask_surname">"Surname : "</string>
+    <string name="ask_first_name">First name :</string>
+    <string name="ask_phone">Phone number :</string>
+    <string name="ask_surname">Surname :</string>
     <string name="card_create">Create</string>
     <string name="card_display">Display</string>
     <string name="card_send">Send</string>
@@ -18,7 +18,7 @@
     <string name="fourth_contact">Fourth contact</string>
     <string name="fifth_contact">Fifth contact</string>
     <string name="ask_website">Website :</string>
-    <string name="ask_email">"Email : "</string>
+    <string name="ask_email">Email :</string>
     <string name="ask_job">Job : </string>
     <string name="display_others">Others</string>
     <string name="display_own">Display my card</string>
@@ -29,4 +29,8 @@
     <string name="card_not_found">Contact has no visit card</string>
     <string name="card_already_exists">Contact already has a card</string>
     <string name="create_user_card">Create user card</string>
+    <string name="first_choice">Choice 1 :</string>
+    <string name="full_name">Full name :</string>
+    <string name="second_choice">Choice 2 :</string>
+    <string name="third_choice">Choice 3 :</string>
 </resources>
