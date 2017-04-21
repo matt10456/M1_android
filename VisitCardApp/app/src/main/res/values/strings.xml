@@ -22,6 +22,7 @@
     <string name="fourth_contact">Fourth contact</string>
     <string name="fifth_contact">Fifth contact</string>
     <string name="ask_email">Email : </string>
+    <string name="ask_adr">Adress : </string>
     <string name="ask_website">Website :</string>
     <string name="display_own">Display my card</string>
     <string name="display_others">Others</string>

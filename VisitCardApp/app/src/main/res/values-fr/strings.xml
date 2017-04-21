@@ -19,6 +19,7 @@
     <string name="third_contact">Troisième contact</string>
     <string name="ask_email">Email :</string>
     <string name="ask_website">Site web :</string>
+    <string name="ask_adr">Adresse : </string>
     <string name="ask_job">Metier : </string>
     <string name="display_others">Autres</string>
     <string name="display_own">Affiche ma carte</string>

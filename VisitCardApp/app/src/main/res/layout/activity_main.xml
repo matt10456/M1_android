@@ -102,7 +102,7 @@
             android:paddingTop="10dp"
             android:id="@+id/textViewPhone"
             android:text="@string/ask_phone"
-            android:layout_marginTop="88dp"
+            android:layout_marginTop="45dp"
             android:layout_weight="0.5"
             android:textAppearance="@style/TextAppearance.AppCompat" />
 
@@ -128,8 +128,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:paddingTop="10dp"
-                android:id="@+id/textViewWebsite"
-                android:text="@string/ask_website"
+                android:id="@+id/textViewAdr"
+                android:text="@string/ask_adr"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
 
         </LinearLayout>
