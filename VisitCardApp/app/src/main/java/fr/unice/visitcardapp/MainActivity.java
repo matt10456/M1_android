@@ -41,7 +41,6 @@ import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.STREET;
-import static fr.unice.visitcardapp.Database.CONTACTS_COLUMN_1;
 import static fr.unice.visitcardapp.Database.CONTACTS_COLUMN_2;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, LoaderManager.LoaderCallbacks<Cursor> {
@@ -55,13 +54,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private ZXingScannerView mScannerView;
     private RelativeLayout relativeLayout;
     TextView tName;
-    TextView tNum;
-    TextView tEmail;
-    TextView tAdr;
+    TextView tView1;
+    TextView tView2;
+    TextView tView3;
     String displayName = "";
     String displayNumber = "";
     String displayEmail = "";
     String displayAdr = "";
+    String numViewHeader = "Phone Number : ";
+    String mailViewHeader = "Email : ";
+    String addViewHeader = "Address : ";
     ImageView imageView;
     Bitmap bitmap;
     String textValue;
@@ -83,9 +85,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             String[] projection = { ContactsContract.Profile.DISPLAY_NAME };
             Cursor cursor = managedQuery(uri, projection, null, null, null);
 
-            if (cursor.moveToFirst ()) {
-                displayName = "" + cursor.getString (cursor.getColumnIndex(projection [0]));
-            }
+            if (cursor.moveToFirst ()) displayName = "" + cursor.getString (cursor.getColumnIndex(projection [0]));
 
         } else if (state.equals(contactCard)) {
             // Display last database value.
@@ -120,14 +120,19 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         tName = (TextView)findViewById(R.id.textViewName);
         tName.append(displayName);
 
-        tNum = (TextView)findViewById(R.id.textViewPhone);
-        tNum.append(displayNumber);
+        // Display
+        String firstDisplay = numViewHeader + displayNumber;
+        String secondDisplay = mailViewHeader + displayEmail;
+        String thirdDisplay = addViewHeader + displayAdr;
 
-        tEmail = (TextView)findViewById(R.id.textViewMail);
-        tEmail.append(displayEmail);
+        tView1 = (TextView)findViewById(R.id.textView1);
+        tView1.append(firstDisplay);
 
-        tAdr = (TextView)findViewById(R.id.textViewAdr);
-        tAdr.append(displayAdr);
+        tView2 = (TextView)findViewById(R.id.textView2);
+        tView2.append(secondDisplay);
+
+        tView3 = (TextView)findViewById(R.id.textView3);
+        tView3.append(thirdDisplay);
 
         textValue = "QRAPP:name="+"name"+",surname=surname,job=job,phone=phone,mail=mail,website=website";
 
@@ -158,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
-        final Button othersButton = (Button)findViewById(R.id.button_display_others);
+        final Button othersButton = (Button)findViewById(R.id.button_others);
         othersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -443,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             mime_type = cursor.getString(ProfileQuery.MIME_TYPE);
-            switch (mime_type) {
+            switch(mime_type) {
                 case ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE:
                     emails.add(cursor.getString(ProfileQuery.EMAIL));
                     break;
@@ -459,11 +464,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
         cursor.close();
 
-        if (phones.size() != 0 && phones.get(0) != null) tNum.append("\n" + phones.get(0));
+        if (phones.size() != 0 && phones.get(0) != null) tView1.append("\n" + phones.get(0));
 
-        if (address.size() != 0 && address.get(0) != null) tAdr.append("\n" + address.get(0));
+        if (address.size() != 0 && address.get(0) != null) tView3.append("\n" + address.get(0));
 
-        if (emails.size() != 0 && emails.get(0) != null) tEmail.append("\n" + emails.get(0));
+        if (emails.size() != 0 && emails.get(0) != null) tView2.append("\n" + emails.get(0));
     }
 
     @Override

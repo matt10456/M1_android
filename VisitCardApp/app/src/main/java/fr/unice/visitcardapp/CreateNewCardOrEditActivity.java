@@ -31,10 +31,8 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_card);
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_create_new);
-
-        db = new Database(this);
-
         displayTextName = (TextView) findViewById(R.id.textViewName);
+        db = new Database(this);
 
         s1=(Spinner)findViewById(R.id.spinner1);
         String subjects1[] ={"Phone number","Address","Email"};
@@ -64,11 +62,9 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emptyField = "";
-                displayTextNameValue = displayTextName.getText().length() == 0 ? emptyField : displayTextName.getText().toString();
+                displayTextNameValue = displayTextName.getText().length() == 0 ? "" : displayTextName.getText().toString();
                 String selected1 = s1.getSelectedItem().toString();
                 String selected2 = s2.getSelectedItem().toString();
-                Log.d("text", selected1);
                 String s1, s2;
 
                 switch(selected1) {
@@ -93,16 +89,14 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                         s2 = "1"; break;
                 }
 
-                if(s1.equals(s2))
-                {
-                    // Même affichage = erreur.
+                if(s1.equals(s2)) {
+                    // Même affichage = erreur
                     Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sameDisplay, Snackbar.LENGTH_LONG);
                     snackbar.show();
-                }
-                else {
+                } else {
                     // DB insertion
                     if (db.insertContact(displayTextNameValue, s1, s2)) {
-                        // Insertion ok.
+                        // Insertion ok
                         Intent i = new Intent(getApplicationContext(), MainActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);

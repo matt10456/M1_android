@@ -60,41 +60,25 @@
                 android:paddingTop="40dp"
                 android:id="@+id/textViewName"/>
 
-            <android.support.design.widget.TextInputLayout
+            <Spinner
+                android:id="@+id/spinner1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
-                android:id="@+id/surname"
-                android:layout_below="@id/textViewName">
+                android:paddingTop="10dp"
+                android:layout_marginTop="25dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                android:layout_below="@id/textViewName"/>
 
-                <Spinner
-                    android:id="@+id/spinner1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:drawable/btn_dropdown"
-                    android:spinnerMode="dropdown" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
+            <Spinner
+                android:id="@+id/spinner2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/job"
-                android:layout_below="@+id/surname"
-                android:paddingTop="10dp">
-
-                <Spinner
-                    android:id="@+id/spinner2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:drawable/btn_dropdown"
-                    android:spinnerMode="dropdown" />
-
-            </android.support.design.widget.TextInputLayout>
-
-
-
-
+                android:paddingTop="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                android:layout_below="@+id/spinner1"/>
 
         </RelativeLayout>
 
@@ -106,7 +90,7 @@
         android:text="@string/confirm_creation"
         android:id="@+id/button_confirm"
         android:layout_marginTop="40dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_below="@+id/linearLayout1"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 

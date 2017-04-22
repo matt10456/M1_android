@@ -1,6 +1,5 @@
 package fr.unice.visitcardapp;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import android.content.ContentValues;

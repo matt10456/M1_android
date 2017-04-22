@@ -24,22 +24,8 @@
         </activity>
 
         <activity
-            android:name=".CreateActivityOLD"
-            android:label="@string/card_create">
-        </activity>
-
-        <activity
             android:name=".CreateNewCardOrEditActivity"
-            android:label="@string/create_from_text_input">
-        </activity>
-
-        <activity
-            android:name=".DisplayActivityOLD"
-            android:label="@string/card_display">
-        </activity>
-
-        <activity
-            android:name=".MainActivityOLD" >
+            android:label="@string/choose_info">
         </activity>
 
     </application>

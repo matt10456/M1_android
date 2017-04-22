@@ -55,8 +55,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/display_others"
-        android:id="@+id/button_display_others"
+        android:text="@string/others"
+        android:id="@+id/button_others"
         android:layout_below="@id/linearLayout1"
         android:layout_marginTop="50dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button" />
@@ -119,8 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:paddingTop="10dp"
-                android:id="@+id/textViewPhone"
-                android:text="@string/ask_phone"
+                android:id="@+id/textView1"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
@@ -129,22 +128,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:paddingTop="10dp"
-                android:id="@+id/textViewMail"
-                android:text="@string/ask_email"
+                android:id="@+id/textView2"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/textViewPhone"
+                android:layout_below="@id/textView1"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:paddingTop="10dp"
-                android:id="@+id/textViewAdr"
-                android:text="@string/ask_adr"
+                android:id="@+id/textView3"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/textViewMail"
+                android:layout_below="@id/textView2"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
 
         </RelativeLayout>
