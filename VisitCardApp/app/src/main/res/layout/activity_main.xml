@@ -68,13 +68,13 @@
         android:id="@+id/textViewJob"
         android:layout_below="@+id/linearLayout1"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="140dp"
+        android:layout_marginStart="130dp"
         android:textAppearance="@style/TextAppearance.AppCompat" />
 
     <FrameLayout
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="49dp"
+        android:layout_marginTop="30dp"
         android:background="@android:color/darker_gray"
         android:id="@+id/qr_placement"
         android:layout_below="@+id/textViewJob"
@@ -98,30 +98,42 @@
         android:layout_below="@id/qr_placement">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:id="@+id/textViewPhone"
-            android:text="@string/ask_phone"
+            android:id="@+id/textViewPhoneOLD"
             android:layout_marginTop="45dp"
             android:textAppearance="@style/TextAppearance.AppCompat" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:weightSum="0.5"
+            android:layout_weight="0.9"
             android:id="@+id/linearLayout3"
             android:orientation="vertical"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
+                android:paddingTop="10dp"
+                android:id="@+id/textViewPhone"
+                android:text="@string/ask_phone"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
                 android:paddingTop="10dp"
                 android:id="@+id/textViewMail"
                 android:text="@string/ask_email"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/textViewPhone"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
@@ -130,9 +142,12 @@
                 android:paddingTop="10dp"
                 android:id="@+id/textViewAdr"
                 android:text="@string/ask_adr"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/textViewMail"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

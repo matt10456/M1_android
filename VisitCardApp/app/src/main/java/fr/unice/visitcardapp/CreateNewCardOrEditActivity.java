@@ -73,32 +73,24 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
 
                 switch(selected1) {
                     case "Phone number":
-                        s1 = "1";
-                        break;
-                    case "Adress" :
-                        s1 = "2";
-                        break;
+                        s1 = "1"; break;
+                    case "Address" :
+                        s1 = "2"; break;
                     case "Email" :
-                        s1  ="3";
-                        break;
+                        s1  ="3"; break;
                     default :
-                        s1 = "1";
-                        break;
+                        s1 = "1"; break;
                 }
 
                 switch(selected2) {
                     case "Phone number":
-                        s2 = "1";
-                        break;
-                    case "Adress" :
-                        s2 = "2";
-                        break;
+                        s2 = "1"; break;
+                    case "Address" :
+                        s2 = "2"; break;
                     case "Email" :
-                        s2  ="3";
-                        break;
+                        s2  ="3"; break;
                     default :
-                        s2 = "1";
-                        break;
+                        s2 = "1"; break;
                 }
 
                 if(s1.equals(s2))

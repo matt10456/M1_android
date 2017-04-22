@@ -84,25 +84,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             Cursor cursor = managedQuery(uri, projection, null, null, null);
 
             if (cursor.moveToFirst ()) {
-                displayName = cursor.getString (cursor.getColumnIndex(projection [0]));
+                displayName = "" + cursor.getString (cursor.getColumnIndex(projection [0]));
             }
-
-            String main_data[] = {"data1", "mimetype"};
-            String phoneNumber = " ";
-            Cursor cr = getContentResolver().query(Uri.withAppendedPath(android.provider.ContactsContract.Profile.CONTENT_URI, "data"), main_data, "mimetype=?",
-                    new String[]{"vnd.android.cursor.item/phone_v2"}, "is_primary DESC");
-            if (cr != null) {
-                cr.moveToNext();
-                if (cr.isFirst()) phoneNumber += cr.getString(0);
-                cr.close();
-            }
-
-
-            displayNumber = "\n" + phoneNumber;
-
-            // The full content of the email is displayed after the Loader is done loading
-            // emails from the database
-            displayEmail = "\n";
 
         } else if (state.equals(contactCard)) {
             // Display last database value.
@@ -115,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
                 if(displayName.equals("null")) { displayName = " "; }
                 if(displayNumber.equals("\nnull")) { displayNumber = " "; }
-                if(displayEmail.equals("null")) { displayEmail = "\n"; }
-                if(displayAdr.equals("null")) { displayAdr = " "; }
+                if(displayEmail.equals("\nnull")) { displayEmail = " "; }
+                if(displayAdr.equals("\nnull")) { displayAdr = " "; }
 
                 Cursor rs = db.getDataByName(displayName);
                 rs.moveToFirst();
@@ -440,8 +423,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 ProfileQuery.PROJECTION,
 
                 // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+                ContactsContract.Contacts.Data.MIMETYPE + "=? OR "
+                        + ContactsContract.Contacts.Data.MIMETYPE + "=? OR "
+                        + ContactsContract.Contacts.Data.MIMETYPE + "=?",
+                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
+                        ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE},
 
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
@@ -450,29 +436,57 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
+        List<String> emails = new ArrayList<>();
+        List<String> phones = new ArrayList<>();
+        List<String> address = new ArrayList<>();
+        String mime_type;
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            // Potentially filter on ProfileQuery.IS_PRIMARY
+            mime_type = cursor.getString(ProfileQuery.MIME_TYPE);
+            switch (mime_type) {
+                case ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE:
+                    emails.add(cursor.getString(ProfileQuery.EMAIL));
+                    break;
+                case ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE:
+                    phones.add(cursor.getString(ProfileQuery.PHONE_NUMBER));
+                    break;
+                case ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE:
+                    address.add(cursor.getString(ProfileQuery.ADDRESS));
+                    break;
+                default: break;
+            }
             cursor.moveToNext();
         }
+        cursor.close();
 
-        if (emails.size() != 0 && emails.get(0) != null) tEmail.append(emails.get(0));
+        if (phones.size() != 0 && phones.get(0) != null) tNum.append("\n" + phones.get(0));
+
+        if (address.size() != 0 && address.get(0) != null) tAdr.append("\n" + address.get(0));
+
+        if (emails.size() != 0 && emails.get(0) != null) tEmail.append("\n" + emails.get(0));
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-    }
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {  }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
                 ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+                ContactsContract.CommonDataKinds.Phone.NUMBER,
+                ContactsContract.CommonDataKinds.Phone.IS_PRIMARY,
+                ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS,
+                ContactsContract.CommonDataKinds.StructuredPostal.IS_PRIMARY,
+                ContactsContract.Contacts.Data.MIMETYPE
         };
 
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
+        int EMAIL = 0;
+        int IS_PRIMARY_EMAIL = 1;
+        int PHONE_NUMBER = 2;
+        int IS_PRIMARY_PHONE_NUMBER = 3;
+        int ADDRESS = 4;
+        int IS_PRIMARY_ADDRESS = 5;
+        int MIME_TYPE = 6;
     }
 
     Bitmap TextToImageEncode(String Value) throws WriterException {
