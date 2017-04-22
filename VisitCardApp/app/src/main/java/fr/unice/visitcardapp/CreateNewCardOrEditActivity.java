@@ -1,20 +1,24 @@
 package fr.unice.visitcardapp;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 public class CreateNewCardOrEditActivity extends AppCompatActivity {
     private TextView displayTextName;
     private String displayTextNameValue;
+    private RelativeLayout relativeLayout;
     private Database db ;
     static String editMode = "EDIT MODE";
     static String createMode = "CREATE MODE";
@@ -26,6 +30,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_card);
+        relativeLayout = (RelativeLayout) findViewById(R.id.activity_create_new);
 
         db = new Database(this);
 
@@ -40,11 +45,6 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
         String subjects2[] ={"Phone number","Address","Email"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,subjects2);
         s2.setAdapter(adapter2);
-
-        s3=(Spinner)findViewById(R.id.spinner3);
-        String subjects3[] ={"Phone number","Address","Email"};
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,subjects3);
-        s3.setAdapter(adapter3);
 
         final Intent i = getIntent();
         if (i.getBooleanExtra(editMode,false)) {
@@ -66,13 +66,55 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String emptyField = "";
                 displayTextNameValue = displayTextName.getText().length() == 0 ? emptyField : displayTextName.getText().toString();
+                String selected1 = s1.getSelectedItem().toString();
+                String selected2 = s2.getSelectedItem().toString();
+                Log.d("text", selected1);
+                String s1, s2;
 
-                // DB insertion
-                if (db.insertContact(displayTextNameValue, "1", "1")) {
-                    // Rechercher si le nom existe deja si oui erreur ?
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
+                switch(selected1) {
+                    case "Phone number":
+                        s1 = "1";
+                        break;
+                    case "Adress" :
+                        s1 = "2";
+                        break;
+                    case "Email" :
+                        s1  ="3";
+                        break;
+                    default :
+                        s1 = "1";
+                        break;
+                }
+
+                switch(selected2) {
+                    case "Phone number":
+                        s2 = "1";
+                        break;
+                    case "Adress" :
+                        s2 = "2";
+                        break;
+                    case "Email" :
+                        s2  ="3";
+                        break;
+                    default :
+                        s2 = "1";
+                        break;
+                }
+
+                if(s1.equals(s2))
+                {
+                    // Même affichage = erreur.
+                    Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sameDisplay, Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+                else {
+                    // DB insertion
+                    if (db.insertContact(displayTextNameValue, s1, s2)) {
+                        // Insertion ok.
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+                    }
                 }
             }
         });

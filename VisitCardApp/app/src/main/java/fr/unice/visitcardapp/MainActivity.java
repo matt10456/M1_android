@@ -41,6 +41,8 @@ import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.STREET;
+import static fr.unice.visitcardapp.Database.CONTACTS_COLUMN_1;
+import static fr.unice.visitcardapp.Database.CONTACTS_COLUMN_2;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, LoaderManager.LoaderCallbacks<Cursor> {
     public int DISPLAY_CONTACT_REQUEST = 1;
@@ -86,11 +88,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
 
             String main_data[] = {"data1", "mimetype"};
+            String phoneNumber = " ";
             Cursor cr = getContentResolver().query(Uri.withAppendedPath(android.provider.ContactsContract.Profile.CONTENT_URI, "data"), main_data, "mimetype=?",
                     new String[]{"vnd.android.cursor.item/phone_v2"}, "is_primary DESC");
-            cr.moveToNext();
-            String phoneNumber = " " + cr.getString(0);
-            cr.close();
+            if (cr != null) {
+                cr.moveToNext();
+                if (cr.isFirst()) phoneNumber += cr.getString(0);
+                cr.close();
+            }
+
 
             displayNumber = "\n" + phoneNumber;
 
@@ -111,6 +117,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 if(displayNumber.equals("\nnull")) { displayNumber = " "; }
                 if(displayEmail.equals("null")) { displayEmail = "\n"; }
                 if(displayAdr.equals("null")) { displayAdr = " "; }
+
+                Cursor rs = db.getDataByName(displayName);
+                rs.moveToFirst();
+                if (rs.getCount() > 0) {
+                    String Td1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
+                    Log.d("td1", Td1);
+                }
 
                 // Found a visit card to display.
                 // rs = db.getDataByName(extraName);

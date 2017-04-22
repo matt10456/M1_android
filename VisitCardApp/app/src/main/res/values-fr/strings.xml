@@ -20,6 +20,7 @@
     <string name="ask_email">Email :</string>
     <string name="ask_website">Site web :</string>
     <string name="ask_job">Metier : </string>
+    <string name="sameDisplay">Les affichages sont les mêmes.</string>
     <string name="display_others">Autres</string>
     <string name="display_own">Affiche ma carte</string>
     <string name="menu">Retour a ma carte</string>

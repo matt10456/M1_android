@@ -20,6 +20,7 @@
     <string name="ask_website">Website :</string>
     <string name="ask_email">Email :</string>
     <string name="ask_job">Job : </string>
+    <string name="sameDisplay">Can\'t display the same value</string>
     <string name="display_others">Others</string>
     <string name="display_own">Display my card</string>
     <string name="menu">Back to my card</string>

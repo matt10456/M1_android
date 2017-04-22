@@ -32,14 +32,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textView3"
-                android:paddingTop="40dp"
-                android:id="@+id/textView4"
-                android:text="@string/third_choice"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:paddingTop="40dp"
                 android:id="@+id/textView3"
                 android:text="@string/second_choice"
@@ -93,22 +85,6 @@
 
                 <Spinner
                     android:id="@+id/spinner2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:drawable/btn_dropdown"
-                    android:spinnerMode="dropdown" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/phone_number"
-                android:layout_below="@+id/job"
-                android:paddingTop="10dp">
-
-                <Spinner
-                    android:id="@+id/spinner3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/btn_dropdown"
