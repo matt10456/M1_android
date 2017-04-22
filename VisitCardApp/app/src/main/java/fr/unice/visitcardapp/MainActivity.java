@@ -89,8 +89,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             Cursor cr = getContentResolver().query(Uri.withAppendedPath(android.provider.ContactsContract.Profile.CONTENT_URI, "data"), main_data, "mimetype=?",
                     new String[]{"vnd.android.cursor.item/phone_v2"}, "is_primary DESC");
             cr.moveToNext();
-            String num = cr.getString(0) == null ? "" : cr.getString(0);
-            String phoneNumber = " " + num;
+            String phoneNumber = " " + cr.getString(0);
             cr.close();
 
             displayNumber = "\n" + phoneNumber;
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 displayAdr = "\n" + extras.getString("address");
 
                 if(displayName.equals("null")) { displayName = " "; }
-                if(displayNumber.equals("\n")) { displayNumber = " "; }
+                if(displayNumber.equals("\nnull")) { displayNumber = " "; }
                 if(displayEmail.equals("null")) { displayEmail = "\n"; }
                 if(displayAdr.equals("null")) { displayAdr = " "; }
 
