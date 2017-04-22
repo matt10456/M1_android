@@ -76,10 +76,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         setContentView(R.layout.activity_main);
         imageView = (ImageView)findViewById(R.id.imageView);
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+        Button editButton = (Button)findViewById(R.id.button_edit);
+        Button sendButton = (Button)findViewById(R.id.button_send);
+        final Button othersButton = (Button)findViewById(R.id.button_others);
 
         db = new Database(this);
 
         if (state.equals(userCard)) {
+            sendButton.setVisibility(View.VISIBLE);
+            othersButton.setVisibility(View.VISIBLE);
             getLoaderManager().initLoader(0, null, this);
             Uri uri = ContactsContract.Profile.CONTENT_URI;
             String[] projection = { ContactsContract.Profile.DISPLAY_NAME };
@@ -88,7 +93,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             if (cursor.moveToFirst ()) displayName = "" + cursor.getString (cursor.getColumnIndex(projection [0]));
 
         } else if (state.equals(contactCard)) {
-            // Display last database value.
+            sendButton.setVisibility(View.GONE);
+            othersButton.setVisibility(View.GONE);
+            // Display last database value
             Bundle extras = this.getIntent().getExtras();
             if (extras != null) {
                 displayName = "" + extras.getString("name");
@@ -108,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     Log.d("td1", Td1);
                 }
 
-                // Found a visit card to display.
+                // Found a visit card to display
                 // rs = db.getDataByName(extraName);
             }
         }
@@ -143,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             e.printStackTrace();
         }
 
-        Button editButton = (Button)findViewById(R.id.button_edit);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
-        Button sendButton = (Button)findViewById(R.id.button_send);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
-        final Button othersButton = (Button)findViewById(R.id.button_others);
         othersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
