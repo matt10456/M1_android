@@ -22,12 +22,18 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.app.LoaderManager;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -36,7 +42,7 @@ import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.STREET;
 
-public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, LoaderManager.LoaderCallbacks<Cursor> {
     public int DISPLAY_CONTACT_REQUEST = 1;
     public int SEND_CONTACT_REQUEST = 2;
     public int PICK_CONTACT_REQUEST = 3;
@@ -46,6 +52,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     static String state = userCard;
     private ZXingScannerView mScannerView;
     private RelativeLayout relativeLayout;
+    TextView tName;
+    TextView tNum;
+    TextView tEmail;
+    TextView tAdr;
     String displayName = "";
     String displayNumber = "";
     String displayEmail = "";
@@ -66,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         db = new Database(this);
 
         if (state.equals(userCard)) {
+            getLoaderManager().initLoader(0, null, this);
             Uri uri = ContactsContract.Profile.CONTENT_URI;
             String[] projection = { ContactsContract.Profile.DISPLAY_NAME };
             Cursor cursor = managedQuery(uri, projection, null, null, null);
@@ -73,8 +84,21 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             if (cursor.moveToFirst ()) {
                 displayName = cursor.getString (cursor.getColumnIndex(projection [0]));
             }
-            displayNumber = "\n";
+
+            String main_data[] = {"data1", "mimetype"};
+            Cursor cr = getContentResolver().query(Uri.withAppendedPath(android.provider.ContactsContract.Profile.CONTENT_URI, "data"), main_data, "mimetype=?",
+                    new String[]{"vnd.android.cursor.item/phone_v2"}, "is_primary DESC");
+            cr.moveToNext();
+            String num = cr.getString(0) == null ? "" : cr.getString(0);
+            String phoneNumber = " " + num;
+            cr.close();
+
+            displayNumber = "\n" + phoneNumber;
+
+            // The full content of the email is displayed after the Loader is done loading
+            // emails from the database
             displayEmail = "\n";
+
         } else if (state.equals(contactCard)) {
             // Display last database value.
             Bundle extras = this.getIntent().getExtras();
@@ -98,16 +122,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         //final String name = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME));
 
-        TextView tName = (TextView)findViewById(R.id.textViewName);
+        tName = (TextView)findViewById(R.id.textViewName);
         tName.append(displayName);
 
-        TextView tNum = (TextView)findViewById(R.id.textViewPhone);
+        tNum = (TextView)findViewById(R.id.textViewPhone);
         tNum.append(displayNumber);
 
-        TextView tEmail = (TextView)findViewById(R.id.textViewMail);
+        tEmail = (TextView)findViewById(R.id.textViewMail);
         tEmail.append(displayEmail);
 
-        TextView tAdr = (TextView)findViewById(R.id.textViewAdr);
+        tAdr = (TextView)findViewById(R.id.textViewAdr);
         tAdr.append(displayAdr);
 
         textValue = "QRAPP:name="+"name"+",surname=surname,job=job,phone=phone,mail=mail,website=website";
@@ -392,6 +416,51 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         // Show the card that got taken by QR
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
+        return new CursorLoader(this,
+                // Retrieve data rows for the device user's 'profile' contact.
+                Uri.withAppendedPath(
+                        ContactsContract.Profile.CONTENT_URI,
+                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
+                ProfileQuery.PROJECTION,
+
+                // Select only email addresses.
+                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
+                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+
+                // Show primary email addresses first. Note that there won't be
+                // a primary email address if the user hasn't specified one.
+                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        List<String> emails = new ArrayList<String>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+            // Potentially filter on ProfileQuery.IS_PRIMARY
+            cursor.moveToNext();
+        }
+
+        if (emails.size() != 0 && emails.get(0) != null) tEmail.append(emails.get(0));
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    }
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
     }
 
     Bitmap TextToImageEncode(String Value) throws WriterException {
