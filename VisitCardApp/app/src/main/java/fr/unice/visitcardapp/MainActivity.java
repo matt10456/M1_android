@@ -117,67 +117,48 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 if (rs.getCount() > 0) {
                     String toDisplay1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1));
                     String toDisplay2 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
-                    Log.d("td1", toDisplay1);
 
-                    // Display first.
-                    switch(toDisplay1)
-                    {
+                    // Display first
+                    switch(toDisplay1) {
                         case "1":
-                            firstDisplay = numViewHeader + displayNumber;
-                            break;
-
+                            firstDisplay = numViewHeader + displayNumber; break;
                         case "2":
-                            firstDisplay = addViewHeader + displayAdr;
-                            break;
-
+                            firstDisplay = addViewHeader + displayAdr; break;
                         case "3" :
-                            firstDisplay = mailViewHeader + displayEmail;
-                            break;
-
+                            firstDisplay = mailViewHeader + displayEmail; break;
                         default :
-                            firstDisplay = numViewHeader + displayNumber;
-                            break;
+                            firstDisplay = numViewHeader + displayNumber; break;
                     }
-                    // Display in second.
-                    switch(toDisplay2)
-                    {
+                    // Display second
+                    switch(toDisplay2) {
                         case "1":
-                            secondDisplay = numViewHeader + displayNumber;
-                            break;
+                            secondDisplay = numViewHeader + displayNumber; break;
 
                         case "2":
-                            secondDisplay = addViewHeader + displayAdr;
-                            break;
+                            secondDisplay = addViewHeader + displayAdr; break;
 
                         case "3" :
-                            secondDisplay = mailViewHeader + displayEmail;
-                            break;
+                            secondDisplay = mailViewHeader + displayEmail; break;
 
                         default :
                             secondDisplay = numViewHeader + displayNumber;
                             break;
                     }
                 }
-
-                // Found a visit card to display
-                // rs = db.getDataByName(extraName);
             }
         }
 
-        if(firstDisplay == null){firstDisplay = " ";}
-        if(secondDisplay == null){secondDisplay = " ";}
-
-        //rs.moveToFirst();
-
-        //final String name = rs.getString(rs.getColumnIndex(Database.CONTACTS_COLUMN_NAME));
+        if(firstDisplay == null){firstDisplay = "";}
+        if(secondDisplay == null){secondDisplay = "";}
 
         tName = (TextView)findViewById(R.id.textViewName);
         tName.append(displayName);
 
         tView1 = (TextView)findViewById(R.id.textView1);
-        tView1.append(firstDisplay);
-
         tView2 = (TextView)findViewById(R.id.textView2);
+        tView3 = (TextView)findViewById(R.id.textView3);
+
+        tView1.append(firstDisplay);
         tView2.append(secondDisplay);
 
         textValue = "QRAPP:name="+"name"+",surname=surname,job=job,phone=phone,mail=mail,website=website";
@@ -328,9 +309,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                             Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // No phone number, display an error msg:
                         Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
                         snackbar.show();
@@ -471,22 +450,22 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
         return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(
-                        ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-                ProfileQuery.PROJECTION,
+            // Retrieve data rows for the device user's 'profile' contact.
+            Uri.withAppendedPath(
+                    ContactsContract.Profile.CONTENT_URI,
+                    ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
+            ProfileQuery.PROJECTION,
 
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE + "=? OR "
-                        + ContactsContract.Contacts.Data.MIMETYPE + "=? OR "
-                        + ContactsContract.Contacts.Data.MIMETYPE + "=?",
-                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
-                        ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE},
+            // Select only email addresses.
+            ContactsContract.Contacts.Data.MIMETYPE + "=? OR "
+                    + ContactsContract.Contacts.Data.MIMETYPE + "=? OR "
+                    + ContactsContract.Contacts.Data.MIMETYPE + "=?",
+            new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
+                    ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE},
 
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+            // Show primary email addresses first. Note that there won't be
+            // a primary email address if the user hasn't specified one.
+            ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
     @Override
@@ -514,11 +493,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
         cursor.close();
 
-        if (phones.size() != 0 && phones.get(0) != null) tView1.append("\n" + phones.get(0));
+        if (phones.size() != 0 && phones.get(0) != null) tView1.append(numViewHeader + "\n" + phones.get(0));
 
-        if (address.size() != 0 && address.get(0) != null) tView3.append("\n" + address.get(0));
+        if (address.size() != 0 && address.get(0) != null) tView2.append(addViewHeader + "\n" + address.get(0));
 
-        if (emails.size() != 0 && emails.get(0) != null) tView2.append("\n" + emails.get(0));
+        if (emails.size() != 0 && emails.get(0) != null) tView3.append(mailViewHeader + "\n" + emails.get(0));
     }
 
     @Override

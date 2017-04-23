@@ -35,6 +35,6 @@
     <string name="second_choice">Choice 2 : </string>
     <string name="third_choice">Choice 3 : </string>
     <string name="ask_adr">Address : </string>
-    <string name="no_number">Contact has no number</string>
+    <string name="no_number">Contact number required</string>
     <string name="choose_info">Choose your card display order</string>
 </resources>

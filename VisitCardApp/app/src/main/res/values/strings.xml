@@ -34,7 +34,7 @@
     <string name="card_already_exists">Contact already has a card</string>
     <string name="create_user_card">Create user card</string>
     <string name="ask_first_name">First name : </string>
-    <string name="no_number">Contact has no number</string>
+    <string name="no_number">Contact number required</string>
     <string name="sameDisplay">Can\'t display the same values</string>
     <string name="choose_info">Choose your card display order</string>
 </resources>

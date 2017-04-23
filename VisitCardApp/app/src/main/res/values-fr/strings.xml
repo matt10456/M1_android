@@ -34,7 +34,7 @@
     <string name="second_choice">Choix 2 : </string>
     <string name="full_name">Nom complet : </string>
     <string name="first_choice">Choix 1 : </string>
-    <string name="no_number">Le contact n\'a pas de numéro</string>
+    <string name="no_number">Numéro contact nécessaire</string>
     <string name="ask_adr">Adresse : </string>
     <string name="choose_info">Choisissez l\'ordre d\'affichage</string>
 </resources>
