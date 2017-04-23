@@ -41,6 +41,7 @@ import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.STREET;
+import static fr.unice.visitcardapp.Database.CONTACTS_COLUMN_1;
 import static fr.unice.visitcardapp.Database.CONTACTS_COLUMN_2;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, LoaderManager.LoaderCallbacks<Cursor> {
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     String displayNumber = "";
     String displayEmail = "";
     String displayAdr = "";
+
+    String firstDisplay;
+    String secondDisplay;
     String numViewHeader = "Phone Number : ";
     String mailViewHeader = "Email : ";
     String addViewHeader = "Address : ";
@@ -111,14 +115,57 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 Cursor rs = db.getDataByName(displayName);
                 rs.moveToFirst();
                 if (rs.getCount() > 0) {
-                    String Td1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
-                    Log.d("td1", Td1);
+                    String toDisplay1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1));
+                    String toDisplay2 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
+                    Log.d("td1", toDisplay1);
+
+                    // Display first.
+                    switch(toDisplay1)
+                    {
+                        case "1":
+                            firstDisplay = numViewHeader + displayNumber;
+                            break;
+
+                        case "2":
+                            firstDisplay = addViewHeader + displayAdr;
+                            break;
+
+                        case "3" :
+                            firstDisplay = mailViewHeader + displayEmail;
+                            break;
+
+                        default :
+                            firstDisplay = numViewHeader + displayNumber;
+                            break;
+                    }
+                    // Display in second.
+                    switch(toDisplay2)
+                    {
+                        case "1":
+                            secondDisplay = numViewHeader + displayNumber;
+                            break;
+
+                        case "2":
+                            secondDisplay = addViewHeader + displayAdr;
+                            break;
+
+                        case "3" :
+                            secondDisplay = mailViewHeader + displayEmail;
+                            break;
+
+                        default :
+                            secondDisplay = numViewHeader + displayNumber;
+                            break;
+                    }
                 }
 
                 // Found a visit card to display
                 // rs = db.getDataByName(extraName);
             }
         }
+
+        if(firstDisplay == null){firstDisplay = " ";}
+        if(secondDisplay == null){secondDisplay = " ";}
 
         //rs.moveToFirst();
 
@@ -127,19 +174,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         tName = (TextView)findViewById(R.id.textViewName);
         tName.append(displayName);
 
-        // Display
-        String firstDisplay = numViewHeader + displayNumber;
-        String secondDisplay = mailViewHeader + displayEmail;
-        String thirdDisplay = addViewHeader + displayAdr;
-
         tView1 = (TextView)findViewById(R.id.textView1);
         tView1.append(firstDisplay);
 
         tView2 = (TextView)findViewById(R.id.textView2);
         tView2.append(secondDisplay);
-
-        tView3 = (TextView)findViewById(R.id.textView3);
-        tView3.append(thirdDisplay);
 
         textValue = "QRAPP:name="+"name"+",surname=surname,job=job,phone=phone,mail=mail,website=website";
 

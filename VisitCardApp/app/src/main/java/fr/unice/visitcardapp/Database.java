@@ -64,7 +64,7 @@ class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = null;
         if(!name.equals("")) {
-            res =  db.rawQuery("select * from contacts where "+CONTACTS_COLUMN_NAME+"=?", new String[]{name});
+            res =  db.rawQuery("select * from contacts where "+CONTACTS_COLUMN_NAME+"=? ORDER BY id DESC", new String[]{name});
         }
        return res;
     }
