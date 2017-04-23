@@ -269,27 +269,34 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         }
                         AddressCursor.close();
                         ADR = ADR.replace("null", "");
+
+                        // We have to look for the name of the contact in our database
+                        Cursor rs = db.getDataByName(name);
+
+                        rs.moveToFirst();
+
+                        if (rs.getCount() > 0) {
+                            // Case 1 : contact is found
+                            state = contactCard;
+                            Intent i = new Intent(getApplicationContext(), this.getClass());
+                            i.putExtra("name", name);
+                            i.putExtra("number", phoneNumber);
+                            i.putExtra("email",email);
+                            i.putExtra("address",ADR.trim());
+                            startActivity(i);
+                        } else {
+                            // Case 2 : contact is not found
+                            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
+                    }
+                    else
+                    {
+                        // No phone number, display an error msg:
+                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     }
                 }
-            }
-            // We have to look for the name of the contact in our database
-            Cursor rs = db.getDataByName(name);
-
-            rs.moveToFirst();
-
-            if (rs.getCount() > 0) {
-                // Case 1 : contact is found
-                state = contactCard;
-                Intent i = new Intent(getApplicationContext(), this.getClass());
-                i.putExtra("name", name);
-                i.putExtra("number", phoneNumber);
-                i.putExtra("email",email);
-                i.putExtra("address",ADR.trim());
-                startActivity(i);
-            } else {
-                // Case 2 : contact is not found
-                Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
-                snackbar.show();
             }
         }
 
