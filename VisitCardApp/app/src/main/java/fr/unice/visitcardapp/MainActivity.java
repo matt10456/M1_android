@@ -450,6 +450,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                             i.putExtra(CreateNewCardOrEditActivity.createContent, new String[]{name});
                             startActivity(i);
                         }
+                        else {
+                            // Case 2 : contact is not found
+                            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
+                    } else {
+                        // No phone number, display an error msg:
+                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     }
                 }
             }
