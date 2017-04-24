@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import static fr.unice.visitcardapp.MainActivity.contactCard;
+
 public class CreateNewCardOrEditActivity extends AppCompatActivity {
     private TextView displayTextName;
     private String displayTextNameValue;
@@ -25,6 +27,10 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
     static String editContent = "EDIT CONTENT";
     static String createContent = "EDIT CONTENT";
     Spinner s1, s2, s3;
+    String address = "";
+    String phone = "";
+    String email = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,12 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_create_new);
         displayTextName = (TextView) findViewById(R.id.textViewName);
         db = new Database(this);
+        Bundle extras = this.getIntent().getExtras();
+        if (extras != null) {
+            this.phone += extras.getString("number");
+            this.address +=  extras.getString("adress");
+            this.email +=  extras.getString("email");
+        }
 
         s1=(Spinner)findViewById(R.id.spinner1);
         String subjects1[] ={"Phone number","Address","Email"};
@@ -97,7 +109,15 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                     // DB insertion
                     if (db.insertContact(displayTextNameValue, s1, s2)) {
                         // Insertion ok
+
+                        // Récupération des paramètres.
+
+                        MainActivity.state = contactCard;
                         Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        i.putExtra("address", address);
+                        i.putExtra("number", phone);
+                        i.putExtra("email", email);
+                        i.putExtra("name", displayTextNameValue);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
                     }
