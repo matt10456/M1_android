@@ -133,16 +133,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     switch(toDisplay2) {
                         case "1":
                             secondDisplay = numViewHeader + displayNumber; break;
-
                         case "2":
                             secondDisplay = addViewHeader + displayAdr; break;
-
                         case "3" :
                             secondDisplay = mailViewHeader + displayEmail; break;
-
                         default :
-                            secondDisplay = numViewHeader + displayNumber;
-                            break;
+                            secondDisplay = numViewHeader + displayNumber; break;
                     }
                 }
             }
@@ -310,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                             snackbar.show();
                         }
                     } else {
-                        // No phone number, display an error msg:
+                        // No phone number, display an error msg
                         Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }
@@ -321,8 +317,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         // Sends SMS to selected contact
         if (resultCode == Activity.RESULT_OK && requestCode == SEND_CONTACT_REQUEST) {
             String name = "";
-            String email = "";
-
             String phoneNumber = null;
             Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
             String _ID = ContactsContract.Contacts._ID;
@@ -449,14 +443,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                             i.putExtra(CreateNewCardOrEditActivity.createMode, true);
                             i.putExtra(CreateNewCardOrEditActivity.createContent, new String[]{name});
                             startActivity(i);
-                        }
-                        else {
+                        } else {
                             // Case 2 : contact is not found
                             Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
                     } else {
-                        // No phone number, display an error msg:
+                        // No phone number, display an error msg
                         Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }

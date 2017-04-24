@@ -31,7 +31,6 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
     String phone = "";
     String email = "";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +41,8 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
         Bundle extras = this.getIntent().getExtras();
         if (extras != null) {
             this.phone += extras.getString("number");
-            this.address +=  extras.getString("adress");
-            this.email +=  extras.getString("email");
+            this.address += extras.getString("address");
+            this.email += extras.getString("email");
         }
 
         s1=(Spinner)findViewById(R.id.spinner1);
@@ -110,8 +109,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                     if (db.insertContact(displayTextNameValue, s1, s2)) {
                         // Insertion ok
 
-                        // Récupération des paramètres.
-
+                        // Récupération des paramètres
                         MainActivity.state = contactCard;
                         Intent i = new Intent(getApplicationContext(), MainActivity.class);
                         i.putExtra("address", address);
