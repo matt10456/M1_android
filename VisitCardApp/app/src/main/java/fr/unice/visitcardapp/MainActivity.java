@@ -172,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                 QrScanner(relativeLayout);
-                //startActivityForResult(intent,SEND_CONTACT_REQUEST);
             }
         });
 
@@ -204,6 +203,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 popup.show();
             }
         });
+
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean("InvalidQR",false)) {
+            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.invalid_QR, Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
 
     @Override
@@ -441,22 +445,18 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             resultPrefix = rawResult.getText().substring(0,6);
         }
 
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+
         if (resultPrefix != null && resultPrefix.equals("QRAPP:")) {
             String phoneNumber = rawResult.getText().substring(6,rawResult.getText().length());
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, "Sending user info", null, null);
-        }
-        else {
+        } else {
             // Incorrect QR code
-            Log.d("QRERROR", "Invalid QR Code");
-            // TO DISPLACE
-            // Snackbar snackbar = Snackbar.make(relativeLayout, R.string.invalid_QR, Snackbar.LENGTH_LONG);
-            // snackbar.show();
+            i.putExtra("InvalidQR",true);
         }
 
         mScannerView.stopCamera();
-        // Show the card that got taken by QR
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
     }
 
