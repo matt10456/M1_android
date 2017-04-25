@@ -6,10 +6,6 @@
         android:title="@string/create_from_text_input" />
 
     <item
-        android:id="@+id/create_qr"
-        android:title="@string/create_from_qr"/>
-
-    <item
         android:id="@+id/display"
         android:title="@string/card_display"/>
 </menu>

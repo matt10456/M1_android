@@ -157,15 +157,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         tView1.append(firstDisplay);
         tView2.append(secondDisplay);
 
-        textValue = "QRAPP:name="+"name"+",surname=surname,job=job,phone=phone,mail=mail,website=website";
-
-        try {
-            bitmap = TextToImageEncode(textValue);
-            imageView.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,7 +171,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent,SEND_CONTACT_REQUEST);
+                QrScanner(relativeLayout);
+                //startActivityForResult(intent,SEND_CONTACT_REQUEST);
             }
         });
 
@@ -199,9 +191,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                             case R.id.create_from_contact:
                                 Intent intent1 = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                                 startActivityForResult(intent1,PICK_CONTACT_REQUEST);
-                                return true;
-                            case R.id.create_qr:
-                                QrScanner(relativeLayout);
                                 return true;
                             case R.id.display:
                                 Intent intent2 = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
@@ -311,54 +300,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         snackbar.show();
                     }
                 }
-            }
-        }
-
-        // Sends SMS to selected contact
-        if (resultCode == Activity.RESULT_OK && requestCode == SEND_CONTACT_REQUEST) {
-            String name = "";
-            String phoneNumber = null;
-            Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
-            String _ID = ContactsContract.Contacts._ID;
-            String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
-
-            String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
-            Uri PHONE_CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-            String PHONE_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
-            String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
-
-            StringBuffer output;
-            ContentResolver contentResolver = getContentResolver();
-            Uri dataUri = data.getData();
-            Cursor cursor = contentResolver.query(dataUri, null, null, null, null);
-            // Iterate every contact in the phone
-            if (cursor.getCount() > 0) {
-                while (cursor.moveToNext()) {
-                    output = new StringBuffer();
-
-                    String contact_id = cursor.getString(cursor.getColumnIndex(_ID));
-                    name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
-                    int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
-                    if (hasPhoneNumber > 0) {
-                        output.append("\n First Name:" + name);
-                        //This is to read multiple phone numbers associated with the same contact
-                        Cursor phoneCursor = contentResolver.query(PHONE_CONTENT_URI, null, PHONE_CONTACT_ID + " = ?", new String[]{contact_id}, null);
-                        while (phoneCursor.moveToNext()) {
-                            phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-                            output.append("\n Phone number:" + phoneNumber);
-                        }
-                        phoneCursor.close();
-                    }
-                }
-            }
-
-            SmsManager smsManager = SmsManager.getDefault();
-            // Sending a text to 5556, should be replaced with contact number
-            if (phoneNumber != null) {
-                smsManager.sendTextMessage(phoneNumber, null, "Sending something", null, null);
-            } else {
-                Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
-                snackbar.show();
             }
         }
 
@@ -489,12 +430,29 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     public void handleResult(Result rawResult) {
-        // Do something with the result here
-
         // Prints scan results
-        Log.e("handler", rawResult.getText());
+        // Log.e("handler", rawResult.getText());
         // Prints the scan format (qrcode)
-        Log.e("handler", rawResult.getBarcodeFormat().toString());
+        // Log.e("handler", rawResult.getBarcodeFormat().toString());
+        String resultPrefix = null;
+
+        // Do something with the result here
+        if (rawResult.getText().length() > 6) {
+            resultPrefix = rawResult.getText().substring(0,6);
+        }
+
+        if (resultPrefix != null && resultPrefix.equals("QRAPP:")) {
+            String phoneNumber = rawResult.getText().substring(6,rawResult.getText().length());
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, "Sending user info", null, null);
+        }
+        else {
+            // Incorrect QR code
+            Log.d("QRERROR", "Invalid QR Code");
+            // TO DISPLACE
+            // Snackbar snackbar = Snackbar.make(relativeLayout, R.string.invalid_QR, Snackbar.LENGTH_LONG);
+            // snackbar.show();
+        }
 
         mScannerView.stopCamera();
         // Show the card that got taken by QR
@@ -548,7 +506,18 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
         cursor.close();
 
-        if (phones.size() != 0 && phones.get(0) != null) tView1.append(numViewHeader + "\n" + phones.get(0));
+        if (phones.size() != 0 && phones.get(0) != null) {
+            // If phone number exists, displays it in the view
+            tView1.append(numViewHeader + "\n" + phones.get(0));
+            // And sets the QR code with the text QRAPP:phonenumber
+            textValue = "QRAPP:" + phones.get(0);
+            try {
+                bitmap = TextToImageEncode(textValue);
+                imageView.setImageBitmap(bitmap);
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+        }
 
         if (address.size() != 0 && address.get(0) != null) tView2.append(addViewHeader + "\n" + address.get(0));
 
