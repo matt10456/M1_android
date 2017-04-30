@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +24,7 @@ import android.widget.TextView;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.app.LoaderManager;
+import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -46,8 +46,7 @@ import static fr.unice.visitcardapp.Database.CONTACTS_COLUMN_2;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, LoaderManager.LoaderCallbacks<Cursor> {
     public int DISPLAY_CONTACT_REQUEST = 1;
-    public int SEND_CONTACT_REQUEST = 2;
-    public int PICK_CONTACT_REQUEST = 3;
+    public int PICK_CONTACT_REQUEST = 2;
     public final static int QRcodeWidth = 500;
     public static final String userCard = "USER CARD";
     public static final String contactCard = "CONTACT CARD";
@@ -72,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     Bitmap bitmap;
     String textValue;
     Database db;
-    Cursor rs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             // Display last database value
             Bundle extras = this.getIntent().getExtras();
             if (extras != null) {
+                textValue = "QRAPP:" + extras.getString("number");
+                createQR(textValue);
+
                 displayName = "" + extras.getString("name");
                 displayNumber = "\n" + extras.getString("number");
                 displayEmail = "\n" + extras.getString("email");
@@ -141,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         default :
                             secondDisplay = numViewHeader + displayNumber; break;
                     }
-
                 }
             }
         }
@@ -516,17 +516,21 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             tView1.append(numViewHeader + "\n" + phones.get(0));
             // And sets the QR code with the text QRAPP:phonenumber
             textValue = "QRAPP:" + phones.get(0);
-            try {
-                bitmap = TextToImageEncode(textValue);
-                imageView.setImageBitmap(bitmap);
-            } catch (WriterException e) {
-                e.printStackTrace();
-            }
+            createQR(textValue);
         }
 
         if (address.size() != 0 && address.get(0) != null) tView2.append(addViewHeader + "\n" + address.get(0));
 
         if (emails.size() != 0 && emails.get(0) != null) tView3.append(mailViewHeader + "\n" + emails.get(0));
+    }
+
+    public void createQR(String textValue) {
+        try {
+            bitmap = TextToImageEncode(textValue);
+            imageView.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
