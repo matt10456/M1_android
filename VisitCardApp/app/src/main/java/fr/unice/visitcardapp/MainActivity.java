@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         } else if (state.equals(contactCard)) {
             sendButton.setVisibility(View.GONE);
             othersButton.setVisibility(View.GONE);
+
             // Display last database value
             Bundle extras = this.getIntent().getExtras();
             if (extras != null) {
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         default :
                             secondDisplay = numViewHeader + displayNumber; break;
                     }
+
                 }
             }
         }
@@ -162,6 +164,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
                 i.putExtra(CreateNewCardOrEditActivity.editMode,true);
+                i.putExtra("address", displayAdr.replace("\n", ""));
+                i.putExtra("number", displayNumber.replace("\n", ""));
+                i.putExtra("email", displayEmail.replace("\n", ""));
                 i.putExtra(CreateNewCardOrEditActivity.editContent, new String[]{displayName});
                 startActivity(i);
             }
@@ -208,11 +213,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             Snackbar snackbar = Snackbar.make(relativeLayout, R.string.invalid_QR, Snackbar.LENGTH_LONG);
             snackbar.show();
         }
+
     }
 
     @Override
     public void onActivityResult( int requestCode, int resultCode, Intent data ) {
-
         // Displays the contact's card if it exists
         if (resultCode == Activity.RESULT_OK && requestCode == DISPLAY_CONTACT_REQUEST) {
             String name = "";
