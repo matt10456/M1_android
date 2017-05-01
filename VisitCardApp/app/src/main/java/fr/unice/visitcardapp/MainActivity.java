@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     String textValue;
     Database db;
 
+    String userDisplay1 = "1";
+    String userDisplay2 = "2";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +95,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             String[] projection = { ContactsContract.Profile.DISPLAY_NAME };
             Cursor cursor = managedQuery(uri, projection, null, null, null);
 
-            if (cursor.moveToFirst ()) displayName = "" + cursor.getString (cursor.getColumnIndex(projection [0]));
+            if (cursor.moveToFirst ()) {
+                displayName = "" + cursor.getString (cursor.getColumnIndex(projection [0]));
+                Cursor rs = db.getDataByName(displayName);
+                rs.moveToFirst();
+                if (rs.getCount() > 0) {
+                    this.userDisplay1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1));
+                    this.userDisplay2 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
+                    Log.d("test", this.userDisplay1);
+                }
+            }
 
         } else if (state.equals(contactCard)) {
             sendButton.setVisibility(View.GONE);
@@ -164,6 +176,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
                 i.putExtra(CreateNewCardOrEditActivity.editMode,true);
+                if(state.equals(userCard))
+                {
+                    // Signal that we want to edit the user card.
+                    i.putExtra("user", "user");
+                }
+                else
+                {
+                    i.putExtra("user", "contact");
+                }
                 i.putExtra("address", displayAdr.replace("\n", ""));
                 i.putExtra("number", displayNumber.replace("\n", ""));
                 i.putExtra("email", displayEmail.replace("\n", ""));
@@ -513,15 +534,34 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         if (phones.size() != 0 && phones.get(0) != null) {
             // If phone number exists, displays it in the view
-            tView1.append(numViewHeader + "\n" + phones.get(0));
+            if(userDisplay1.equals("1")) {
+                tView1.append(numViewHeader + "\n" + phones.get(0));
+            }
+            else if(userDisplay1.equals("2")){
+                tView2.append(numViewHeader + "\n" + phones.get(0));
+            }
             // And sets the QR code with the text QRAPP:phonenumber
             textValue = "QRAPP:" + phones.get(0);
             createQR(textValue);
         }
 
-        if (address.size() != 0 && address.get(0) != null) tView2.append(addViewHeader + "\n" + address.get(0));
+        if (address.size() != 0 && address.get(0) != null) {
+            if(userDisplay1.equals("2")) {
+                tView1.append(addViewHeader + "\n" + address.get(0));
+            }
+            if(userDisplay2.equals("2")) {
+                tView2.append(addViewHeader + "\n" + address.get(0));
+            }
+        }
 
-        if (emails.size() != 0 && emails.get(0) != null) tView3.append(mailViewHeader + "\n" + emails.get(0));
+        if (emails.size() != 0 && emails.get(0) != null) {
+            if(userDisplay1.equals("3")) {
+                tView1.append(mailViewHeader + "\n" + emails.get(0));
+            }
+            else if(userDisplay2.equals("3")) {
+                tView2.append(mailViewHeader + "\n" + emails.get(0));
+            }
+        }
     }
 
     public void createQR(String textValue) {

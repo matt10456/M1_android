@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import static fr.unice.visitcardapp.MainActivity.contactCard;
+import static fr.unice.visitcardapp.MainActivity.userCard;
 
 public class CreateNewCardOrEditActivity extends AppCompatActivity {
     private TextView displayTextName;
@@ -30,6 +31,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
     String address = "";
     String phone = "";
     String email = "";
+    boolean userEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,13 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
             this.phone += extras.getString("number");
             this.address += extras.getString("address");
             this.email += extras.getString("email");
+
+            if(extras.getString("user") != null)
+            {
+                Log.d("t", (extras.getString("user")));
+                if(extras.getString("user").equals("user")) { this.userEdit = true; }
+                else { this.userEdit = false; }
+            }
         }
 
         s1=(Spinner)findViewById(R.id.spinner1);
@@ -110,7 +119,13 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                         // Insertion ok
 
                         // Récupération des paramètres
-                        MainActivity.state = contactCard;
+                        if(!userEdit) {
+                            MainActivity.state = contactCard;
+                        }
+                        else
+                        {
+                            MainActivity.state = userCard;
+                        }
                         Intent i = new Intent(getApplicationContext(), MainActivity.class);
                         i.putExtra("address", address);
                         i.putExtra("number", phone);
@@ -136,7 +151,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.back_menu:
-                MainActivity.state = MainActivity.userCard;
+                MainActivity.state = userCard;
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
