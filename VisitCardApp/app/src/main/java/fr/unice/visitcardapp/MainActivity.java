@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 if (rs.getCount() > 0) {
                     this.userDisplay1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1));
                     this.userDisplay2 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
-                    Log.d("test", this.userDisplay1);
                 }
             }
 
@@ -176,13 +175,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
                 i.putExtra(CreateNewCardOrEditActivity.editMode,true);
-                if(state.equals(userCard))
-                {
+                if(state.equals(userCard)) {
                     // Signal that we want to edit the user card.
                     i.putExtra("user", "user");
-                }
-                else
-                {
+                } else {
                     i.putExtra("user", "contact");
                 }
                 i.putExtra("address", displayAdr.replace("\n", ""));
@@ -536,8 +532,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             // If phone number exists, displays it in the view
             if(userDisplay1.equals("1")) {
                 tView1.append(numViewHeader + "\n" + phones.get(0));
-            }
-            else if(userDisplay2.equals("1")){
+            } else if(userDisplay2.equals("1")){
                 tView2.append(numViewHeader + "\n" + phones.get(0));
             }
             // And sets the QR code with the text QRAPP:phonenumber
@@ -548,8 +543,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if (address.size() != 0 && address.get(0) != null) {
             if(userDisplay1.equals("2")) {
                 tView1.append(addViewHeader + "\n" + address.get(0));
-            }
-            else if(userDisplay2.equals("2")) {
+            } else if(userDisplay2.equals("2")) {
                 tView2.append(addViewHeader + "\n" + address.get(0));
             }
         }
@@ -557,8 +551,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if (emails.size() != 0 && emails.get(0) != null) {
             if(userDisplay1.equals("3")) {
                 tView1.append(mailViewHeader + "\n" + emails.get(0));
-            }
-            else if(userDisplay2.equals("3")) {
+            } else if(userDisplay2.equals("3")) {
                 tView2.append(mailViewHeader + "\n" + emails.get(0));
             }
         }

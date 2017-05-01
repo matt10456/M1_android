@@ -46,8 +46,7 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
             this.address += extras.getString("address");
             this.email += extras.getString("email");
 
-            if(extras.getString("user") != null)
-            {
+            if(extras.getString("user") != null) {
                 Log.d("t", (extras.getString("user")));
                 if(extras.getString("user").equals("user")) { this.userEdit = true; }
                 else { this.userEdit = false; }
@@ -66,16 +65,13 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
 
         final Intent i = getIntent();
         if (i.getBooleanExtra(editMode,false)) {
-            // code to edit the user card
             String[] cardContents = i.getStringArrayExtra(editContent);
             displayTextName.append("" + cardContents[0]);
         }
 
         if (i.getBooleanExtra(createMode,false)) {
-            // code to create new card for a contact
             String[] cardContents = i.getStringArrayExtra(createContent);
             displayTextName.append("" + cardContents[0]);
-            // MainActivity.state = MainActivity.contactCard;
         }
 
         Button confirmButton = (Button)findViewById(R.id.button_confirm);
@@ -116,14 +112,10 @@ public class CreateNewCardOrEditActivity extends AppCompatActivity {
                 } else {
                     // DB insertion
                     if (db.insertContact(displayTextNameValue, s1, s2)) {
-                        // Insertion ok
-
                         // Récupération des paramètres
                         if(!userEdit) {
                             MainActivity.state = contactCard;
-                        }
-                        else
-                        {
+                        } else {
                             MainActivity.state = userCard;
                         }
                         Intent i = new Intent(getApplicationContext(), MainActivity.class);
