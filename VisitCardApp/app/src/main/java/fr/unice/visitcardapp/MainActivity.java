@@ -537,7 +537,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             if(userDisplay1.equals("1")) {
                 tView1.append(numViewHeader + "\n" + phones.get(0));
             }
-            else if(userDisplay1.equals("2")){
+            else if(userDisplay2.equals("1")){
                 tView2.append(numViewHeader + "\n" + phones.get(0));
             }
             // And sets the QR code with the text QRAPP:phonenumber
@@ -549,7 +549,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             if(userDisplay1.equals("2")) {
                 tView1.append(addViewHeader + "\n" + address.get(0));
             }
-            if(userDisplay2.equals("2")) {
+            else if(userDisplay2.equals("2")) {
                 tView2.append(addViewHeader + "\n" + address.get(0));
             }
         }
