@@ -38,4 +38,5 @@
     <string name="sameDisplay">Can\'t display the same values</string>
     <string name="choose_info">Choose your card display order</string>
     <string name="invalid_QR">QR Code isn\'t valid for the app</string>
+    <string name="create_profile">Create profile</string>
 </resources>

@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     static String state = userCard;
     private ZXingScannerView mScannerView;
     private RelativeLayout relativeLayout;
+    boolean profileCreation = false;
     TextView tName;
     TextView tView1;
     TextView tView2;
@@ -61,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     String displayNumber = "";
     String displayEmail = "";
     String displayAdr = "";
-
+    String userDisplay1 = "1";
+    String userDisplay2 = "2";
     String firstDisplay;
     String secondDisplay;
     String numViewHeader = "Phone Number : ";
@@ -72,9 +74,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     String textValue;
     Database db;
 
-    String userDisplay1 = "1";
-    String userDisplay2 = "2";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
         Button editButton = (Button)findViewById(R.id.button_edit);
         Button sendButton = (Button)findViewById(R.id.button_send);
+        Button profileButton = (Button)findViewById(R.id.button_user_profile);
         final Button othersButton = (Button)findViewById(R.id.button_others);
 
         db = new Database(this);
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if (state.equals(userCard)) {
             sendButton.setVisibility(View.VISIBLE);
             othersButton.setVisibility(View.VISIBLE);
+            profileButton.setVisibility(View.GONE);
             getLoaderManager().initLoader(0, null, this);
             Uri uri = ContactsContract.Profile.CONTENT_URI;
             String[] projection = { ContactsContract.Profile.DISPLAY_NAME };
@@ -104,10 +105,17 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     this.userDisplay2 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
                 }
             }
+            // If the user doesn't have his or her profile set up yet
+            if (displayName.equals("")) {
+                tName = (TextView)findViewById(R.id.textViewName);
+                tName.append("To view your card, please \nenter your user info");
+                profileButton.setVisibility(View.VISIBLE);
+            }
 
         } else if (state.equals(contactCard)) {
             sendButton.setVisibility(View.GONE);
             othersButton.setVisibility(View.GONE);
+            profileButton.setVisibility(View.GONE);
 
             // Display last database value
             Bundle extras = this.getIntent().getExtras();
@@ -447,11 +455,31 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         mScannerView.startCamera();
     }
 
+    public void createProfile(View view) {
+        Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.android.contacts");
+        if (launchIntent != null) {
+            profileCreation = true;
+            startActivity(launchIntent); //null pointer check in case package name was not found
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
         // Stop camera on pause
         if (mScannerView != null) mScannerView.stopCamera();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (profileCreation) {
+            profileCreation = false;
+            state = userCard;
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
     }
 
     @Override
