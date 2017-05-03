@@ -49,7 +49,7 @@ public class SmsReceiver extends BroadcastReceiver {
                         } else {
                             emailAdd = name[5];
                         }
-                        Toast.makeText(context, R.string.saving_card + " \n"+nameAdd, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getResources().getString(R.string.saving_card) + " \n"+nameAdd, Toast.LENGTH_SHORT).show();
                         // Add contact in the android database.
                         addContact(nameAdd, mobileAdd,adrAdd,emailAdd, context);
                         // Add contact in App database.
