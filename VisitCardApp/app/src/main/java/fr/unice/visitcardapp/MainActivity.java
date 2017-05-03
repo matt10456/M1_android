@@ -500,7 +500,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if (resultPrefix != null && resultPrefix.equals("QRAPP:")) {
             String phoneNumber = rawResult.getText().substring(6,rawResult.getText().length());
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, "Sending user info", null, null);
+            String sendName = tName.getText().toString();
+            //String send1 = tView1.getText().toString().split(":")[1];
+            //String send2 = tView2.getText().toString().split(":")[1];
+            smsManager.sendTextMessage(phoneNumber, null, "##VCA##"+userDisplay1+";"+userDisplay2+";"+sendName+";"+displayNumber+";"+displayAdr+";"+displayEmail, null, null);
         } else {
             // Incorrect QR code
             i.putExtra("InvalidQR",true);
@@ -558,6 +561,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         if (phones.size() != 0 && phones.get(0) != null) {
             // If phone number exists, displays it in the view
+            displayNumber = phones.get(0);
             if(userDisplay1.equals("1")) {
                 tView1.append(numViewHeader + "\n" + phones.get(0));
             } else if(userDisplay2.equals("1")){
@@ -569,6 +573,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
 
         if (address.size() != 0 && address.get(0) != null) {
+            displayAdr =  address.get(0);
             if(userDisplay1.equals("2")) {
                 tView1.append(addViewHeader + "\n" + address.get(0));
             } else if(userDisplay2.equals("2")) {
@@ -577,6 +582,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
 
         if (emails.size() != 0 && emails.get(0) != null) {
+            displayEmail = emails.get(0);
             if(userDisplay1.equals("3")) {
                 tView1.append(mailViewHeader + "\n" + emails.get(0));
             } else if(userDisplay2.equals("3")) {
