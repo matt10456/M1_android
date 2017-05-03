@@ -40,8 +40,22 @@ public class SmsReceveir extends BroadcastReceiver {
                         String display2 = name[1];
                         String nameAdd = name[2];
                         String mobileAdd = name[3];
-                        String adrAdd = name[4];
-                        String emailAdd  = name[5];
+                        String adrAdd;
+                        String emailAdd;
+                        if(name.length < 5)
+                        {
+                            adrAdd = null;
+                        }
+                        else {
+                            adrAdd = name[4];
+                        }
+                        if(name.length < 5)
+                        {
+                            emailAdd = null;
+                        }
+                        else {
+                            emailAdd = name[5];
+                        }
                         Toast.makeText(context, "Enregistrement de la carte de visite du contact \n"+nameAdd, Toast.LENGTH_SHORT).show();
                         // Add contact in the android database.
                         addContact(nameAdd, mobileAdd,adrAdd,emailAdd, context);

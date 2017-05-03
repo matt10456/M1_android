@@ -503,7 +503,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             String sendName = tName.getText().toString();
             //String send1 = tView1.getText().toString().split(":")[1];
             //String send2 = tView2.getText().toString().split(":")[1];
-            smsManager.sendTextMessage(phoneNumber, null, "##VCA##"+userDisplay1+";"+userDisplay2+";"+sendName+";"+displayNumber+"; "+displayAdr+"; "+displayEmail, null, null);
+            smsManager.sendTextMessage(phoneNumber, null, "##VCA##"+userDisplay1+";"+userDisplay2+";"+sendName+";"+displayNumber+";"+displayAdr+";"+displayEmail, null, null);
         } else {
             // Incorrect QR code
             i.putExtra("InvalidQR",true);
