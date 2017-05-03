@@ -39,4 +39,6 @@
     <string name="choose_info">Choose your card display order</string>
     <string name="invalid_QR">QR Code isn\'t valid for the app</string>
     <string name="create_profile">Create profile</string>
+    <string name="saving_card">Saving the visit card of the contact</string>
+    <string name="sending_card_error">Enter name and number to send card</string>
 </resources>

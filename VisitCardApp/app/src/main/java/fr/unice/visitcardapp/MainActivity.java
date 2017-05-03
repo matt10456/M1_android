@@ -200,8 +200,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                QrScanner(relativeLayout);
+                if (displayName.equals("") || displayNumber.equals("")) {
+                    Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sending_card_error, Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                } else {
+                    QrScanner(relativeLayout);
+                }
             }
         });
 
@@ -374,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
                     if (hasPhoneNumber > 0) {
                         output.append("\n First Name:" + name);
-                        //This is to read multiple phone numbers associated with the same contact
+                        // This is to read multiple phone numbers associated with the same contact
                         Cursor phoneCursor = contentResolver.query(PHONE_CONTENT_URI, null, PHONE_CONTACT_ID + " = ?", new String[]{contact_id}, null);
                         while (phoneCursor.moveToNext()) {
                             phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
@@ -459,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.android.contacts");
         if (launchIntent != null) {
             profileCreation = true;
-            startActivity(launchIntent); //null pointer check in case package name was not found
+            startActivity(launchIntent);
         }
     }
 
@@ -501,8 +505,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             String phoneNumber = rawResult.getText().substring(6,rawResult.getText().length());
             SmsManager smsManager = SmsManager.getDefault();
             String sendName = tName.getText().toString();
-            //String send1 = tView1.getText().toString().split(":")[1];
-            //String send2 = tView2.getText().toString().split(":")[1];
             smsManager.sendTextMessage(phoneNumber, null, "##VCA##"+userDisplay1+";"+userDisplay2+";"+sendName+";"+displayNumber+";"+displayAdr+";"+displayEmail, null, null);
         } else {
             // Incorrect QR code

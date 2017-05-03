@@ -39,4 +39,6 @@
     <string name="choose_info">Choisissez l\'ordre d\'affichage</string>
     <string name="invalid_QR">Le QR code n\'est pas valide pour l\'app</string>
     <string name="create_profile">Créer le profil</string>
+    <string name="saving_card">Enregistrement de la carte de visite du contact</string>
+    <string name="sending_card_error">Entrez nom et numéro pour envoyer la carte</string>
 </resources>

@@ -7,12 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
-import android.util.Log;
 import android.widget.Toast;
 import java.util.ArrayList;
+import android.util.Log;
 
-
-public class SmsReceveir extends BroadcastReceiver {
+public class SmsReceiver extends BroadcastReceiver {
 
     Database db;
 
@@ -25,15 +24,14 @@ public class SmsReceveir extends BroadcastReceiver {
             Bundle bundle = intent.getExtras();
             SmsMessage[] msgs = null;
 
-            if (bundle != null)
-            {
+            if (bundle != null) {
                 Object[] pdus = (Object[]) bundle.get("pdus");
                 msgs = new SmsMessage[pdus.length];
-                String body ="";
-                for (int i=0; i<msgs.length; i++){
+                String body = "";
+                for (int i=0; i<msgs.length; i++) {
                     msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
                     body =  msgs[i].getMessageBody().toString();
-                    if(body.startsWith("##VCA##")){
+                    if(body.startsWith("##VCA##")) {
                         // Receive the sms.
                         String[] name = body.split(";");
                         String display1 = name[0];
@@ -42,30 +40,23 @@ public class SmsReceveir extends BroadcastReceiver {
                         String mobileAdd = name[3];
                         String adrAdd;
                         String emailAdd;
-                        if(name.length < 5)
-                        {
+                        if(name.length < 5) {
                             adrAdd = null;
-                        }
-                        else {
+                        } else {
                             adrAdd = name[4];
-                        }
-                        if(name.length < 5)
-                        {
+                        } if(name.length < 6) {
                             emailAdd = null;
-                        }
-                        else {
+                        } else {
                             emailAdd = name[5];
                         }
-                        Toast.makeText(context, "Enregistrement de la carte de visite du contact \n"+nameAdd, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.saving_card + " \n"+nameAdd, Toast.LENGTH_SHORT).show();
                         // Add contact in the android database.
                         addContact(nameAdd, mobileAdd,adrAdd,emailAdd, context);
-                        // Add cobtact in App database.
+                        // Add contact in App database.
                         db.insertContact(nameAdd, display1, display2);
                     }
                 }
-
             }
-
         }
     }
 
@@ -128,10 +119,10 @@ public class SmsReceveir extends BroadcastReceiver {
 
         // Asking the Contact provider to create a new contact
         try {
-                context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+            context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
         } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(context, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            Toast.makeText(context, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }
