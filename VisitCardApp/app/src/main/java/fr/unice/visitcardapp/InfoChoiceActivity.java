@@ -15,8 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import static fr.unice.visitcardapp.MainActivity.contactCard;
-import static fr.unice.visitcardapp.MainActivity.userCard;
+import fr.unice.visitcardapp.database.Database;
+
+import static fr.unice.visitcardapp.MainActivity.CONTACT_CARD;
+import static fr.unice.visitcardapp.MainActivity.USER_CARD;
 
 public class InfoChoiceActivity extends AppCompatActivity {
     private TextView displayTextName;
@@ -106,17 +108,17 @@ public class InfoChoiceActivity extends AppCompatActivity {
                 }
 
                 if(s1.equals(s2)) {
-                    // Même affichage = erreur
+                    // Same display = error
                     Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sameDisplay, Snackbar.LENGTH_LONG);
                     snackbar.show();
                 } else {
                     // DB insertion
                     if (db.insertContact(displayTextNameValue, s1, s2)) {
-                        // Récupération des paramètres
+                        // Parameter retrieval
                         if(!userEdit) {
-                            MainActivity.state = contactCard;
+                            MainActivity.state = CONTACT_CARD;
                         } else {
-                            MainActivity.state = userCard;
+                            MainActivity.state = USER_CARD;
                         }
                         Intent i = new Intent(getApplicationContext(), MainActivity.class);
                         i.putExtra("address", address);
@@ -143,7 +145,7 @@ public class InfoChoiceActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.back_menu:
-                MainActivity.state = userCard;
+                MainActivity.state = USER_CARD;
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

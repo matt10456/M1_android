@@ -1,4 +1,4 @@
-package fr.unice.visitcardapp;
+package fr.unice.visitcardapp.database;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -9,17 +9,17 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 
-class Database extends SQLiteOpenHelper {
+public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Visitcard.db";
     static final String CONTACTS_TABLE_NAME = "contacts";
     static final String CONTACTS_COLUMN_ID = "id";
-    static final String CONTACTS_COLUMN_NAME = "name";
-    static final String CONTACTS_COLUMN_1 = "display1";
-    static final String CONTACTS_COLUMN_2 = "display2";
+    private static final String CONTACTS_COLUMN_NAME = "name";
+    public static final String CONTACTS_COLUMN_1 = "display1";
+    public static final String CONTACTS_COLUMN_2 = "display2";
     private HashMap hp;
 
-    Database(Context context) {
+    public Database(Context context) {
         super(context, DATABASE_NAME , null, 1);
     }
 
@@ -45,7 +45,7 @@ class Database extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS contacts");
     }
 
-    boolean insertContact (String name, String d1, String d2) {
+    public boolean insertContact (String name, String d1, String d2) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CONTACTS_COLUMN_NAME , name);
@@ -55,18 +55,18 @@ class Database extends SQLiteOpenHelper {
         return true;
     }
 
-    Cursor getData(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery( "select * from contacts where id=?", new String[]{Integer.toString(id)});
-    }
-
-    Cursor getDataByName(String name) {
+    public Cursor getDataByName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = null;
         if(!name.equals("")) {
             res =  db.rawQuery("select * from contacts where "+CONTACTS_COLUMN_NAME+"=? ORDER BY id DESC", new String[]{name});
         }
        return res;
+    }
+
+    Cursor getData(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery( "select * from contacts where id=?", new String[]{Integer.toString(id)});
     }
 
     Cursor getLastContact() {

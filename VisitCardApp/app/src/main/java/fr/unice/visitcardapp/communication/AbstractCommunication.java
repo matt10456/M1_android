@@ -1,15 +1,13 @@
-package fr.unice.visitcardapp;
+package fr.unice.visitcardapp.communication;
 
 import java.util.ArrayList;
 
-abstract class AbstractCommunication implements ICommunication {
-    final static private String ACCEPTED_PREFIX = "QRAPP:";
+public abstract class AbstractCommunication implements ICommunication {
+    final static public String ACCEPTED_PREFIX = "QRAPP:";
     final static String SENT_PREFIX = "##VCA##";
     final static String ERROR_QR = "InvalidQR";
     final static private int ACCEPTED_MIN_SIZE = ACCEPTED_PREFIX.length();
     private String destinationNum;
-
-    AbstractCommunication( ) {  }
 
     /*
     * The send function takes as input a string of information that's behind

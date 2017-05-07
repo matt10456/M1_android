@@ -34,40 +34,41 @@ import com.google.zxing.common.BitMatrix;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.unice.visitcardapp.communication.AbstractCommunication;
+import fr.unice.visitcardapp.communication.AndroidCommunication;
+import fr.unice.visitcardapp.database.Database;
+import fr.unice.visitcardapp.visitcard.AbstractVisitCard;
+import fr.unice.visitcardapp.visitcard.AndroidVisitCard;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.CITY;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE;
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.STREET;
-import static fr.unice.visitcardapp.Database.CONTACTS_COLUMN_1;
-import static fr.unice.visitcardapp.Database.CONTACTS_COLUMN_2;
+import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_1;
+import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_2;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String USER_CARD = AbstractVisitCard.USER_CARD;
+    public static final String CONTACT_CARD = AbstractVisitCard.CONTACT_CARD;
     public int DISPLAY_CONTACT_REQUEST = 1;
     public int PICK_CONTACT_REQUEST = 2;
-    public final static int QRcodeWidth = 500;
-    public static final String userCard = "USER CARD";
-    public static final String contactCard = "CONTACT CARD";
-    static String state = userCard;
+    public final static int QR_CODE_WIDTH = 500;
+    static String state = USER_CARD;
     private ZXingScannerView mScannerView;
     private RelativeLayout relativeLayout;
     boolean profileCreation = false;
-    TextView tName;
-    TextView tView1;
-    TextView tView2;
-    TextView tView3;
+    TextView tName, tView1, tView2, tView3;
     String displayName = "";
     String displayNumber = "";
     String displayEmail = "";
     String displayAdr = "";
     String userDisplay1 = "1";
     String userDisplay2 = "2";
-    String firstDisplay;
-    String secondDisplay;
-    String numViewHeader = "Phone Number : ";
-    String mailViewHeader = "Email : ";
-    String addViewHeader = "Address : ";
+    String firstDisplay, secondDisplay;
+    String numViewHeader = AndroidVisitCard.NUM_VIEW_HEADER;
+    String mailViewHeader = AndroidVisitCard.MAIL_VIEW_HEADER;
+    String addViewHeader = AndroidVisitCard.ADD_VIEW_HEADER;
     ImageView imageView;
     Bitmap bitmap;
     String textValue;
@@ -83,10 +84,14 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         Button sendButton = (Button)findViewById(R.id.button_send);
         Button profileButton = (Button)findViewById(R.id.button_user_profile);
         final Button othersButton = (Button)findViewById(R.id.button_others);
+        tView1 = (TextView)findViewById(R.id.textView1);
+        tView2 = (TextView)findViewById(R.id.textView2);
+        tView3 = (TextView)findViewById(R.id.textView3);
+        tName = (TextView)findViewById(R.id.textViewName);
 
         db = new Database(this);
 
-        if (state.equals(userCard)) {
+        if (state.equals(USER_CARD)) {
             sendButton.setVisibility(View.VISIBLE);
             othersButton.setVisibility(View.VISIBLE);
             profileButton.setVisibility(View.GONE);
@@ -100,18 +105,17 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 Cursor rs = db.getDataByName(displayName);
                 rs.moveToFirst();
                 if (rs.getCount() > 0) {
-                    this.userDisplay1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1));
-                    this.userDisplay2 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
+                    userDisplay1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1));
+                    userDisplay2 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
                 }
             }
             // If the user doesn't have his or her profile set up yet
             if (displayName.equals("")) {
-                tName = (TextView)findViewById(R.id.textViewName);
                 tName.append("To view your card, please \nenter your user info");
                 profileButton.setVisibility(View.VISIBLE);
             }
 
-        } else if (state.equals(contactCard)) {
+        } else if (state.equals(CONTACT_CARD)) {
             sendButton.setVisibility(View.GONE);
             othersButton.setVisibility(View.GONE);
             profileButton.setVisibility(View.GONE);
@@ -167,13 +171,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if(firstDisplay == null){firstDisplay = "";}
         if(secondDisplay == null){secondDisplay = "";}
 
-        tName = (TextView)findViewById(R.id.textViewName);
         tName.append(displayName);
-
-        tView1 = (TextView)findViewById(R.id.textView1);
-        tView2 = (TextView)findViewById(R.id.textView2);
-        tView3 = (TextView)findViewById(R.id.textView3);
-
         tView1.append(firstDisplay);
         tView2.append(secondDisplay);
 
@@ -182,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
                 i.putExtra(InfoChoiceActivity.editMode,true);
-                if(state.equals(userCard)) {
+                if(state.equals(USER_CARD)) {
                     // Signal that we want to edit the user card.
                     i.putExtra("user", "user");
                 } else {
@@ -319,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
                         if (rs.getCount() > 0) {
                             // Case 1 : contact is found
-                            state = contactCard;
+                            state = CONTACT_CARD;
                             Intent i = new Intent(getApplicationContext(), this.getClass());
                             i.putExtra("name", name);
                             i.putExtra("number", phoneNumber);
@@ -406,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         AddressCursor.close();
                         ADR = ADR.replace("null", "");
                         
-                        state = userCard;
+                        state = USER_CARD;
                         Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
                         i.putExtra("name", name);
                         i.putExtra("number", phoneNumber);
@@ -438,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.back_menu:
-                state = userCard;
+                state = USER_CARD;
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -478,7 +476,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         super.onResume();
         if (profileCreation) {
             profileCreation = false;
-            state = userCard;
+            state = USER_CARD;
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -553,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
         List<String> phones = new ArrayList<>();
-        List<String> address = new ArrayList<>();
+        List<String> addresses = new ArrayList<>();
         String mime_type;
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -566,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     phones.add(cursor.getString(ProfileQuery.PHONE_NUMBER));
                     break;
                 case ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE:
-                    address.add(cursor.getString(ProfileQuery.ADDRESS));
+                    addresses.add(cursor.getString(ProfileQuery.ADDRESS));
                     break;
                 default: break;
             }
@@ -583,16 +581,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 tView2.append(numViewHeader + "\n" + phones.get(0));
             }
             // And sets the QR code with the text QRAPP:phonenumber
-            textValue = "QRAPP:" + phones.get(0);
+            textValue = AndroidCommunication.ACCEPTED_PREFIX + phones.get(0);
             createQR(textValue);
         }
 
-        if (address.size() != 0 && address.get(0) != null) {
-            displayAdr =  address.get(0);
+        if (addresses.size() != 0 && addresses.get(0) != null) {
+            displayAdr =  addresses.get(0);
             if(userDisplay1.equals("2")) {
-                tView1.append(addViewHeader + "\n" + address.get(0));
+                tView1.append(addViewHeader + "\n" + addresses.get(0));
             } else if(userDisplay2.equals("2")) {
-                tView2.append(addViewHeader + "\n" + address.get(0));
+                tView2.append(addViewHeader + "\n" + addresses.get(0));
             }
         }
 
@@ -642,7 +640,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         BitMatrix bitMatrix;
         try {
             bitMatrix = new MultiFormatWriter().encode(Value, BarcodeFormat.DATA_MATRIX.QR_CODE,
-                    QRcodeWidth, QRcodeWidth, null);
+                    QR_CODE_WIDTH, QR_CODE_WIDTH, null);
         } catch (IllegalArgumentException Illegalargumentexception) {
             return null;
         }
@@ -662,7 +660,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
 
-        bitmap.setPixels(pixels, 0, QRcodeWidth, 0, 0, bitMatrixWidth, bitMatrixHeight);
+        bitmap.setPixels(pixels, 0, QR_CODE_WIDTH, 0, 0, bitMatrixWidth, bitMatrixHeight);
         return bitmap;
     }
 }

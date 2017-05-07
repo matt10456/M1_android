@@ -1,4 +1,4 @@
-package fr.unice.visitcardapp;
+package fr.unice.visitcardapp.communication;
 
 import java.util.ArrayList;
 
