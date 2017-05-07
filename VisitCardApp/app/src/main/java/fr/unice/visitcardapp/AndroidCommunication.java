@@ -15,15 +15,14 @@ import android.util.Log;
 import com.google.zxing.Result;
 
 public class AndroidCommunication extends AbstractCommunication {
-    private final static String ERROR_TEXT = "InvalidQR";
     private final static String RECEIVING_INTENT = "android.provider.Telephony.SMS_RECEIVED";
 
-    public Intent sendSMS(Context context, Result qrResult, String info) {
+    Intent sendSMS(Context context, Result qrResult, String info) {
         Intent i = new Intent(context, MainActivity.class);
 
         String toSend = super.send(qrResult.toString(), info);
-        if (toSend.equals(ERROR_TEXT)) {
-            i.putExtra(ERROR_TEXT, true);
+        if (toSend.equals(ERROR_QR)) {
+            i.putExtra(ERROR_QR, true);
         } else {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(getDestinationNum(), null, toSend, null, null);
@@ -47,11 +46,8 @@ public class AndroidCommunication extends AbstractCommunication {
     }
 
     public class SmsReceiver extends BroadcastReceiver {
-        Database db;
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            db = new Database(context);
 
             if (intent.getAction().equals(RECEIVING_INTENT)) {
                 // Retrieve the sms

@@ -486,19 +486,26 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mScannerView != null) mScannerView.stopCamera();
+    }
+
+    @Override
     public void handleResult(Result rawResult) {
         // Prints scan results
         // Log.e("handler", rawResult.getText());
         // Prints the scan format (qrcode)
         // Log.e("handler", rawResult.getBarcodeFormat().toString());
+
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+
         String resultPrefix = null;
 
         // Do something with the result here
         if (rawResult.getText().length() > 6) {
             resultPrefix = rawResult.getText().substring(0,6);
         }
-
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
 
         if (resultPrefix != null && resultPrefix.equals("QRAPP:")) {
             String phoneNumber = rawResult.getText().substring(6,rawResult.getText().length());
@@ -512,6 +519,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         mScannerView.stopCamera();
         startActivity(i);
+
+        // ========== New code (to test) ============
+        // AndroidCommunication com = new AndroidCommunication(); // to put in class fields
+        // Intent intent = com.sendSMS(this, rawResult, AndroidCommunication.SENT_PREFIX+userDisplay1+";"+
+        //        userDisplay2+";"+tName.getText().toString()+";"+displayNumber+";"+displayAdr+";"+displayEmail);
+        // mScannerView.stopCamera();
+        // startActivity(intent);
     }
 
     @Override

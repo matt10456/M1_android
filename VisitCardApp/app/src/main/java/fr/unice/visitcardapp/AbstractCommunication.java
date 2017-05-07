@@ -3,9 +3,9 @@ package fr.unice.visitcardapp;
 import java.util.ArrayList;
 
 abstract class AbstractCommunication implements ICommunication {
-    final static String SENT_PREFIX = "##VCA##";
     final static private String ACCEPTED_PREFIX = "QRAPP:";
-    final static private String ERROR_QR = "InvalidQR";
+    final static String SENT_PREFIX = "##VCA##";
+    final static String ERROR_QR = "InvalidQR";
     final static private int ACCEPTED_MIN_SIZE = ACCEPTED_PREFIX.length();
     private String destinationNum;
 
