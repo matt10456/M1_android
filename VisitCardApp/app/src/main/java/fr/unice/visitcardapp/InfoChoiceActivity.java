@@ -18,7 +18,7 @@ import android.widget.TextView;
 import static fr.unice.visitcardapp.MainActivity.contactCard;
 import static fr.unice.visitcardapp.MainActivity.userCard;
 
-public class CreateNewCardOrEditActivity extends AppCompatActivity {
+public class InfoChoiceActivity extends AppCompatActivity {
     private TextView displayTextName;
     private String displayTextNameValue;
     private RelativeLayout relativeLayout;

@@ -24,7 +24,6 @@ import android.widget.TextView;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.app.LoaderManager;
-import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -181,8 +180,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
-                i.putExtra(CreateNewCardOrEditActivity.editMode,true);
+                Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
+                i.putExtra(InfoChoiceActivity.editMode,true);
                 if(state.equals(userCard)) {
                     // Signal that we want to edit the user card.
                     i.putExtra("user", "user");
@@ -192,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 i.putExtra("address", displayAdr.replace("\n", ""));
                 i.putExtra("number", displayNumber.replace("\n", ""));
                 i.putExtra("email", displayEmail.replace("\n", ""));
-                i.putExtra(CreateNewCardOrEditActivity.editContent, new String[]{displayName});
+                i.putExtra(InfoChoiceActivity.editContent, new String[]{displayName});
                 startActivity(i);
             }
         });
@@ -408,13 +407,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         ADR = ADR.replace("null", "");
                         
                         state = userCard;
-                        Intent i = new Intent(getApplicationContext(), CreateNewCardOrEditActivity.class);
+                        Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
                         i.putExtra("name", name);
                         i.putExtra("number", phoneNumber);
                         i.putExtra("email", email);
                         i.putExtra("address", ADR.trim());
-                        i.putExtra(CreateNewCardOrEditActivity.createMode, true);
-                        i.putExtra(CreateNewCardOrEditActivity.createContent, new String[]{name});
+                        i.putExtra(InfoChoiceActivity.createMode, true);
+                        i.putExtra(InfoChoiceActivity.createContent, new String[]{name});
                         startActivity(i);
 
                     } else {
