@@ -6,7 +6,7 @@ interface IVisitCard {
 
     ArrayList<String> displayUser(ArrayList<String> phones, ArrayList<String> addresses, ArrayList<String> emails);
 
-    void displayContact();
+    ArrayList<String> displayContact(ArrayList<String> contactInfo);
 
     void edit();
 

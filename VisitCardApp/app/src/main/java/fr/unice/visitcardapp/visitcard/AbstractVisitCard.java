@@ -1,8 +1,12 @@
 package fr.unice.visitcardapp.visitcard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class AbstractVisitCard implements IVisitCard {
+    final static public String NUM_VIEW_HEADER = "Phone Number : ";
+    final static public String MAIL_VIEW_HEADER = "Email : ";
+    final static public String ADD_VIEW_HEADER = "Address : ";
     final public static String USER_CARD = "USER CARD";
     final public static String CONTACT_CARD = "CONTACT CARD";
     private String fullName;
@@ -22,9 +26,9 @@ public abstract class AbstractVisitCard implements IVisitCard {
     }
 
     /*
-    * The display function takes as input the result of a database request
-    * and extracts if present the necessary information that will be
-    * displayed later on
+    * The display user function takes as input the results of a database
+    * request and extracts if present the necessary information that
+    * will be displayed later on
     * */
     @Override
     public ArrayList<String> displayUser(ArrayList<String> phones, ArrayList<String> addresses, ArrayList<String> emails) {
@@ -44,9 +48,25 @@ public abstract class AbstractVisitCard implements IVisitCard {
 
     }
 
+    /*
+    * The display contact function takes as input the contacts' infos
+    * and chooses the right ones to display according to the default
+    * choices or that the user made after editing the card, if present
+    * in the database
+    * */
     @Override
-    public void displayContact() {
+    public ArrayList<String> displayContact(ArrayList<String> contactInfo) {
+        String displayName = "" + contactInfo.get(0);
+        String displayNumber = "\n" + contactInfo.get(1);
+        String displayEmail = "\n" + contactInfo.get(2);
+        String displayAdr = "\n" + contactInfo.get(3);
 
+        if(displayName.equals("null")) { displayName = " "; }
+        if(displayNumber.equals("\nnull")) { displayNumber = " "; }
+        if(displayEmail.equals("\nnull")) { displayEmail = " "; }
+        if(displayAdr.equals("\nnull")) { displayAdr = " "; }
+
+        return new ArrayList<>(Arrays.asList(displayName,displayNumber,displayEmail,displayAdr));
     }
 
     @Override

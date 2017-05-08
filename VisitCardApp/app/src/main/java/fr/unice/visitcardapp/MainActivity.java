@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             // Display last database value
             Bundle extras = this.getIntent().getExtras();
             if (extras != null) {
-                textValue = "QRAPP:" + extras.getString("number");
+                textValue = AndroidCommunication.ACCEPTED_PREFIX + extras.getString("number");
                 createQR(textValue);
 
                 displayName = "" + extras.getString("name");
@@ -166,14 +166,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     }
                 }
             }
+
+            if(firstDisplay == null){firstDisplay = "";}
+            if(secondDisplay == null){secondDisplay = "";}
+
+            tView1.append(firstDisplay);
+            tView2.append(secondDisplay);
         }
 
-        if(firstDisplay == null){firstDisplay = "";}
-        if(secondDisplay == null){secondDisplay = "";}
-
         tName.append(displayName);
-        tView1.append(firstDisplay);
-        tView2.append(secondDisplay);
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -37,9 +37,10 @@ public abstract class AbstractCommunication implements ICommunication {
     }
 
     /*
-     * The receive function takes the content of the sent message and extracts
-     * the necessary info so that a new contact can be created, the sending part
-     * of the whole process makes sure that the info being sent is valid
+     * The receive function takes as input the content of the sent message and
+     * extracts the necessary info so that a new contact can be created, the
+     * sending part of the whole process makes sure that the info being sent
+     * is valid
      * */
     @Override
     public ArrayList<String> receive(String smsBody) {
