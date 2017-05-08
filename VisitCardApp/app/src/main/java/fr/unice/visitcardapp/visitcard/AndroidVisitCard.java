@@ -1,10 +1,13 @@
 package fr.unice.visitcardapp.visitcard;
 
+import android.database.Cursor;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import fr.unice.visitcardapp.database.Database;
 
 public class AndroidVisitCard extends AbstractVisitCard {
     public AndroidVisitCard() {
@@ -46,13 +49,16 @@ public class AndroidVisitCard extends AbstractVisitCard {
 
     }
 
-    public ArrayList<String> displayContactInfo(ArrayList<String> contactInfo, boolean inDb) {
-        // Calls for the superclass method to display the fields properly
+    public ArrayList<String> displayContactInfo(ArrayList<String> contactInfo, Database db) {
+        // Calls for the superclass method to register the fields properly
         displayContact(contactInfo);
 
         String firstDisplay = null;
         String secondDisplay = null;
-        if (!isUserCard() && inDb) {
+
+        Cursor rs = db.getDataByName(getFullName());
+        rs.moveToFirst();
+        if (rs.getCount() > 0) {
             // Display first
             switch (getFirstUserChoice()) {
                 case 1:

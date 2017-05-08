@@ -33,6 +33,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import fr.unice.visitcardapp.communication.AbstractCommunication;
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             Cursor cursor = managedQuery(uri, projection, null, null, null);
 
             if (cursor.moveToFirst ()) {
-                displayName = "" + cursor.getString (cursor.getColumnIndex(projection [0]));
+                displayName = "" + cursor.getString (cursor.getColumnIndex(projection[0]));
                 userCard.setFullName(displayName);
                 Cursor rs = db.getDataByName(displayName);
                 rs.moveToFirst();
@@ -113,9 +114,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 }
             }
             // If the user doesn't have his or her profile set up yet
-            if (displayName.equals("")) {
-                tName.append("To view your card, please \nenter your user info");
+            if (displayName.equals("") || userCard.getPhoneNumber() == null) {
+                tName.append("To use your card, enter\nyour username and number");
                 profileButton.setVisibility(View.VISIBLE);
+            } else {
+                tName.append(displayName);
             }
 
         } else if (state.equals(CONTACT_CARD)) {
@@ -128,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             if (extras != null) {
                 textValue = AndroidCommunication.ACCEPTED_PREFIX + extras.getString("number");
                 createQR(textValue);
+
+                ArrayList<String> contactDisplay = contactCard.displayContactInfo(new ArrayList<>(Arrays.asList(extras.getString("name"),extras.getString("number"),
+                        extras.getString("address"),extras.getString("email"))), db);
 
                 displayName = "" + extras.getString("name");
                 displayNumber = "\n" + extras.getString("number");
@@ -175,9 +181,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
             tView1.append(firstDisplay);
             tView2.append(secondDisplay);
+            tName.append(displayName);
         }
-
-        tName.append(displayName);
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,7 +206,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (displayName.equals("") || displayNumber.equals("")) {
+                Log.d("NAME","name: " + userCard.getFullName());
+                Log.d("NUM","num: " + userCard.getPhoneNumber());
+                if (displayName.equals("") || userCard.getPhoneNumber() == null || userCard.getPhoneNumber().equals("")) {
                     Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sending_card_error, Snackbar.LENGTH_LONG);
                     snackbar.show();
                 } else {
@@ -493,6 +500,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        state = USER_CARD;
+    }
+
+    @Override
     public void handleResult(Result rawResult) {
         // Prints scan results
         // Log.e("handler", rawResult.getText());
@@ -577,7 +590,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         userCard.displayUserInfo(phones, addresses, emails, tView1, tView2);
 
-        // ASets the QR code with the adapted text for communication
+        // Sets the QR code with the adapted text for communication
         textValue = AndroidCommunication.ACCEPTED_PREFIX + userCard.getPhoneNumber();
         createQR(textValue);
     }
