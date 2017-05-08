@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -69,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     String displayNumber = "";
     String displayEmail = "";
     String displayAdr = "";
-    String userDisplay1 = "1";
-    String userDisplay2 = "2";
     String firstDisplay, secondDisplay;
     ImageView imageView;
     Bitmap bitmap;
@@ -105,11 +104,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
             if (cursor.moveToFirst ()) {
                 displayName = "" + cursor.getString (cursor.getColumnIndex(projection [0]));
+                userCard.setFullName(displayName);
                 Cursor rs = db.getDataByName(displayName);
                 rs.moveToFirst();
                 if (rs.getCount() > 0) {
-                    userDisplay1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1));
-                    userDisplay2 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
+                    userCard.setFirstUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1))));
+                    userCard.setSecondUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2))));
                 }
             }
             // If the user doesn't have his or her profile set up yet
@@ -512,7 +512,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             String phoneNumber = rawResult.getText().substring(6,rawResult.getText().length());
             SmsManager smsManager = SmsManager.getDefault();
             String sendName = tName.getText().toString();
-            smsManager.sendTextMessage(phoneNumber, null, "##VCA##"+userDisplay1+";"+userDisplay2+";"+sendName+";"+displayNumber+";"+displayAdr+";"+displayEmail, null, null);
+            smsManager.sendTextMessage(phoneNumber, null, "##VCA##"+userCard.getFirstUserChoice()+";"+userCard.getSecondUserChoice()+";"+sendName+";"+displayNumber+";"+displayAdr+";"+displayEmail, null, null);
         } else {
             // Incorrect QR code
             i.putExtra("InvalidQR",true);
@@ -523,8 +523,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         // ========== New code (to test) ============
         // AndroidCommunication com = new AndroidCommunication(); // to put in class fields
-        // Intent intent = com.sendSMS(this, rawResult, AndroidCommunication.SENT_PREFIX+userDisplay1+";"+
-        //        userDisplay2+";"+tName.getText().toString()+";"+displayNumber+";"+displayAdr+";"+displayEmail);
+        // Intent intent = com.sendSMS(this, rawResult, AndroidCommunication.SENT_PREFIX+userCard.getFirstUserChoice()+";"+
+        //        userCard.getSecondUserChoice()+";"+tName.getText().toString()+";"+displayNumber+";"+displayAdr+";"+displayEmail);
         // mScannerView.stopCamera();
         // startActivity(intent);
     }
@@ -552,9 +552,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        List<String> phones = new ArrayList<>();
-        List<String> addresses = new ArrayList<>();
+        ArrayList<String> emails = new ArrayList<>();
+        ArrayList<String> phones = new ArrayList<>();
+        ArrayList<String> addresses = new ArrayList<>();
         String mime_type;
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -575,36 +575,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
         cursor.close();
 
-        if (phones.size() != 0 && phones.get(0) != null) {
-            // If phone number exists, displays it in the view
-            displayNumber = phones.get(0);
-            if(userDisplay1.equals("1")) {
-                tView1.append(numViewHeader + "\n" + phones.get(0));
-            } else if(userDisplay2.equals("1")){
-                tView2.append(numViewHeader + "\n" + phones.get(0));
-            }
-            // And sets the QR code with the text QRAPP:phonenumber
-            textValue = AndroidCommunication.ACCEPTED_PREFIX + phones.get(0);
-            createQR(textValue);
-        }
+        userCard.displayUserInfo(phones, addresses, emails, tView1, tView2);
 
-        if (addresses.size() != 0 && addresses.get(0) != null) {
-            displayAdr =  addresses.get(0);
-            if(userDisplay1.equals("2")) {
-                tView1.append(addViewHeader + "\n" + addresses.get(0));
-            } else if(userDisplay2.equals("2")) {
-                tView2.append(addViewHeader + "\n" + addresses.get(0));
-            }
-        }
-
-        if (emails.size() != 0 && emails.get(0) != null) {
-            displayEmail = emails.get(0);
-            if(userDisplay1.equals("3")) {
-                tView1.append(mailViewHeader + "\n" + emails.get(0));
-            } else if(userDisplay2.equals("3")) {
-                tView2.append(mailViewHeader + "\n" + emails.get(0));
-            }
-        }
+        // ASets the QR code with the adapted text for communication
+        textValue = AndroidCommunication.ACCEPTED_PREFIX + userCard.getPhoneNumber();
+        createQR(textValue);
     }
 
     public void createQR(String textValue) {

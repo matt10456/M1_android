@@ -20,24 +20,26 @@ public class AndroidVisitCard extends AbstractVisitCard {
     }
 
     public String displayUserInfo(ArrayList<String> phones, ArrayList<String> addresses, ArrayList<String> emails, TextView t1, TextView t2) {
-        displayUser(phones, addresses, emails);
+        if (isUserCard() && getFullName() != null) {
+            displayUser(phones, addresses, emails);
 
-        if(getFirstUserChoice() == 1) {
-            t1.append(NUM_VIEW_HEADER + "\n" + getPhoneNumber());
-        } else if(getSecondUserChoice() == 1){
-            t2.append(NUM_VIEW_HEADER + "\n" + getPhoneNumber());
-        }
+            if(getFirstUserChoice() == 1) {
+                t1.append(NUM_VIEW_HEADER + "\n" + getPhoneNumber());
+            } else if(getSecondUserChoice() == 1){
+                t2.append(NUM_VIEW_HEADER + "\n" + getPhoneNumber());
+            }
 
-        if(getFirstUserChoice() == 2) {
-            t1.append(ADD_VIEW_HEADER + "\n" + getAddress());
-        } else if(getSecondUserChoice() == 2) {
-            t2.append(ADD_VIEW_HEADER + "\n" + getAddress());
-        }
+            if(getFirstUserChoice() == 2) {
+                t1.append(ADD_VIEW_HEADER + "\n" + getAddress());
+            } else if(getSecondUserChoice() == 2) {
+                t2.append(ADD_VIEW_HEADER + "\n" + getAddress());
+            }
 
-        if(getFirstUserChoice() == 3) {
-            t1.append(MAIL_VIEW_HEADER + "\n" + getEmail());
-        } else if(getSecondUserChoice() == 3) {
-            t2.append(MAIL_VIEW_HEADER + "\n" + getEmail());
+            if(getFirstUserChoice() == 3) {
+                t1.append(MAIL_VIEW_HEADER + "\n" + getEmail());
+            } else if(getSecondUserChoice() == 3) {
+                t2.append(MAIL_VIEW_HEADER + "\n" + getEmail());
+            }
         }
 
         return getPhoneNumber();
@@ -50,7 +52,7 @@ public class AndroidVisitCard extends AbstractVisitCard {
 
         String firstDisplay = null;
         String secondDisplay = null;
-        if (inDb) {
+        if (!isUserCard() && inDb) {
             // Display first
             switch (getFirstUserChoice()) {
                 case 1:

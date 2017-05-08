@@ -41,17 +41,17 @@ public abstract class AbstractVisitCard implements IVisitCard {
         if (phones.size() != 0 && phones.get(0) != null) {
             phoneNumber = phones.get(0);
         } else {
-            phoneNumber = null;
+            phoneNumber = "";
         }
         if (addresses.size() != 0 && addresses.get(0) != null) {
             address = addresses.get(0);
         } else {
-            address = null;
+            address = "";
         }
         if (emails.size() != 0 && emails.get(0) != null) {
             email = emails.get(0);
         } else {
-            email = null;
+            email = "";
         }
 
     }
