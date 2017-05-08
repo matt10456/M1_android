@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +13,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.util.Log;
 
 import fr.unice.visitcardapp.database.Database;
 import fr.unice.visitcardapp.visitcard.AndroidVisitCard;
@@ -51,7 +51,6 @@ public class InfoChoiceActivity extends AppCompatActivity {
             this.email += extras.getString("email");
 
             if(extras.getString("user") != null) {
-                Log.d("t", (extras.getString("user")));
                 if(extras.getString("user").equals("user")) { this.userEdit = true; }
                 else { this.userEdit = false; }
             }

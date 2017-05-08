@@ -65,14 +65,14 @@ public abstract class AbstractVisitCard implements IVisitCard {
     @Override
     public void displayContact(ArrayList<String> contactInfo) {
         setFullName("" + contactInfo.get(0));
-        setPhoneNumber("\n" + contactInfo.get(1));
-        setAddress("\n" + contactInfo.get(2));
-        setEmail("\n" + contactInfo.get(3));
+        setPhoneNumber("" + contactInfo.get(1));
+        setAddress("" + contactInfo.get(2));
+        setEmail("" + contactInfo.get(3));
 
         if(fullName.equals("null")) { setFullName(" "); }
-        if(phoneNumber.equals("\nnull")) { setPhoneNumber(" "); }
-        if(address.equals("\nnull")) { setAddress(" "); }
-        if(email.equals("\nnull")) { setEmail(" "); }
+        if(phoneNumber.equals("null")) { setPhoneNumber(" "); }
+        if(address.equals("null")) { setAddress(" "); }
+        if(email.equals("null")) { setEmail(" "); }
     }
 
     /*

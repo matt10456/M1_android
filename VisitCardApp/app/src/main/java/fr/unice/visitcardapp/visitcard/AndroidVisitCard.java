@@ -67,31 +67,31 @@ public class AndroidVisitCard extends AbstractVisitCard {
             // Display first
             switch (getFirstUserChoice()) {
                 case 1:
-                    firstDisplay = NUM_VIEW_HEADER + getPhoneNumber();
+                    firstDisplay = NUM_VIEW_HEADER + "\n" + getPhoneNumber();
                     break;
                 case 2:
-                    firstDisplay = ADD_VIEW_HEADER + getAddress();
+                    firstDisplay = ADD_VIEW_HEADER + "\n" + getAddress();
                     break;
                 case 3:
-                    firstDisplay = MAIL_VIEW_HEADER + getEmail();
+                    firstDisplay = MAIL_VIEW_HEADER + "\n" + getEmail();
                     break;
                 default:
-                    firstDisplay = NUM_VIEW_HEADER + getAddress();
+                    firstDisplay = NUM_VIEW_HEADER + "\n" + getAddress();
                     break;
             }
             // Display second
             switch (getSecondUserChoice()) {
                 case 1:
-                    secondDisplay = NUM_VIEW_HEADER + getPhoneNumber();
+                    secondDisplay = NUM_VIEW_HEADER + "\n" + getPhoneNumber();
                     break;
                 case 2:
-                    secondDisplay = ADD_VIEW_HEADER + getAddress();
+                    secondDisplay = ADD_VIEW_HEADER + "\n" + getAddress();
                     break;
                 case 3:
-                    secondDisplay = MAIL_VIEW_HEADER + getEmail();
+                    secondDisplay = MAIL_VIEW_HEADER + "\n" + getEmail();
                     break;
                 default:
-                    secondDisplay = NUM_VIEW_HEADER + getPhoneNumber();
+                    secondDisplay = NUM_VIEW_HEADER + "\n" + getPhoneNumber();
                     break;
             }
         }

@@ -64,9 +64,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private RelativeLayout relativeLayout;
     boolean profileCreation = false;
     TextView tName, tView1, tView2, tView3;
-    String numViewHeader = AndroidVisitCard.NUM_VIEW_HEADER;
-    String mailViewHeader = AndroidVisitCard.MAIL_VIEW_HEADER;
-    String addViewHeader = AndroidVisitCard.ADD_VIEW_HEADER;
     Button editButton, sendButton, profileButton;
     String displayName = "";
     String displayNumber = "";
@@ -114,10 +111,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     userCard.setSecondUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2))));
                 }
             }
-
         } else if (state.equals(CONTACT_CARD)) {
-            sendButton.setVisibility(View.GONE);
             othersButton.setVisibility(View.GONE);
+            sendButton.setVisibility(View.GONE);
             profileButton.setVisibility(View.GONE);
 
             // Display last database value
@@ -125,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             if (extras != null) {
                 textValue = AndroidCommunication.ACCEPTED_PREFIX + extras.getString("number");
                 createQR(textValue);
-
                 ArrayList<String> contactDisplay = contactCard.displayContactInfo(new ArrayList<>(Arrays.asList(extras.getString("name"),extras.getString("number"),
                         extras.getString("address"),extras.getString("email"))), db);
 
@@ -153,9 +148,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 } else {
                     i.putExtra("user", "contact");
                 }
-                i.putExtra("number", displayNumber.replace("\n", ""));
-                i.putExtra("address", displayAdr.replace("\n", ""));
-                i.putExtra("email", displayEmail.replace("\n", ""));
+                if (state.equals(USER_CARD)) {
+                    i.putExtra("number", displayNumber.replace("\n", ""));
+                    i.putExtra("address", displayAdr.replace("\n", ""));
+                    i.putExtra("email", displayEmail.replace("\n", ""));
+                } else if (state.equals(CONTACT_CARD)) {
+                    i.putExtra("number", contactCard.getPhoneNumber());
+                    i.putExtra("address", contactCard.getAddress());
+                    i.putExtra("email", contactCard.getEmail());
+                }
                 i.putExtra(InfoChoiceActivity.editContent, new String[]{displayName});
                 startActivity(i);
             }
