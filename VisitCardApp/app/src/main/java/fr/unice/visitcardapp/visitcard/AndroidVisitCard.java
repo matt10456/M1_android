@@ -7,7 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AndroidVisitCard extends AbstractVisitCard {
-    AndroidVisitCard(String fullName, String phoneNumber, String address, String email, boolean user) {
+    public AndroidVisitCard() {
+        super();
+    }
+
+    public AndroidVisitCard(boolean user) {
+        super(null, null, null, null, user);
+    }
+
+    public AndroidVisitCard(String fullName, String phoneNumber, String address, String email, boolean user) {
         super(fullName, phoneNumber, address, email, user);
     }
 

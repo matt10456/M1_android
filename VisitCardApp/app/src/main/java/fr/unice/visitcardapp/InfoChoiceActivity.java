@@ -20,6 +20,7 @@ import fr.unice.visitcardapp.visitcard.AndroidVisitCard;
 
 import static fr.unice.visitcardapp.MainActivity.CONTACT_CARD;
 import static fr.unice.visitcardapp.MainActivity.USER_CARD;
+import static fr.unice.visitcardapp.MainActivity.staticCard;
 
 public class InfoChoiceActivity extends AppCompatActivity {
     private TextView displayTextName;
@@ -82,31 +83,11 @@ public class InfoChoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 displayTextNameValue = displayTextName.getText().length() == 0 ? "" : displayTextName.getText().toString();
-                String sVal1, sVal2;
-                String selected1 = s1.getSelectedItem().toString();
-                String selected2 = s2.getSelectedItem().toString();
-
-                switch(selected1) {
-                    case "Phone number":
-                        sVal1 = "1"; break;
-                    case "Address" :
-                        sVal1 = "2"; break;
-                    case "Email" :
-                        sVal1  ="3"; break;
-                    default :
-                        sVal1 = "1"; break;
-                }
-
-                switch(selected2) {
-                    case "Phone number":
-                        sVal2 = "1"; break;
-                    case "Address" :
-                        sVal2 = "2"; break;
-                    case "Email" :
-                        sVal2  ="3"; break;
-                    default :
-                        sVal2 = "1"; break;
-                }
+                // Static card is used here because the change can apply
+                // to both user and contact card
+                staticCard.editCard(s1,s2);
+                String sVal1 = Integer.toString(staticCard.getFirstUserChoice());
+                String sVal2 = Integer.toString(staticCard.getSecondUserChoice());
 
                 if(sVal1.equals(sVal2)) {
                     // Same display = error

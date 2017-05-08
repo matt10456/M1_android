@@ -19,6 +19,8 @@ public abstract class AbstractVisitCard implements IVisitCard {
     private int firstUserChoice;
     private int secondUserChoice;
 
+    public AbstractVisitCard() {  }
+
     public AbstractVisitCard(String fullName, String phoneNumber, String address, String email, boolean user) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;

@@ -54,11 +54,17 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public int DISPLAY_CONTACT_REQUEST = 1;
     public int PICK_CONTACT_REQUEST = 2;
     public final static int QR_CODE_WIDTH = 500;
+    public static AndroidVisitCard userCard = new AndroidVisitCard(true);
+    public static AndroidVisitCard contactCard = new AndroidVisitCard(false);
+    public static AndroidVisitCard staticCard = new AndroidVisitCard();
     static String state = USER_CARD;
     private ZXingScannerView mScannerView;
     private RelativeLayout relativeLayout;
     boolean profileCreation = false;
     TextView tName, tView1, tView2, tView3;
+    String numViewHeader = AndroidVisitCard.NUM_VIEW_HEADER;
+    String mailViewHeader = AndroidVisitCard.MAIL_VIEW_HEADER;
+    String addViewHeader = AndroidVisitCard.ADD_VIEW_HEADER;
     String displayName = "";
     String displayNumber = "";
     String displayEmail = "";
@@ -66,9 +72,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     String userDisplay1 = "1";
     String userDisplay2 = "2";
     String firstDisplay, secondDisplay;
-    String numViewHeader = AndroidVisitCard.NUM_VIEW_HEADER;
-    String mailViewHeader = AndroidVisitCard.MAIL_VIEW_HEADER;
-    String addViewHeader = AndroidVisitCard.ADD_VIEW_HEADER;
     ImageView imageView;
     Bitmap bitmap;
     String textValue;
