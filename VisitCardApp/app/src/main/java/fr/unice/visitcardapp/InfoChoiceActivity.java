@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import fr.unice.visitcardapp.database.Database;
+import fr.unice.visitcardapp.visitcard.AndroidVisitCard;
 
 import static fr.unice.visitcardapp.MainActivity.CONTACT_CARD;
 import static fr.unice.visitcardapp.MainActivity.USER_CARD;
@@ -56,12 +57,12 @@ public class InfoChoiceActivity extends AppCompatActivity {
         }
 
         s1=(Spinner)findViewById(R.id.spinner1);
-        String subjects1[] ={"Phone number","Address","Email"};
+        String subjects1[] ={AndroidVisitCard.NUM_SPINNER_CHOICE,AndroidVisitCard.ADD_SPINNER_CHOICE,AndroidVisitCard.MAIL_SPINNER_CHOICE};
         ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,subjects1);
         s1.setAdapter(adapter1);
 
         s2=(Spinner)findViewById(R.id.spinner2);
-        String subjects2[] ={"Phone number","Address","Email"};
+        String subjects2[] ={AndroidVisitCard.NUM_SPINNER_CHOICE,AndroidVisitCard.ADD_SPINNER_CHOICE,AndroidVisitCard.MAIL_SPINNER_CHOICE};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,subjects2);
         s2.setAdapter(adapter2);
 
@@ -81,39 +82,39 @@ public class InfoChoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 displayTextNameValue = displayTextName.getText().length() == 0 ? "" : displayTextName.getText().toString();
+                String sVal1, sVal2;
                 String selected1 = s1.getSelectedItem().toString();
                 String selected2 = s2.getSelectedItem().toString();
-                String s1, s2;
 
                 switch(selected1) {
                     case "Phone number":
-                        s1 = "1"; break;
+                        sVal1 = "1"; break;
                     case "Address" :
-                        s1 = "2"; break;
+                        sVal1 = "2"; break;
                     case "Email" :
-                        s1  ="3"; break;
+                        sVal1  ="3"; break;
                     default :
-                        s1 = "1"; break;
+                        sVal1 = "1"; break;
                 }
 
                 switch(selected2) {
                     case "Phone number":
-                        s2 = "1"; break;
+                        sVal2 = "1"; break;
                     case "Address" :
-                        s2 = "2"; break;
+                        sVal2 = "2"; break;
                     case "Email" :
-                        s2  ="3"; break;
+                        sVal2  ="3"; break;
                     default :
-                        s2 = "1"; break;
+                        sVal2 = "1"; break;
                 }
 
-                if(s1.equals(s2)) {
+                if(sVal1.equals(sVal2)) {
                     // Same display = error
                     Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sameDisplay, Snackbar.LENGTH_LONG);
                     snackbar.show();
                 } else {
                     // DB insertion
-                    if (db.insertContact(displayTextNameValue, s1, s2)) {
+                    if (db.insertContact(displayTextNameValue, sVal1, sVal2)) {
                         // Parameter retrieval
                         if(!userEdit) {
                             MainActivity.state = CONTACT_CARD;
@@ -121,8 +122,8 @@ public class InfoChoiceActivity extends AppCompatActivity {
                             MainActivity.state = USER_CARD;
                         }
                         Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        i.putExtra("address", address);
                         i.putExtra("number", phone);
+                        i.putExtra("address", address);
                         i.putExtra("email", email);
                         i.putExtra("name", displayTextNameValue);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -1,7 +1,6 @@
 package fr.unice.visitcardapp.visitcard;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class AbstractVisitCard implements IVisitCard {
     final static public String NUM_VIEW_HEADER = "Phone Number : ";
@@ -12,6 +11,7 @@ public abstract class AbstractVisitCard implements IVisitCard {
     final static public String ADD_SPINNER_CHOICE = "Address";
     final public static String USER_CARD = "USER CARD";
     final public static String CONTACT_CARD = "CONTACT CARD";
+    private boolean userCard;
     private String fullName;
     private String phoneNumber;
     private String address;
@@ -19,11 +19,12 @@ public abstract class AbstractVisitCard implements IVisitCard {
     private int firstUserChoice;
     private int secondUserChoice;
 
-    public AbstractVisitCard(String fullName, String phoneNumber, String address, String email) {
+    public AbstractVisitCard(String fullName, String phoneNumber, String address, String email, boolean user) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.email = email;
+        userCard = user;
         firstUserChoice = 1;
         secondUserChoice = 2;
     }
@@ -34,26 +35,22 @@ public abstract class AbstractVisitCard implements IVisitCard {
     * will be displayed later on
     * */
     @Override
-    public ArrayList<String> displayUser(ArrayList<String> phones, ArrayList<String> addresses, ArrayList<String> emails) {
-        ArrayList<String> displayInfo = new ArrayList<>();
-
+    public void displayUser(ArrayList<String> phones, ArrayList<String> addresses, ArrayList<String> emails) {
         if (phones.size() != 0 && phones.get(0) != null) {
-            displayInfo.add(phones.get(0));
+            phoneNumber = phones.get(0);
         } else {
-            displayInfo.add(null);
+            phoneNumber = null;
         }
         if (addresses.size() != 0 && addresses.get(0) != null) {
-            displayInfo.add(addresses.get(0));
+            address = addresses.get(0);
         } else {
-            displayInfo.add(null);
+            address = null;
         }
         if (emails.size() != 0 && emails.get(0) != null) {
-            displayInfo.add(emails.get(0));
+            email = emails.get(0);
         } else {
-            displayInfo.add(null);
+            email = null;
         }
-
-        return displayInfo;
 
     }
 
@@ -64,18 +61,16 @@ public abstract class AbstractVisitCard implements IVisitCard {
     * in the database
     * */
     @Override
-    public ArrayList<String> displayContact(ArrayList<String> contactInfo) {
-        String displayName = "" + contactInfo.get(0);
-        String displayNumber = "\n" + contactInfo.get(1);
-        String displayEmail = "\n" + contactInfo.get(2);
-        String displayAdr = "\n" + contactInfo.get(3);
+    public void displayContact(ArrayList<String> contactInfo) {
+        setFullName("" + contactInfo.get(0));
+        setPhoneNumber("\n" + contactInfo.get(1));
+        setAddress("\n" + contactInfo.get(2));
+        setEmail("\n" + contactInfo.get(3));
 
-        if(displayName.equals("null")) { displayName = " "; }
-        if(displayNumber.equals("\nnull")) { displayNumber = " "; }
-        if(displayEmail.equals("\nnull")) { displayEmail = " "; }
-        if(displayAdr.equals("\nnull")) { displayAdr = " "; }
-
-        return new ArrayList<>(Arrays.asList(displayName,displayNumber,displayEmail,displayAdr));
+        if(fullName.equals("null")) { setFullName(" "); }
+        if(phoneNumber.equals("\nnull")) { setPhoneNumber(" "); }
+        if(address.equals("\nnull")) { setAddress(" "); }
+        if(email.equals("\nnull")) { setEmail(" "); }
     }
 
     /*
@@ -84,32 +79,29 @@ public abstract class AbstractVisitCard implements IVisitCard {
     * to the selection
     * */
     @Override
-    public ArrayList<Integer> edit(String choice1, String choice2) {
-        ArrayList<Integer> newChoices = new ArrayList<>();
+    public void edit(String choice1, String choice2) {
 
         switch(choice1) {
             case NUM_SPINNER_CHOICE:
-                newChoices.add(1); break;
+                firstUserChoice = 1; break;
             case ADD_SPINNER_CHOICE:
-                newChoices.add(2); break;
+                firstUserChoice = 2; break;
             case MAIL_SPINNER_CHOICE:
-                newChoices.add(3); break;
+                firstUserChoice = 3; break;
             default :
-                newChoices.add(1); break;
+                firstUserChoice = 1; break;
         }
 
         switch(choice2) {
             case NUM_SPINNER_CHOICE:
-                newChoices.add(1); break;
+                secondUserChoice = 1; break;
             case ADD_SPINNER_CHOICE:
-                newChoices.add(2); break;
+                secondUserChoice = 2; break;
             case MAIL_SPINNER_CHOICE:
-                newChoices.add(3); break;
+                secondUserChoice = 3; break;
             default :
-                newChoices.add(1); break;
+                secondUserChoice = 1; break;
         }
-
-        return newChoices;
     }
 
     public String getFullName() {
@@ -158,6 +150,14 @@ public abstract class AbstractVisitCard implements IVisitCard {
 
     public void setSecondUserChoice(int secondUserChoice) {
         this.secondUserChoice = secondUserChoice;
+    }
+
+    public boolean isUserCard() {
+        return userCard;
+    }
+
+    public void setUserCard(boolean userCard) {
+        this.userCard = userCard;
     }
 
 }
