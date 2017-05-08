@@ -7,6 +7,9 @@ public abstract class AbstractVisitCard implements IVisitCard {
     final static public String NUM_VIEW_HEADER = "Phone Number : ";
     final static public String MAIL_VIEW_HEADER = "Email : ";
     final static public String ADD_VIEW_HEADER = "Address : ";
+    final static public String NUM_SPINNER_CHOICE = "Phone Number";
+    final static public String MAIL_SPINNER_CHOICE = "Email";
+    final static public String ADD_SPINNER_CHOICE = "Address";
     final public static String USER_CARD = "USER CARD";
     final public static String CONTACT_CARD = "CONTACT CARD";
     private String fullName;
@@ -36,12 +39,18 @@ public abstract class AbstractVisitCard implements IVisitCard {
 
         if (phones.size() != 0 && phones.get(0) != null) {
             displayInfo.add(phones.get(0));
+        } else {
+            displayInfo.add(null);
         }
         if (addresses.size() != 0 && addresses.get(0) != null) {
             displayInfo.add(addresses.get(0));
+        } else {
+            displayInfo.add(null);
         }
         if (emails.size() != 0 && emails.get(0) != null) {
             displayInfo.add(emails.get(0));
+        } else {
+            displayInfo.add(null);
         }
 
         return displayInfo;
@@ -69,9 +78,38 @@ public abstract class AbstractVisitCard implements IVisitCard {
         return new ArrayList<>(Arrays.asList(displayName,displayNumber,displayEmail,displayAdr));
     }
 
+    /*
+    * The edit function takes as input the selection of the user
+    * and delivers a result that will be saved later on according
+    * to the selection
+    * */
     @Override
-    public void edit() {
+    public ArrayList<Integer> edit(String choice1, String choice2) {
+        ArrayList<Integer> newChoices = new ArrayList<>();
 
+        switch(choice1) {
+            case NUM_SPINNER_CHOICE:
+                newChoices.add(1); break;
+            case ADD_SPINNER_CHOICE:
+                newChoices.add(2); break;
+            case MAIL_SPINNER_CHOICE:
+                newChoices.add(3); break;
+            default :
+                newChoices.add(1); break;
+        }
+
+        switch(choice2) {
+            case NUM_SPINNER_CHOICE:
+                newChoices.add(1); break;
+            case ADD_SPINNER_CHOICE:
+                newChoices.add(2); break;
+            case MAIL_SPINNER_CHOICE:
+                newChoices.add(3); break;
+            default :
+                newChoices.add(1); break;
+        }
+
+        return newChoices;
     }
 
     public String getFullName() {

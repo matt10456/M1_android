@@ -1,5 +1,6 @@
 package fr.unice.visitcardapp.visitcard;
 
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -75,5 +76,12 @@ public class AndroidVisitCard extends AbstractVisitCard {
         }
 
         return new ArrayList<>(Arrays.asList(firstDisplay,secondDisplay));
+    }
+
+    public ArrayList<Integer> editCard(Spinner s1, Spinner s2) {
+        String selected1 = s1.getSelectedItem().toString();
+        String selected2 = s2.getSelectedItem().toString();
+
+        return edit(selected1, selected2);
     }
 }
