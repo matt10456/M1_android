@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     String numViewHeader = AndroidVisitCard.NUM_VIEW_HEADER;
     String mailViewHeader = AndroidVisitCard.MAIL_VIEW_HEADER;
     String addViewHeader = AndroidVisitCard.ADD_VIEW_HEADER;
+    Button editButton, sendButton, profileButton;
     String displayName = "";
     String displayNumber = "";
     String displayEmail = "";
@@ -83,9 +84,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         setContentView(R.layout.activity_main);
         imageView = (ImageView)findViewById(R.id.imageView);
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
-        Button editButton = (Button)findViewById(R.id.button_edit);
-        Button sendButton = (Button)findViewById(R.id.button_send);
-        Button profileButton = (Button)findViewById(R.id.button_user_profile);
+        editButton = (Button)findViewById(R.id.button_edit);
+        sendButton = (Button)findViewById(R.id.button_send);
+        profileButton = (Button)findViewById(R.id.button_user_profile);
         final Button othersButton = (Button)findViewById(R.id.button_others);
         tView1 = (TextView)findViewById(R.id.textView1);
         tView2 = (TextView)findViewById(R.id.textView2);
@@ -113,13 +114,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     userCard.setSecondUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2))));
                 }
             }
-            // If the user doesn't have his or her profile set up yet
-            if (displayName.equals("") || userCard.getPhoneNumber() == null) {
-                tName.append("To use your card, enter\nyour username and number");
-                profileButton.setVisibility(View.VISIBLE);
-            } else {
-                tName.append(displayName);
-            }
 
         } else if (state.equals(CONTACT_CARD)) {
             sendButton.setVisibility(View.GONE);
@@ -136,44 +130,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         extras.getString("address"),extras.getString("email"))), db);
 
                 displayName = "" + extras.getString("name");
-                displayNumber = "\n" + extras.getString("number");
-                displayAdr = "\n" + extras.getString("address");
-                displayEmail = "\n" + extras.getString("email");
-
-                if(displayName.equals("null")) { displayName = " "; }
-                if(displayNumber.equals("\nnull")) { displayNumber = " "; }
-                if(displayAdr.equals("\nnull")) { displayAdr = " "; }
-                if(displayEmail.equals("\nnull")) { displayEmail = " "; }
-
-                Cursor rs = db.getDataByName(displayName);
-                rs.moveToFirst();
-                if (rs.getCount() > 0) {
-                    String toDisplay1 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1));
-                    String toDisplay2 = rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2));
-
-                    // Display first
-                    switch(toDisplay1) {
-                        case "1":
-                            firstDisplay = numViewHeader + displayNumber; break;
-                        case "2":
-                            firstDisplay = addViewHeader + displayAdr; break;
-                        case "3" :
-                            firstDisplay = mailViewHeader + displayEmail; break;
-                        default :
-                            firstDisplay = numViewHeader + displayNumber; break;
-                    }
-                    // Display second
-                    switch(toDisplay2) {
-                        case "1":
-                            secondDisplay = numViewHeader + displayNumber; break;
-                        case "2":
-                            secondDisplay = addViewHeader + displayAdr; break;
-                        case "3" :
-                            secondDisplay = mailViewHeader + displayEmail; break;
-                        default :
-                            secondDisplay = numViewHeader + displayNumber; break;
-                    }
-                }
+                firstDisplay = contactDisplay.get(0);
+                secondDisplay = contactDisplay.get(1);
             }
 
             if(firstDisplay == null){firstDisplay = "";}
@@ -206,8 +164,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("NAME","name: " + userCard.getFullName());
-                Log.d("NUM","num: " + userCard.getPhoneNumber());
                 if (displayName.equals("") || userCard.getPhoneNumber() == null || userCard.getPhoneNumber().equals("")) {
                     Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sending_card_error, Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -589,6 +545,14 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         cursor.close();
 
         userCard.displayUserInfo(phones, addresses, emails, tView1, tView2);
+
+        // If the user doesn't have his or her profile set up yet
+        if (displayName.equals("") || userCard.getPhoneNumber() == null || userCard.getPhoneNumber().equals("")) {
+            tName.append("To use your card, enter\nyour username and number");
+            profileButton.setVisibility(View.VISIBLE);
+        } else {
+            tName.append(displayName);
+        }
 
         // Sets the QR code with the adapted text for communication
         textValue = AndroidCommunication.ACCEPTED_PREFIX + userCard.getPhoneNumber();

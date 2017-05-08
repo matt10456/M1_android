@@ -9,6 +9,9 @@ import java.util.Arrays;
 
 import fr.unice.visitcardapp.database.Database;
 
+import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_1;
+import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_2;
+
 public class AndroidVisitCard extends AbstractVisitCard {
     public AndroidVisitCard() {
         super();
@@ -59,6 +62,8 @@ public class AndroidVisitCard extends AbstractVisitCard {
         Cursor rs = db.getDataByName(getFullName());
         rs.moveToFirst();
         if (rs.getCount() > 0) {
+            setFirstUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1))));
+            setSecondUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2))));
             // Display first
             switch (getFirstUserChoice()) {
                 case 1:
