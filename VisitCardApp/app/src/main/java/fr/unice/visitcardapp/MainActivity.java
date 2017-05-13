@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     rs.moveToFirst();
                     if (rs.getCount() > 0) {
                         userCard.setFirstUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1))));
+                        Log.d("test", rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1)));
                         userCard.setSecondUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2))));
                     }
                 }
@@ -483,7 +484,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     public void handleResult(Result rawResult) {
-        Intent intent = com.sendSMS(this, rawResult, AndroidCommunication.SENT_PREFIX + userCard.getFirstUserChoice()+";"+
+        Intent intent = com.sendSMS(this, rawResult, AndroidCommunication.SENT_PREFIX +";"+ userCard.getFirstUserChoice()+";"+
                 userCard.getSecondUserChoice()+";"+tName.getText().toString()+";"+userCard.getPhoneNumber()+";"+userCard.getAddress()+";"+userCard.getEmail());
         mScannerView.stopCamera();
         startActivity(intent);

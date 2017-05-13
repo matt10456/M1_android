@@ -18,7 +18,7 @@ import fr.unice.visitcardapp.MainActivity;
 import fr.unice.visitcardapp.R;
 
 public class AndroidCommunication extends AbstractCommunication {
-    private final static String RECEIVING_INTENT = "android.provider.Telephony.SMS_RECEIVED";
+    final static String RECEIVING_INTENT = "android.provider.Telephony.SMS_RECEIVED";
 
     public Intent sendSMS(Context context, Result qrResult, String info) {
         Intent i = new Intent(context, MainActivity.class);
@@ -34,7 +34,7 @@ public class AndroidCommunication extends AbstractCommunication {
         return i;
     }
 
-    private void receiveSMS(Context context, String smsBody) {
+    void receiveSMS(Context context, String smsBody) {
         Database db = new Database(context);
 
         if(smsBody.startsWith(SENT_PREFIX)) {
@@ -45,29 +45,6 @@ public class AndroidCommunication extends AbstractCommunication {
             addContact(contactData.get(2), contactData.get(3), contactData.get(4), contactData.get(5), context);
             // Add contact in App database.
             db.insertContact(contactData.get(2), contactData.get(0), contactData.get(1));
-        }
-    }
-
-    public class SmsReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            if (intent.getAction().equals(RECEIVING_INTENT)) {
-                // Retrieve the sms
-                Bundle bundle = intent.getExtras();
-                SmsMessage[] msgs;
-
-                if (bundle != null) {
-                    Object[] pdus = (Object[]) bundle.get("pdus");
-                    msgs = new SmsMessage[pdus.length];
-                    String body = "";
-                    for (int i=0; i<msgs.length; i++) {
-                        msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
-                        body =  msgs[i].getMessageBody();
-                        receiveSMS(context, body);
-                    }
-                }
-            }
         }
     }
 

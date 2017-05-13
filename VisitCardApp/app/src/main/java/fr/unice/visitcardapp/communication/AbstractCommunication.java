@@ -48,24 +48,24 @@ public abstract class AbstractCommunication implements ICommunication {
         // Receive the sms
         String[] name = smsBody.split(";");
         // The first user choice for the card is added to the result
-        contactData.add(name[0]);
-        // The second user choice for the card is added to the result
         contactData.add(name[1]);
-        // The username for the other card is added to the result
+        // The second user choice for the card is added to the result
         contactData.add(name[2]);
-        // The mobile number for the other card is added to the result
+        // The username for the other card is added to the result
         contactData.add(name[3]);
-        if (name.length < 5) {
-            contactData.add(null);
-        } else {
-            // The address for the other card is added to the result
-            contactData.add(name[4]);
-        }
+        // The mobile number for the other card is added to the result
+        contactData.add(name[4]);
         if (name.length < 6) {
             contactData.add(null);
         } else {
-            // The email for the other card is added to the result
+            // The address for the other card is added to the result
             contactData.add(name[5]);
+        }
+        if (name.length < 7) {
+            contactData.add(null);
+        } else {
+            // The email for the other card is added to the result
+            contactData.add(name[6]);
         }
 
         return contactData;
