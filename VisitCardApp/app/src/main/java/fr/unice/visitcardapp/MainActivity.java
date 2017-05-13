@@ -98,18 +98,14 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED  ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-        {
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             // Ask for permissions
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.SEND_SMS, Manifest.permission.CAMERA, Manifest.permission.READ_CONTACTS},
                     2);
 
             tName.append("Give the rights and click \n Back to my card to restart.");
-        }
-
-       else
-        {
+        } else {
             if (state.equals(USER_CARD)) {
                 sendButton.setVisibility(View.VISIBLE);
                 othersButton.setVisibility(View.VISIBLE);
@@ -171,9 +167,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         i.putExtra("user", "contact");
                     }
                     if (state.equals(USER_CARD)) {
-                        i.putExtra("number", displayNumber.replace("\n", ""));
-                        i.putExtra("address", displayAdr.replace("\n", ""));
-                        i.putExtra("email", displayEmail.replace("\n", ""));
+                        i.putExtra("number", userCard.getPhoneNumber());
+                        i.putExtra("address", userCard.getAddress());
+                        i.putExtra("email", userCard.getEmail());
                     } else if (state.equals(CONTACT_CARD)) {
                         i.putExtra("number", contactCard.getPhoneNumber());
                         i.putExtra("address", contactCard.getAddress());
@@ -503,8 +499,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if (resultPrefix != null && resultPrefix.equals("QRAPP:")) {
             String phoneNumber = rawResult.getText().substring(6,rawResult.getText().length());
             SmsManager smsManager = SmsManager.getDefault();
-            String sendName = tName.getText().toString();
-            smsManager.sendTextMessage(phoneNumber, null, "##VCA##"+userCard.getFirstUserChoice()+";"+userCard.getSecondUserChoice()+";"+sendName+";"+displayNumber+";"+displayAdr+";"+displayEmail, null, null);
+            smsManager.sendTextMessage(phoneNumber, null, "##VCA##"+userCard.getFirstUserChoice()+";"+userCard.getSecondUserChoice()+";"
+                    +tName.getText().toString()+";"+userCard.getPhoneNumber()+";"+displayAdr+";"+displayEmail, null, null);
         } else {
             // Incorrect QR code
             i.putExtra("InvalidQR",true);
