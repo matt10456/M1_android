@@ -1,13 +1,17 @@
 package fr.unice.visitcardapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -92,122 +96,140 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         db = new Database(this);
 
-        if (state.equals(USER_CARD)) {
-            sendButton.setVisibility(View.VISIBLE);
-            othersButton.setVisibility(View.VISIBLE);
-            profileButton.setVisibility(View.GONE);
-            getLoaderManager().initLoader(0, null, this);
-            Uri uri = ContactsContract.Profile.CONTENT_URI;
-            String[] projection = { ContactsContract.Profile.DISPLAY_NAME };
-            Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED  ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+        {
+            // Ask for permissions
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.SEND_SMS, Manifest.permission.CAMERA, Manifest.permission.READ_CONTACTS},
+                    2);
 
-            if (cursor.moveToFirst ()) {
-                displayName = "" + cursor.getString (cursor.getColumnIndex(projection[0]));
-                userCard.setFullName(displayName);
-                Cursor rs = db.getDataByName(displayName);
-                rs.moveToFirst();
-                if (rs.getCount() > 0) {
-                    userCard.setFirstUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1))));
-                    userCard.setSecondUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2))));
-                }
-            }
-        } else if (state.equals(CONTACT_CARD)) {
-            othersButton.setVisibility(View.GONE);
-            sendButton.setVisibility(View.GONE);
-            profileButton.setVisibility(View.GONE);
-
-            // Display last database value
-            Bundle extras = this.getIntent().getExtras();
-            if (extras != null) {
-                textValue = AndroidCommunication.ACCEPTED_PREFIX + extras.getString("number");
-                createQR(textValue);
-                ArrayList<String> contactDisplay = contactCard.displayContactInfo(new ArrayList<>(Arrays.asList(extras.getString("name"),extras.getString("number"),
-                        extras.getString("address"),extras.getString("email"))), db);
-
-                displayName = "" + extras.getString("name");
-                firstDisplay = contactDisplay.get(0);
-                secondDisplay = contactDisplay.get(1);
-            }
-
-            if(firstDisplay == null){firstDisplay = "";}
-            if(secondDisplay == null){secondDisplay = "";}
-
-            tView1.append(firstDisplay);
-            tView2.append(secondDisplay);
-            tName.append(displayName);
+            tName.append("Give the rights and click \n Back to my card to restart.");
         }
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
-                i.putExtra(InfoChoiceActivity.editMode,true);
-                if(state.equals(USER_CARD)) {
-                    // Signal that we want to edit the user card.
-                    i.putExtra("user", "user");
-                } else {
-                    i.putExtra("user", "contact");
-                }
-                if (state.equals(USER_CARD)) {
-                    i.putExtra("number", displayNumber.replace("\n", ""));
-                    i.putExtra("address", displayAdr.replace("\n", ""));
-                    i.putExtra("email", displayEmail.replace("\n", ""));
-                } else if (state.equals(CONTACT_CARD)) {
-                    i.putExtra("number", contactCard.getPhoneNumber());
-                    i.putExtra("address", contactCard.getAddress());
-                    i.putExtra("email", contactCard.getEmail());
-                }
-                i.putExtra(InfoChoiceActivity.editContent, new String[]{displayName});
-                startActivity(i);
-            }
-        });
+       else
+        {
+            if (state.equals(USER_CARD)) {
+                sendButton.setVisibility(View.VISIBLE);
+                othersButton.setVisibility(View.VISIBLE);
+                profileButton.setVisibility(View.GONE);
+                getLoaderManager().initLoader(0, null, this);
+                Uri uri = ContactsContract.Profile.CONTENT_URI;
+                String[] projection = {ContactsContract.Profile.DISPLAY_NAME};
+                Cursor cursor = managedQuery(uri, projection, null, null, null);
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (displayName.equals("") || userCard.getPhoneNumber() == null || userCard.getPhoneNumber().equals("")) {
-                    Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sending_card_error, Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                } else {
-                    QrScanner(relativeLayout);
-                }
-            }
-        });
-
-        othersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(MainActivity.this, othersButton);
-                // Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.others_menu, popup.getMenu());
-
-                // Registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.create_from_contact:
-                                Intent intent1 = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                                startActivityForResult(intent1,PICK_CONTACT_REQUEST);
-                                return true;
-                            case R.id.display:
-                                Intent intent2 = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                                startActivityForResult(intent2,DISPLAY_CONTACT_REQUEST);
-                                return true;
-                            default:
-                                return true;
-                        }
+                if (cursor.moveToFirst()) {
+                    displayName = "" + cursor.getString(cursor.getColumnIndex(projection[0]));
+                    userCard.setFullName(displayName);
+                    Cursor rs = db.getDataByName(displayName);
+                    rs.moveToFirst();
+                    if (rs.getCount() > 0) {
+                        userCard.setFirstUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1))));
+                        userCard.setSecondUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2))));
                     }
-                });
-                popup.show();
+                }
+            } else if (state.equals(CONTACT_CARD)) {
+                othersButton.setVisibility(View.GONE);
+                sendButton.setVisibility(View.GONE);
+                profileButton.setVisibility(View.GONE);
+
+                // Display last database value
+                Bundle extras = this.getIntent().getExtras();
+                if (extras != null) {
+                    textValue = AndroidCommunication.ACCEPTED_PREFIX + extras.getString("number");
+                    createQR(textValue);
+                    ArrayList<String> contactDisplay = contactCard.displayContactInfo(new ArrayList<>(Arrays.asList(extras.getString("name"), extras.getString("number"),
+                            extras.getString("address"), extras.getString("email"))), db);
+
+                    displayName = "" + extras.getString("name");
+                    firstDisplay = contactDisplay.get(0);
+                    secondDisplay = contactDisplay.get(1);
+                }
+
+                if (firstDisplay == null) {
+                    firstDisplay = "";
+                }
+                if (secondDisplay == null) {
+                    secondDisplay = "";
+                }
+
+                tView1.append(firstDisplay);
+                tView2.append(secondDisplay);
+                tName.append(displayName);
             }
-        });
 
-        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean("InvalidQR",false)) {
-            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.invalid_QR, Snackbar.LENGTH_LONG);
-            snackbar.show();
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
+                    i.putExtra(InfoChoiceActivity.editMode, true);
+                    if (state.equals(USER_CARD)) {
+                        // Signal that we want to edit the user card.
+                        i.putExtra("user", "user");
+                    } else {
+                        i.putExtra("user", "contact");
+                    }
+                    if (state.equals(USER_CARD)) {
+                        i.putExtra("number", displayNumber.replace("\n", ""));
+                        i.putExtra("address", displayAdr.replace("\n", ""));
+                        i.putExtra("email", displayEmail.replace("\n", ""));
+                    } else if (state.equals(CONTACT_CARD)) {
+                        i.putExtra("number", contactCard.getPhoneNumber());
+                        i.putExtra("address", contactCard.getAddress());
+                        i.putExtra("email", contactCard.getEmail());
+                    }
+                    i.putExtra(InfoChoiceActivity.editContent, new String[]{displayName});
+                    startActivity(i);
+                }
+            });
+
+            sendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (displayName.equals("") || userCard.getPhoneNumber() == null || userCard.getPhoneNumber().equals("")) {
+                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sending_card_error, Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    } else {
+                        QrScanner(relativeLayout);
+                    }
+                }
+            });
+
+            othersButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Creating the instance of PopupMenu
+                    PopupMenu popup = new PopupMenu(MainActivity.this, othersButton);
+                    // Inflating the Popup using xml file
+                    popup.getMenuInflater().inflate(R.menu.others_menu, popup.getMenu());
+
+                    // Registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.create_from_contact:
+                                    Intent intent1 = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                                    startActivityForResult(intent1, PICK_CONTACT_REQUEST);
+                                    return true;
+                                case R.id.display:
+                                    Intent intent2 = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                                    startActivityForResult(intent2, DISPLAY_CONTACT_REQUEST);
+                                    return true;
+                                default:
+                                    return true;
+                            }
+                        }
+                    });
+                    popup.show();
+                }
+            });
+
+            if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean("InvalidQR", false)) {
+                Snackbar snackbar = Snackbar.make(relativeLayout, R.string.invalid_QR, Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
         }
-
     }
 
     @Override
