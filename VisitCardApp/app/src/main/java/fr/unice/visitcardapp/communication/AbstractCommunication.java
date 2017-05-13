@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class AbstractCommunication implements ICommunication {
     final static public String ACCEPTED_PREFIX = "QRAPP:";
-    final static String SENT_PREFIX = "##VCA##";
+    final static public String SENT_PREFIX = "##VCA##";
     final static String ERROR_QR = "InvalidQR";
     final static private int ACCEPTED_MIN_SIZE = ACCEPTED_PREFIX.length();
     private String destinationNum;

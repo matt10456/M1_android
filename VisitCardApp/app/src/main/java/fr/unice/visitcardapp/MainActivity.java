@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public static AndroidVisitCard userCard = new AndroidVisitCard(true);
     public static AndroidVisitCard contactCard = new AndroidVisitCard(false);
     public static AndroidVisitCard staticCard = new AndroidVisitCard();
+    AndroidCommunication com = new AndroidCommunication();
     static String state = USER_CARD;
     private ZXingScannerView mScannerView;
     private RelativeLayout relativeLayout;
@@ -482,39 +483,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     public void handleResult(Result rawResult) {
-        // Prints scan results
-        // Log.e("handler", rawResult.getText());
-        // Prints the scan format (qrcode)
-        // Log.e("handler", rawResult.getBarcodeFormat().toString());
-
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-
-        String resultPrefix = null;
-
-        // Do something with the result here
-        if (rawResult.getText().length() > 6) {
-            resultPrefix = rawResult.getText().substring(0,6);
-        }
-
-        if (resultPrefix != null && resultPrefix.equals("QRAPP:")) {
-            String phoneNumber = rawResult.getText().substring(6,rawResult.getText().length());
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, "##VCA##"+userCard.getFirstUserChoice()+";"+userCard.getSecondUserChoice()+";"
-                    +tName.getText().toString()+";"+userCard.getPhoneNumber()+";"+displayAdr+";"+displayEmail, null, null);
-        } else {
-            // Incorrect QR code
-            i.putExtra("InvalidQR",true);
-        }
-
+        Intent intent = com.sendSMS(this, rawResult, AndroidCommunication.SENT_PREFIX + userCard.getFirstUserChoice()+";"+
+                userCard.getSecondUserChoice()+";"+tName.getText().toString()+";"+userCard.getPhoneNumber()+";"+userCard.getAddress()+";"+userCard.getEmail());
         mScannerView.stopCamera();
-        startActivity(i);
-
-        // ========== New code (to test) ============
-        // AndroidCommunication com = new AndroidCommunication(); // to put in class fields
-        // Intent intent = com.sendSMS(this, rawResult, AndroidCommunication.SENT_PREFIX+userCard.getFirstUserChoice()+";"+
-        //        userCard.getSecondUserChoice()+";"+tName.getText().toString()+";"+displayNumber+";"+displayAdr+";"+displayEmail);
-        // mScannerView.stopCamera();
-        // startActivity(intent);
+        startActivity(intent);
     }
 
     @Override
