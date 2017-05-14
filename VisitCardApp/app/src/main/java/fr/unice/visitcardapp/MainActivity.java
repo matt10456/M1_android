@@ -42,6 +42,7 @@ import java.util.List;
 
 import fr.unice.visitcardapp.communication.AbstractCommunication;
 import fr.unice.visitcardapp.communication.AndroidCommunication;
+import fr.unice.visitcardapp.database.AndroidReadData;
 import fr.unice.visitcardapp.database.Database;
 import fr.unice.visitcardapp.visitcard.AbstractVisitCard;
 import fr.unice.visitcardapp.visitcard.AndroidVisitCard;
@@ -239,182 +240,58 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     public void onActivityResult( int requestCode, int resultCode, Intent data ) {
+        ContentResolver contentResolver = getContentResolver();
+        Uri dataUri = data.getData();
+        ArrayList<String> result = AndroidReadData.read(contentResolver, dataUri);
+        String name = result.get(0);
+        String ADR = result.get(1);
+        String email = result.get(2);
+        String phoneNumber = result.get(3);
+        String output = result.get(4);
+
+
         // Displays the contact's card if it exists
         if (resultCode == Activity.RESULT_OK && requestCode == DISPLAY_CONTACT_REQUEST) {
-            String name = "";
-            String email = "";
+            // We have to look for the name of the contact in our database
+            Cursor rs = db.getDataByName(name);
+            rs.moveToFirst();
 
-            String phoneNumber = null;
-            Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
-            String _ID = ContactsContract.Contacts._ID;
-            String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
-
-            String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
-            Uri PHONE_CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-            String PHONE_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
-            String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
-
-            Uri ADDRESS_CONTENT_URI = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-            String ADDRESS_CONTACT_ID = ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID;
-            String ADR = "";
-
-            Uri EMAIL_CONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
-            String EMAIL_CONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
-            String DATA = ContactsContract.CommonDataKinds.Email.DATA;
-
-            StringBuffer output;
-            ContentResolver contentResolver = getContentResolver();
-            Uri dataUri = data.getData();
-            Cursor cursor = contentResolver.query(dataUri, null, null, null, null);
-            // Iterate every contact in the phone
-            if (cursor.getCount() > 0) {
-                while (cursor.moveToNext()) {
-                    output = new StringBuffer();
-
-                    String contact_id = cursor.getString(cursor.getColumnIndex(_ID));
-                    name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
-                    int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
-                    if (hasPhoneNumber > 0) {
-                        output.append("\n First Name:" + name);
-                        //This is to read multiple phone numbers associated with the same contact
-                        Cursor phoneCursor = contentResolver.query(PHONE_CONTENT_URI, null, PHONE_CONTACT_ID + " = ?", new String[]{contact_id}, null);
-                        while (phoneCursor.moveToNext()) {
-                            phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-                            output.append("\n Phone number:" + phoneNumber);
-                        }
-                        phoneCursor.close();
-
-                        // Read one address of the contact.
-                        int max = 1; // Number of addresses.
-                        Cursor AddressCursor = contentResolver.query(ADDRESS_CONTENT_URI, null, ADDRESS_CONTACT_ID + " = ?", new String[]{contact_id}, null);
-                        while (AddressCursor.moveToNext() && max == 1) {
-                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(STREET));
-                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(CITY));
-                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(POSTCODE));
-                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(COUNTRY));
-                            max++;
-                        }
-                        AddressCursor.close();
-                        ADR = ADR.replace("null", "");
-
-                        // Read every email id associated with the contact
-                        Cursor emailCursor = contentResolver.query(EMAIL_CONTENT_URI, null, EMAIL_CONTACT_ID + " = ?", new String[]{contact_id}, null);
-                        while (emailCursor.moveToNext()) {
-                            email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
-                            output.append("\n Email:" + email);
-                        }
-                        emailCursor.close();
-
-                        // We have to look for the name of the contact in our database
-                        Cursor rs = db.getDataByName(name);
-
-                        rs.moveToFirst();
-
-                        if (rs.getCount() > 0) {
-                            // Case 1 : contact is found
-                            state = CONTACT_CARD;
-                            Intent i = new Intent(getApplicationContext(), this.getClass());
-                            i.putExtra("name", name);
-                            i.putExtra("number", phoneNumber);
-                            i.putExtra("address", ADR.trim());
-                            i.putExtra("email", email);
-                            startActivity(i);
-                        } else {
-                            // Case 2 : contact is not found
-                            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
-                            snackbar.show();
-                        }
-                    } else {
-                        // No phone number, display an error msg
-                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
-                }
+            if (rs.getCount() > 0) {
+                // Case 1 : contact is found
+                state = CONTACT_CARD;
+                Intent i = new Intent(getApplicationContext(), this.getClass());
+                i.putExtra("name", name);
+                i.putExtra("number", phoneNumber);
+                i.putExtra("address", ADR.trim());
+                i.putExtra("email", email);
+                startActivity(i);
+            } else {
+                // Case 2 : contact is not found
+                Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
+        } else {
+            // No phone number, display an error msg
+            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
 
         // Opens creation window for selected contact
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
-            String name = "";
-            String email = "";
 
-            String phoneNumber = "";
-            Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
-            String _ID = ContactsContract.Contacts._ID;
-            String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
-
-            String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
-            Uri PHONE_CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-            String PHONE_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
-            String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
-
-            Uri ADDRESS_CONTENT_URI = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-            String ADDRESS_CONTACT_ID = ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID;
-            String ADR = "";
-
-            Uri EMAIL_CONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
-            String EMAIL_CONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
-            String DATA = ContactsContract.CommonDataKinds.Email.DATA;
-
-            StringBuffer output;
-            ContentResolver contentResolver = getContentResolver();
-            Uri dataUri = data.getData();
-            Cursor cursor = contentResolver.query(dataUri, null, null, null, null);
-            // Iterate every contact in the phone
-            if (cursor.getCount() > 0) {
-                while (cursor.moveToNext()) {
-                    output = new StringBuffer();
-
-                    String contact_id = cursor.getString(cursor.getColumnIndex(_ID));
-                    name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
-                    int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
-                    if (hasPhoneNumber > 0) {
-                        output.append("\n First Name:" + name);
-                        // This is to read multiple phone numbers associated with the same contact
-                        Cursor phoneCursor = contentResolver.query(PHONE_CONTENT_URI, null, PHONE_CONTACT_ID + " = ?", new String[]{contact_id}, null);
-                        while (phoneCursor.moveToNext()) {
-                            phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-                            output.append("\n Phone number:" + phoneNumber);
-                        }
-                        phoneCursor.close();
-
-                        // Read one address of the contact.
-                        int max = 1; // Number of addresses.
-                        Cursor AddressCursor = contentResolver.query(ADDRESS_CONTENT_URI, null, ADDRESS_CONTACT_ID + " = ?", new String[]{contact_id}, null);
-                        while (AddressCursor.moveToNext() && max == 1) {
-                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(STREET));
-                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(CITY));
-                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(POSTCODE));
-                            ADR += " " + AddressCursor.getString(AddressCursor.getColumnIndex(COUNTRY));
-                            max++;
-                        }
-                        AddressCursor.close();
-                        ADR = ADR.replace("null", "");
-
-                        // Read every email id associated with the contact
-                        Cursor emailCursor = contentResolver.query(EMAIL_CONTENT_URI, null, EMAIL_CONTACT_ID + " = ?", new String[]{contact_id}, null);
-                        while (emailCursor.moveToNext()) {
-                            email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
-                            output.append("\n Email:" + email);
-                        }
-                        emailCursor.close();
-
-                        state = USER_CARD;
-                        Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
-                        i.putExtra("name", name);
-                        i.putExtra("number", phoneNumber);
-                        i.putExtra("address", ADR.trim());
-                        i.putExtra("email", email);
-                        i.putExtra(InfoChoiceActivity.createMode, true);
-                        i.putExtra(InfoChoiceActivity.createContent, new String[]{name});
-                        startActivity(i);
-                    } else {
-                        // No phone number, display an error msg
-                        Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
-                }
-            }
+            state = USER_CARD;
+            Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
+            i.putExtra("name", name);
+            i.putExtra("number", phoneNumber);
+            i.putExtra("address", ADR.trim());
+            i.putExtra("email", email);
+            i.putExtra(InfoChoiceActivity.createMode, true);
+            i.putExtra(InfoChoiceActivity.createContent, new String[]{name});
+            startActivity(i);
+        } else {
+            // No phone number, display an error msg
+            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
     }
 
