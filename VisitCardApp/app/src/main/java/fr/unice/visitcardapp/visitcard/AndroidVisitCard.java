@@ -7,11 +7,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import fr.unice.visitcardapp.database.Database;
+import fr.unice.visitcardapp.database.SQLDatabase;
 
-import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_1;
-import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_2;
-import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_3;
+import static fr.unice.visitcardapp.database.SQLDatabase.CONTACTS_COLUMN_1;
+import static fr.unice.visitcardapp.database.SQLDatabase.CONTACTS_COLUMN_2;
+import static fr.unice.visitcardapp.database.SQLDatabase.CONTACTS_COLUMN_3;
 
 public class AndroidVisitCard extends AbstractVisitCard {
     public AndroidVisitCard() {
@@ -20,10 +20,6 @@ public class AndroidVisitCard extends AbstractVisitCard {
 
     public AndroidVisitCard(boolean user) {
         super(null, null, null, null, user);
-    }
-
-    public AndroidVisitCard(String fullName, String phoneNumber, String address, String email, boolean user) {
-        super(fullName, phoneNumber, address, email, user);
     }
 
     public String displayUserInfo(ArrayList<String> phones, ArrayList<String> addresses, ArrayList<String> emails, TextView t1, TextView t2, TextView t3) {
@@ -59,7 +55,7 @@ public class AndroidVisitCard extends AbstractVisitCard {
 
     }
 
-    public ArrayList<String> displayContactInfo(ArrayList<String> contactInfo, Database db) {
+    public ArrayList<String> displayContactInfo(ArrayList<String> contactInfo, SQLDatabase db) {
         // Calls for the superclass method to register the fields properly
         displayContact(contactInfo);
 
@@ -120,7 +116,7 @@ public class AndroidVisitCard extends AbstractVisitCard {
             }
         }
 
-        return new ArrayList<>(Arrays.asList(firstDisplay,secondDisplay, thirdDisplay));
+        return new ArrayList<>(Arrays.asList(firstDisplay, secondDisplay, thirdDisplay));
     }
 
     public void editCard(Spinner s1, Spinner s2, Spinner s3) {

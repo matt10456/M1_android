@@ -13,9 +13,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.util.Log;
 
-import fr.unice.visitcardapp.database.Database;
+import fr.unice.visitcardapp.database.SQLDatabase;
 import fr.unice.visitcardapp.visitcard.AndroidVisitCard;
 
 import static fr.unice.visitcardapp.MainActivity.CONTACT_CARD;
@@ -26,7 +25,7 @@ public class InfoChoiceActivity extends AppCompatActivity {
     private TextView displayTextName;
     private String displayTextNameValue;
     private RelativeLayout relativeLayout;
-    private Database db ;
+    private SQLDatabase db ;
     static String editMode = "EDIT MODE";
     static String createMode = "CREATE MODE";
     static String editContent = "EDIT CONTENT";
@@ -43,17 +42,14 @@ public class InfoChoiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_new_card);
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_create_new);
         displayTextName = (TextView) findViewById(R.id.textViewName);
-        db = new Database(this);
+        db = new SQLDatabase(this);
         Bundle extras = this.getIntent().getExtras();
         if (extras != null) {
             this.phone += extras.getString("number");
             this.address += extras.getString("address");
             this.email += extras.getString("email");
 
-            if(extras.getString("user") != null) {
-                if(extras.getString("user").equals("user")) { this.userEdit = true; }
-                else { this.userEdit = false; }
-            }
+            if(extras.getString("user") != null) this.userEdit = extras.getString("user").equals("user");
         }
 
         s1=(Spinner)findViewById(R.id.spinner1);
@@ -89,7 +85,7 @@ public class InfoChoiceActivity extends AppCompatActivity {
                 displayTextNameValue = displayTextName.getText().length() == 0 ? "" : displayTextName.getText().toString();
                 // Static card is used here because the change can apply
                 // to both user and contact card
-                staticCard.editCard(s1,s2, s3);
+                staticCard.editCard(s1,s2,s3);
                 String sVal1 = Integer.toString(staticCard.getFirstUserChoice());
                 String sVal2 = Integer.toString(staticCard.getSecondUserChoice());
                 String sVal3 = Integer.toString(staticCard.getThirdUserChoice());

@@ -1,19 +1,16 @@
 package fr.unice.visitcardapp.communication;
 
-import android.content.BroadcastReceiver;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
-import android.telephony.SmsMessage;
 import android.widget.Toast;
 import java.util.ArrayList;
 
 import com.google.zxing.Result;
 
-import fr.unice.visitcardapp.database.Database;
+import fr.unice.visitcardapp.database.SQLDatabase;
 import fr.unice.visitcardapp.MainActivity;
 import fr.unice.visitcardapp.R;
 
@@ -35,7 +32,7 @@ public class AndroidCommunication extends AbstractCommunication {
     }
 
     void receiveSMS(Context context, String smsBody) {
-        Database db = new Database(context);
+        SQLDatabase db = new SQLDatabase(context);
 
         if(smsBody.startsWith(SENT_PREFIX)) {
             ArrayList<String> contactData = receive(smsBody);

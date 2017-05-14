@@ -1,33 +1,28 @@
 package fr.unice.visitcardapp.database;
 
-import java.util.HashMap;
-import java.util.Hashtable;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 
-public class Database extends SQLiteOpenHelper {
+public class SQLDatabase extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Visitcard.db";
-    static final String CONTACTS_TABLE_NAME = "contacts";
-    static final String CONTACTS_COLUMN_ID = "id";
+    private static final String CONTACTS_TABLE_NAME = "contacts";
+    private static final String CONTACTS_COLUMN_ID = "id";
     private static final String CONTACTS_COLUMN_NAME = "name";
     public static final String CONTACTS_COLUMN_1 = "display1";
     public static final String CONTACTS_COLUMN_2 = "display2";
     public static final String CONTACTS_COLUMN_3 = "display3";
-    private static final String REQUEST_CREATE = "create table "+CONTACTS_TABLE_NAME+" ("+CONTACTS_COLUMN_ID+" integer primary key, "+CONTACTS_COLUMN_NAME+" text, " +
-            ""+CONTACTS_COLUMN_1+" text, "+CONTACTS_COLUMN_2+" text, "+CONTACTS_COLUMN_3+" text)";
+    private static final String REQUEST_CREATE = "create table "+CONTACTS_TABLE_NAME+" ("+CONTACTS_COLUMN_ID+" integer primary key, "+
+            CONTACTS_COLUMN_NAME+" text, " +""+CONTACTS_COLUMN_1+" text, "+CONTACTS_COLUMN_2+" text, "+CONTACTS_COLUMN_3+" text)";
     private static final String DROP_REQUEST = "DROP TABLE IF EXISTS "+CONTACTS_TABLE_NAME;
     private static final String REQUEST_GETDATABYNAME = "select * from contacts where "+CONTACTS_COLUMN_NAME+"=? ORDER BY id DESC";
     private static final String REQUEST_GETDATA ="select * from contacts where id=?";
     private static final String REQUEST_GETLASTCONTACT = "select * from contacts ORDER BY id DESC";
 
-    private HashMap hp;
-
-    public Database(Context context) {
+    public SQLDatabase(Context context) {
         super(context, DATABASE_NAME , null, 1);
     }
 
@@ -79,5 +74,6 @@ public class Database extends SQLiteOpenHelper {
 
     Cursor getLastContact() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery(REQUEST_GETLASTCONTACT, null);    }
+        return db.rawQuery(REQUEST_GETLASTCONTACT, null);
+    }
 }

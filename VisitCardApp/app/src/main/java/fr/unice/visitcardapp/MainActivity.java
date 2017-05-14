@@ -15,8 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
-import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,23 +36,17 @@ import com.google.zxing.common.BitMatrix;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import fr.unice.visitcardapp.communication.AbstractCommunication;
 import fr.unice.visitcardapp.communication.AndroidCommunication;
-import fr.unice.visitcardapp.database.AndroidReadData;
-import fr.unice.visitcardapp.database.Database;
+import fr.unice.visitcardapp.database.AndroidDatabase;
+import fr.unice.visitcardapp.database.SQLDatabase;
 import fr.unice.visitcardapp.visitcard.AbstractVisitCard;
 import fr.unice.visitcardapp.visitcard.AndroidVisitCard;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.CITY;
-import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY;
-import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE;
-import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.STREET;
-import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_1;
-import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_2;
-import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_3;
+import static fr.unice.visitcardapp.database.SQLDatabase.CONTACTS_COLUMN_1;
+import static fr.unice.visitcardapp.database.SQLDatabase.CONTACTS_COLUMN_2;
+import static fr.unice.visitcardapp.database.SQLDatabase.CONTACTS_COLUMN_3;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, LoaderManager.LoaderCallbacks<Cursor> {
     public static final String USER_CARD = AbstractVisitCard.USER_CARD;
@@ -80,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     ImageView imageView;
     Bitmap bitmap;
     String textValue;
-    Database db;
+    SQLDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +89,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         tView3 = (TextView)findViewById(R.id.textView3);
         tName = (TextView)findViewById(R.id.textViewName);
 
-        db = new Database(this);
+        db = new SQLDatabase(this);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED  ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             // Ask for permissions
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.SEND_SMS, Manifest.permission.CAMERA, Manifest.permission.READ_CONTACTS},
-                    2);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.CAMERA, Manifest.permission.READ_CONTACTS}, 2);
 
             tName.append("Give the rights and click \n Back to my card to restart.");
         } else {
@@ -154,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 if (secondDisplay == null) {
                     secondDisplay = "";
                 }
-
                 if (thirdDisplay == null) {
                     thirdDisplay = "";
                 }
@@ -242,13 +231,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public void onActivityResult( int requestCode, int resultCode, Intent data ) {
         ContentResolver contentResolver = getContentResolver();
         Uri dataUri = data.getData();
-        ArrayList<String> result = AndroidReadData.read(contentResolver, dataUri);
+        ArrayList<String> result = AndroidDatabase.read(contentResolver, dataUri);
         String name = result.get(0);
         String ADR = result.get(1);
         String email = result.get(2);
         String phoneNumber = result.get(3);
         String output = result.get(4);
-
 
         // Displays the contact's card if it exists
         if (resultCode == Activity.RESULT_OK && requestCode == DISPLAY_CONTACT_REQUEST) {
@@ -270,28 +258,32 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 Snackbar snackbar = Snackbar.make(relativeLayout, R.string.card_not_found, Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
-        } else {
-            // No phone number, display an error msg
-            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
-            snackbar.show();
+
+            if (phoneNumber == null) {
+                // No phone number, display an error msg
+                Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
         }
 
         // Opens creation window for selected contact
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
 
-            state = USER_CARD;
-            Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
-            i.putExtra("name", name);
-            i.putExtra("number", phoneNumber);
-            i.putExtra("address", ADR.trim());
-            i.putExtra("email", email);
-            i.putExtra(InfoChoiceActivity.createMode, true);
-            i.putExtra(InfoChoiceActivity.createContent, new String[]{name});
-            startActivity(i);
-        } else {
-            // No phone number, display an error msg
-            Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
-            snackbar.show();
+            if (phoneNumber != null) {
+                state = USER_CARD;
+                Intent i = new Intent(getApplicationContext(), InfoChoiceActivity.class);
+                i.putExtra("name", name);
+                i.putExtra("number", phoneNumber);
+                i.putExtra("address", ADR.trim());
+                i.putExtra("email", email);
+                i.putExtra(InfoChoiceActivity.createMode, true);
+                i.putExtra(InfoChoiceActivity.createContent, new String[]{name});
+                startActivity(i);
+            } else {
+                // No phone number, display an error msg
+                Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_number, Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
         }
     }
 
