@@ -51,21 +51,23 @@ public abstract class AbstractCommunication implements ICommunication {
         contactData.add(name[1]);
         // The second user choice for the card is added to the result
         contactData.add(name[2]);
-        // The username for the other card is added to the result
+        // The third user choice for the card is added to the result
         contactData.add(name[3]);
-        // The mobile number for the other card is added to the result
+        // The username for the other card is added to the result
         contactData.add(name[4]);
-        if (name.length < 6) {
-            contactData.add(null);
-        } else {
-            // The address for the other card is added to the result
-            contactData.add(name[5]);
-        }
+        // The mobile number for the other card is added to the result
+        contactData.add(name[5]);
         if (name.length < 7) {
             contactData.add(null);
         } else {
-            // The email for the other card is added to the result
+            // The address for the other card is added to the result
             contactData.add(name[6]);
+        }
+        if (name.length < 8) {
+            contactData.add(null);
+        } else {
+            // The email for the other card is added to the result
+            contactData.add(name[7]);
         }
 
         return contactData;

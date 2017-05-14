@@ -53,6 +53,7 @@ import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal
 import static android.provider.ContactsContract.CommonDataKinds.StructuredPostal.STREET;
 import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_1;
 import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_2;
+import static fr.unice.visitcardapp.database.Database.CONTACTS_COLUMN_3;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, LoaderManager.LoaderCallbacks<Cursor> {
     public static final String USER_CARD = AbstractVisitCard.USER_CARD;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     String displayNumber = "";
     String displayEmail = "";
     String displayAdr = "";
-    String firstDisplay, secondDisplay;
+    String firstDisplay, secondDisplay, thirdDisplay;
     ImageView imageView;
     Bitmap bitmap;
     String textValue;
@@ -123,8 +124,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     rs.moveToFirst();
                     if (rs.getCount() > 0) {
                         userCard.setFirstUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1))));
-                        Log.d("test", rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_1)));
                         userCard.setSecondUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_2))));
+                        userCard.setThirdUserChoice(Integer.parseInt(rs.getString(rs.getColumnIndex(CONTACTS_COLUMN_3))));
                     }
                 }
             } else if (state.equals(CONTACT_CARD)) {
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     displayName = "" + extras.getString("name");
                     firstDisplay = contactDisplay.get(0);
                     secondDisplay = contactDisplay.get(1);
+                    thirdDisplay = contactDisplay.get(2);
                 }
 
                 if (firstDisplay == null) {
@@ -152,8 +154,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     secondDisplay = "";
                 }
 
+                if (thirdDisplay == null) {
+                    thirdDisplay = "";
+                }
+
                 tView1.append(firstDisplay);
                 tView2.append(secondDisplay);
+                tView3.append(thirdDisplay);
                 tName.append(displayName);
             }
 
@@ -485,7 +492,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     public void handleResult(Result rawResult) {
         Intent intent = com.sendSMS(this, rawResult, AndroidCommunication.SENT_PREFIX +";"+ userCard.getFirstUserChoice()+";"+
-                userCard.getSecondUserChoice()+";"+tName.getText().toString()+";"+userCard.getPhoneNumber()+";"+userCard.getAddress()+";"+userCard.getEmail());
+                userCard.getSecondUserChoice()+";"+userCard.getThirdUserChoice()+";"+tName.getText().toString()+";"+userCard.getPhoneNumber()+";"+userCard.getAddress()+";"+userCard.getEmail());
         mScannerView.stopCamera();
         startActivity(intent);
     }
@@ -536,7 +543,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
         cursor.close();
 
-        userCard.displayUserInfo(phones, addresses, emails, tView1, tView2);
+        userCard.displayUserInfo(phones, addresses, emails, tView1, tView2, tView3);
 
         // If the user doesn't have his or her profile set up yet
         if (displayName.equals("") || userCard.getPhoneNumber() == null || userCard.getPhoneNumber().equals("")) {

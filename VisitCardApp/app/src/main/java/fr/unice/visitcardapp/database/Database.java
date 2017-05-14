@@ -17,6 +17,14 @@ public class Database extends SQLiteOpenHelper {
     private static final String CONTACTS_COLUMN_NAME = "name";
     public static final String CONTACTS_COLUMN_1 = "display1";
     public static final String CONTACTS_COLUMN_2 = "display2";
+    public static final String CONTACTS_COLUMN_3 = "display3";
+    private static final String REQUEST_CREATE = "create table "+CONTACTS_TABLE_NAME+" ("+CONTACTS_COLUMN_ID+" integer primary key, "+CONTACTS_COLUMN_NAME+" text, " +
+            ""+CONTACTS_COLUMN_1+" text, "+CONTACTS_COLUMN_2+" text, "+CONTACTS_COLUMN_3+" text)";
+    private static final String DROP_REQUEST = "DROP TABLE IF EXISTS "+CONTACTS_TABLE_NAME;
+    private static final String REQUEST_GETDATABYNAME = "select * from contacts where "+CONTACTS_COLUMN_NAME+"=? ORDER BY id DESC";
+    private static final String REQUEST_GETDATA ="select * from contacts where id=?";
+    private static final String REQUEST_GETLASTCONTACT = "select * from contacts ORDER BY id DESC";
+
     private HashMap hp;
 
     public Database(Context context) {
@@ -25,13 +33,12 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table contacts " +
-                "(id integer primary key, name text, display1 text, display2 text)");
+        db.execSQL(REQUEST_CREATE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS contacts");
+        db.execSQL(DROP_REQUEST);
         onCreate(db);
     }
 
@@ -42,16 +49,17 @@ public class Database extends SQLiteOpenHelper {
 
     public void deleteDb() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS contacts");
+        db.execSQL(DROP_REQUEST);
     }
 
-    public boolean insertContact (String name, String d1, String d2) {
+    public boolean insertContact (String name, String d1, String d2, String d3) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CONTACTS_COLUMN_NAME , name);
         contentValues.put(CONTACTS_COLUMN_1, d1);
         contentValues.put(CONTACTS_COLUMN_2, d2);
-        db.insert("contacts", null, contentValues);
+        contentValues.put(CONTACTS_COLUMN_3, d3);
+        db.insert(CONTACTS_TABLE_NAME, null, contentValues);
         return true;
     }
 
@@ -59,17 +67,17 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = null;
         if(!name.equals("")) {
-            res =  db.rawQuery("select * from contacts where "+CONTACTS_COLUMN_NAME+"=? ORDER BY id DESC", new String[]{name});
+            res =  db.rawQuery(REQUEST_GETDATABYNAME, new String[]{name});
         }
        return res;
     }
 
     Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery( "select * from contacts where id=?", new String[]{Integer.toString(id)});
+        return db.rawQuery(REQUEST_GETDATA, new String[]{Integer.toString(id)});
     }
 
     Cursor getLastContact() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery( "select * from contacts ORDER BY id DESC", null);    }
+        return db.rawQuery(REQUEST_GETLASTCONTACT, null);    }
 }

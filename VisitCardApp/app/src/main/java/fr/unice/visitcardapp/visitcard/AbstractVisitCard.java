@@ -18,6 +18,7 @@ public abstract class AbstractVisitCard implements IVisitCard {
     private String email;
     private int firstUserChoice;
     private int secondUserChoice;
+    private int thirdUserChoice;
 
     AbstractVisitCard() {  }
 
@@ -29,6 +30,7 @@ public abstract class AbstractVisitCard implements IVisitCard {
         userCard = user;
         firstUserChoice = 1;
         secondUserChoice = 2;
+        secondUserChoice = 3;
     }
 
     /*
@@ -81,7 +83,7 @@ public abstract class AbstractVisitCard implements IVisitCard {
     * to the selection
     * */
     @Override
-    public void edit(String choice1, String choice2) {
+    public void edit(String choice1, String choice2, String choice3) {
 
         switch(choice1) {
             case NUM_SPINNER_CHOICE:
@@ -103,6 +105,17 @@ public abstract class AbstractVisitCard implements IVisitCard {
                 secondUserChoice = 3; break;
             default :
                 secondUserChoice = 1; break;
+        }
+
+        switch(choice3) {
+            case NUM_SPINNER_CHOICE:
+                thirdUserChoice = 1; break;
+            case ADD_SPINNER_CHOICE:
+                thirdUserChoice = 2; break;
+            case MAIL_SPINNER_CHOICE:
+                thirdUserChoice = 3; break;
+            default :
+                thirdUserChoice = 1; break;
         }
     }
 
@@ -153,6 +166,15 @@ public abstract class AbstractVisitCard implements IVisitCard {
     public void setSecondUserChoice(int secondUserChoice) {
         this.secondUserChoice = secondUserChoice;
     }
+
+    public int getThirdUserChoice() {
+        return thirdUserChoice;
+    }
+
+    public void setThirdUserChoice(int thirdUserChoice) {
+        this.thirdUserChoice = thirdUserChoice;
+    }
+
 
     public boolean isUserCard() {
         return userCard;

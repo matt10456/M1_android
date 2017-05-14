@@ -40,11 +40,11 @@ public class AndroidCommunication extends AbstractCommunication {
         if(smsBody.startsWith(SENT_PREFIX)) {
             ArrayList<String> contactData = receive(smsBody);
 
-            Toast.makeText(context, context.getResources().getString(R.string.saving_card) + " \n"+contactData.get(2), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getResources().getString(R.string.saving_card) + " \n"+contactData.get(3), Toast.LENGTH_SHORT).show();
             // Add contact in the android database.
-            addContact(contactData.get(2), contactData.get(3), contactData.get(4), contactData.get(5), context);
+            addContact(contactData.get(3), contactData.get(4), contactData.get(5), contactData.get(6), context);
             // Add contact in App database.
-            db.insertContact(contactData.get(2), contactData.get(0), contactData.get(1));
+            db.insertContact(contactData.get(3), contactData.get(0), contactData.get(1),contactData.get(2));
         }
     }
 

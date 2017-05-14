@@ -8,6 +8,6 @@ interface IVisitCard {
 
     void displayContact(ArrayList<String> contactInfo);
 
-    void edit(String choice1, String choice2);
+    void edit(String choice1, String choice2, String choice3);
 
 }

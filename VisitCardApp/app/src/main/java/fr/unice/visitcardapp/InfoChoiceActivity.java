@@ -66,6 +66,11 @@ public class InfoChoiceActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,subjects2);
         s2.setAdapter(adapter2);
 
+        s3=(Spinner)findViewById(R.id.spinner3);
+        String subjects3[] ={AndroidVisitCard.NUM_SPINNER_CHOICE,AndroidVisitCard.ADD_SPINNER_CHOICE,AndroidVisitCard.MAIL_SPINNER_CHOICE};
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,subjects3);
+        s3.setAdapter(adapter3);
+
         final Intent i = getIntent();
         if (i.getBooleanExtra(editMode,false)) {
             String[] cardContents = i.getStringArrayExtra(editContent);
@@ -84,17 +89,18 @@ public class InfoChoiceActivity extends AppCompatActivity {
                 displayTextNameValue = displayTextName.getText().length() == 0 ? "" : displayTextName.getText().toString();
                 // Static card is used here because the change can apply
                 // to both user and contact card
-                staticCard.editCard(s1,s2);
+                staticCard.editCard(s1,s2, s3);
                 String sVal1 = Integer.toString(staticCard.getFirstUserChoice());
                 String sVal2 = Integer.toString(staticCard.getSecondUserChoice());
+                String sVal3 = Integer.toString(staticCard.getThirdUserChoice());
 
-                if(sVal1.equals(sVal2)) {
+                if(sVal1.equals(sVal2) || sVal1.equals(sVal3) || sVal2.equals(sVal3)) {
                     // Same display = error
                     Snackbar snackbar = Snackbar.make(relativeLayout, R.string.sameDisplay, Snackbar.LENGTH_LONG);
                     snackbar.show();
                 } else {
                     // DB insertion
-                    if (db.insertContact(displayTextNameValue, sVal1, sVal2)) {
+                    if (db.insertContact(displayTextNameValue, sVal1, sVal2, sVal3)) {
                         // Parameter retrieval
                         if(!userEdit) {
                             MainActivity.state = CONTACT_CARD;
